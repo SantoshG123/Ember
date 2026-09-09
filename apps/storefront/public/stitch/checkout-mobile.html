@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>EMBER - Protected Payment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-primary-container": "#848484",
+                        "on-surface": "#1b1b1b",
+                        "background": "#F5F5F7",
+                        "surface-bright": "#f9f9f9",
+                        "primary-fixed": "#e2e2e2",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "secondary": "#5d5f5f",
+                        "error": "#D92D20",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-tertiary-container": "#848484",
+                        "inverse-on-surface": "#f1f1f1",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "primary-container": "#1b1b1b",
+                        "tertiary-container": "#1b1b1b",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-background": "#1b1b1b",
+                        "surface-variant": "#e2e2e2",
+                        "signal-yellow": "#FFE100",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "divider": "#D2D2D7",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "signal-yellow-pressed": "#E5CA00",
+                        "surface-container-high": "#e8e8e8",
+                        "on-primary-fixed-variant": "#474747",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container-low": "#f3f3f3",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#616363",
+                        "tertiary": "#000000",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "secondary-container": "#dfe0e0",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "graphite": "#1D1D1F",
+                        "surface-tint": "#5e5e5e",
+                        "surface-muted": "#EEEEF0",
+                        "inverse-primary": "#c6c6c6",
+                        "on-primary-fixed": "#1b1b1b",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "success": "#168653",
+                        "outline": "#7e7576",
+                        "outline-variant": "#cfc4c5",
+                        "on-surface-variant": "#4c4546",
+                        "surface-dim": "#dadada",
+                        "muted": "#86868B",
+                        "warning": "#9A6700",
+                        "ember-red": "#FF3B30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "section-mobile": "88px",
+                        "section-desktop": "160px",
+                        "base": "8px",
+                        "gutter-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Poppins"],
+                        "stat": ["Poppins"],
+                        "label": ["Manrope"],
+                        "display-xl": ["Poppins"],
+                        "display-mobile": ["Poppins"],
+                        "label-caps": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Poppins"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }],
+                        "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }],
+                        "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* Custom scrollbar hide */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md w-full max-w-[390px] mx-auto relative overflow-hidden h-screen sm:border-x sm:border-divider shadow-2xl">
+<!-- Header -->
+<header class="flex items-center justify-between px-5 py-4 border-b border-divider bg-surface-container-lowest z-20 sticky top-0">
+<button aria-label="Back to messages" class="w-10 h-10 flex items-center justify-center -ml-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="font-display-mobile text-[20px] font-bold tracking-tighter">EMBER</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Area - Scrollable -->
+<main class="flex-1 overflow-y-auto no-scrollbar pb-[100px]">
+<!-- Collapsible Proposal Summary -->
+<section class="border-b border-divider bg-surface-container-lowest">
+<details class="group p-5 cursor-pointer">
+<summary class="flex items-center justify-between list-none">
+<div>
+<p class="font-label-caps text-label-caps text-muted mb-1">PROPOSAL SUMMARY</p>
+<h2 class="font-body-lg text-body-lg font-semibold">Chef Maria L. — $68.00</h2>
+</div>
+<span class="material-symbols-outlined text-muted group-open:rotate-180 transition-transform duration-300">expand_more</span>
+</summary>
+<div class="pt-4 mt-4 border-t border-surface-container overflow-hidden">
+<div class="flex justify-between items-start mb-3">
+<span class="text-muted">Service</span>
+<span class="font-medium text-right">Weekly Italian dinners<br/>(Prep &amp; Cook)</span>
+</div>
+<div class="flex justify-between items-center mb-3">
+<span class="text-muted">Date</span>
+<span class="font-medium">Oct 24, 2024</span>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-surface-container border-dashed mt-2">
+<span class="font-bold">Total Authorization</span>
+<span class="font-bold text-[18px]">$68.00</span>
+</div>
+</div>
+</details>
+</section>
+<!-- Funds Path Visualization -->
+<section class="p-6 bg-surface-bright border-b border-divider">
+<h3 class="font-label-caps text-label-caps text-muted mb-6">PROTECTED PAYMENT FLOW</h3>
+<div class="relative pl-8 space-y-8">
+<!-- Vertical Line -->
+<div class="absolute left-2.5 top-2 bottom-4 w-px bg-divider"></div>
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-8 w-5 h-5 bg-primary rounded-full flex items-center justify-center ring-4 ring-surface-bright z-10">
+<div class="w-1.5 h-1.5 bg-surface-container-lowest rounded-full"></div>
+</div>
+<div>
+<h4 class="font-bold mb-1">Authorize Funds</h4>
+<p class="text-[13px] text-muted">Your card is charged, but funds are held securely.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative opacity-60">
+<div class="absolute -left-[31px] w-4 h-4 bg-surface-container-lowest border-2 border-outline rounded-full z-10 ring-4 ring-surface-bright mt-1"></div>
+<div>
+<h4 class="font-medium mb-1">Held in Escrow</h4>
+<p class="text-[13px] text-muted">Funds remain protected while the service is completed.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative opacity-60">
+<div class="absolute -left-[31px] w-4 h-4 bg-surface-container-lowest border-2 border-outline rounded-full z-10 ring-4 ring-surface-bright mt-1"></div>
+<div>
+<h4 class="font-medium mb-1">Release Payment</h4>
+<p class="text-[13px] text-muted">Money is transferred only when you approve completion.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Form -->
+<section class="p-5">
+<h3 class="font-label-caps text-label-caps text-muted mb-4">PAYMENT METHOD</h3>
+<div class="space-y-3">
+<!-- Saved Card -->
+<label class="flex items-center justify-between p-4 border border-primary rounded-lg bg-surface-container-lowest cursor-pointer relative">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[28px]">credit_card</span>
+<div>
+<p class="font-medium">Visa ending in 4242</p>
+<p class="text-[13px] text-muted">Expires 12/25</p>
+</div>
+</div>
+<div class="w-5 h-5 rounded-full border border-primary flex items-center justify-center bg-primary">
+<div class="w-2 h-2 bg-surface-container-lowest rounded-full"></div>
+</div>
+</label>
+<!-- Add New Card -->
+<button class="w-full flex items-center gap-4 p-4 border border-divider rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors text-left group">
+<span class="material-symbols-outlined text-[28px] text-muted group-hover:text-primary transition-colors">add_circle</span>
+<span class="font-medium text-muted group-hover:text-primary transition-colors">Add new card</span>
+</button>
+</div>
+<div class="mt-6 flex items-start gap-3">
+<span class="material-symbols-outlined text-muted text-[20px] mt-0.5">lock</span>
+<p class="text-[12px] text-muted leading-relaxed">
+                    Your payment information is securely processed. EMBER uses bank-level encryption. Funds will not be released to Chef Maria L. without your final approval.
+                </p>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 left-0 right-0 max-w-[390px] mx-auto bg-surface-container-lowest border-t border-divider p-5 pb-8 z-50">
+<button class="w-full bg-[#FF3B30] text-on-primary font-bold py-4 px-6 rounded-lg shadow-lg active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+<span>Authorize $68.00</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</body></html>

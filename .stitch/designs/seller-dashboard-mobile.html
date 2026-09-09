@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Sofia's Table — EMBER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-container-low": "#f3f3f3",
+          "surface-container-highest": "#e2e2e2",
+          "background": "#F5F5F7",
+          "secondary-fixed-dim": "#c6c6c7",
+          "tertiary-fixed-dim": "#c6c6c6",
+          "primary-container": "#1b1b1b",
+          "inverse-primary": "#c6c6c6",
+          "graphite": "#1D1D1F",
+          "on-tertiary-container": "#848484",
+          "surface-dim": "#dadada",
+          "on-primary": "#ffffff",
+          "on-secondary-fixed": "#1a1c1c",
+          "warning": "#9A6700",
+          "secondary-fixed": "#e2e2e2",
+          "surface-bright": "#f9f9f9",
+          "divider": "#D2D2D7",
+          "on-secondary-fixed-variant": "#454747",
+          "surface-variant": "#e2e2e2",
+          "surface-muted": "#EEEEF0",
+          "on-surface": "#1b1b1b",
+          "on-error-container": "#93000a",
+          "inverse-on-surface": "#f1f1f1",
+          "secondary-container": "#dfe0e0",
+          "on-secondary": "#ffffff",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary-fixed": "#1b1b1b",
+          "on-primary-fixed": "#1b1b1b",
+          "surface-container": "#eeeeee",
+          "on-primary-container": "#848484",
+          "error": "#A61B16",
+          "primary-fixed": "#e2e2e2",
+          "outline-variant": "#cfc4c5",
+          "on-primary-fixed-variant": "#474747",
+          "secondary": "#5d5f5f",
+          "on-tertiary-fixed-variant": "#474747",
+          "outline": "#7e7576",
+          "muted": "#86868B",
+          "inverse-surface": "#303030",
+          "on-error": "#ffffff",
+          "primary": "#000000",
+          "on-tertiary": "#ffffff",
+          "ember-red": "#FF3B30",
+          "primary-fixed-dim": "#c6c6c6",
+          "on-secondary-container": "#616363",
+          "tertiary-fixed": "#e2e2e2",
+          "surface": "#f9f9f9",
+          "ember-red-pressed": "#D92D20",
+          "tertiary": "#000000",
+          "surface-container-high": "#e8e8e8",
+          "on-surface-variant": "#4c4546",
+          "tertiary-container": "#1b1b1b",
+          "success": "#168653",
+          "surface-tint": "#5e5e5e",
+          "on-background": "#1b1b1b",
+          "error-container": "#ffdad6"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin-desktop": "64px",
+          "base": "8px",
+          "section-mobile": "88px",
+          "gutter-desktop": "40px",
+          "section-desktop": "160px"
+        },
+        "fontFamily": {
+          "display-xl": [
+            "Poppins"
+          ],
+          "display-lg": [
+            "Poppins"
+          ],
+          "label-caps": [
+            "Manrope"
+          ],
+          "display-mobile": [
+            "Poppins"
+          ],
+          "headline-md": [
+            "Poppins"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "stat": [
+            "Poppins"
+          ],
+          "label": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-xl": [
+            "120px",
+            {
+              "lineHeight": "90%",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-lg": [
+            "76px",
+            {
+              "lineHeight": "96%",
+              "letterSpacing": "-0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "12px",
+            {
+              "lineHeight": "17px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-mobile": [
+            "46px",
+            {
+              "lineHeight": "100%",
+              "letterSpacing": "-0.035em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "52px",
+            {
+              "lineHeight": "102%",
+              "letterSpacing": "-0.035em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "150%",
+              "fontWeight": "400"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "155%",
+              "fontWeight": "400"
+            }
+          ],
+          "stat": [
+            "68px",
+            {
+              "lineHeight": "92%",
+              "letterSpacing": "-0.045em",
+              "fontWeight": "500"
+            }
+          ],
+          "label": [
+            "12px",
+            {
+              "lineHeight": "140%",
+              "letterSpacing": "0.08em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }
+</script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased pb-24 selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation (Mobile Friendly) -->
+<header class="sticky top-0 w-full z-50 bg-background/80 backdrop-blur-md dark:bg-background/80 border-b border-outline-variant dark:border-outline-variant">
+<div class="flex justify-between items-center w-full px-4 py-4 md:px-margin-desktop md:max-w-[1280px] mx-auto">
+<div class="font-display-mobile text-display-mobile md:font-display-lg md:text-display-lg text-primary dark:text-primary-fixed italic">EMBER</div>
+<div class="flex items-center gap-4">
+<button aria-label="Notifications" class="text-on-surface-variant hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button aria-label="Messages" class="text-on-surface-variant hover:text-primary transition-colors duration-300 relative">
+<span class="material-symbols-outlined" data-icon="chat" style="font-variation-settings: 'FILL' 0;">chat</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button aria-label="Profile" class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex-shrink-0">
+<img alt="Sofia's Avatar" class="w-full h-full object-cover" data-alt="A close up portrait photo of an entrepreneurial woman in her 30s with warm lighting and soft focus, representing Sofia from Sofia's Table in a culinary or artisanal setting. The background is a slightly blurred light-filled kitchen studio. Overall palette is warm ivory, soft stone, and muted olives, conveying professionalism and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmbB3qcyRdx7Y2-0OaY7sSvHbPCSWPKDjD4GWAeX9YM3RwtOnU8ofo7fOaV3BOMIP406_yBAAixSyYm4uww4U-GSbA8hAdC9q2H4kNIk98yNYwldMTbQwSv-Z1iXRJ3Bl6DfbpGNdoYKH6SgZmAZiNWZS0WVZJPJ36g9L68j3deQV6ATGSv1tT_jnLZ0xZKvviHiggworD4Fgij4DYB1FzxeWfm-N2VS5Zr-T916B0s5eDW1MYwyHN9jU-f2E-t8CBAhmdBxwPSQuW"/>
+</button>
+</div>
+</div>
+</header>
+<main class="w-full md:max-w-[1280px] mx-auto overflow-hidden">
+<!-- Welcome Section -->
+<section class="px-4 pt-8 pb-8">
+<div class="flex flex-col gap-2">
+<h1 class="font-display-mobile text-[46px] leading-[100%] tracking-[-0.035em] font-semibold text-primary">Good morning, Sofia</h1>
+<p class="font-body-md text-on-surface-variant">Sofia's Table • Austin, Texas</p>
+<div class="flex items-center gap-3 mt-2">
+<div class="flex-1 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[78%]"></div>
+</div>
+<span class="font-label text-label text-on-surface-variant">78% Profile</span>
+</div>
+</div>
+<!-- Segmented Control -->
+<div class="mt-6 bg-surface-container-low p-1 rounded-lg flex border border-outline-variant/30">
+<button class="flex-1 py-2 font-label-caps text-label-caps text-on-surface-variant rounded-md transition-colors hover:bg-surface-container">Buying</button>
+<button class="flex-1 py-2 font-label-caps text-label-caps text-on-primary bg-primary rounded-md shadow-sm transition-colors">Selling</button>
+</div>
+<button class="w-full mt-6 bg-primary text-on-primary font-label-caps text-label-caps py-4 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+                Explore new demand
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</section>
+<!-- Evidence Rail -->
+<section class="py-4 pl-4 overflow-hidden border-t border-b border-outline-variant/30 bg-surface-bright">
+<div class="flex gap-4 overflow-x-auto no-scrollbar pr-4 pb-2 snap-x">
+<!-- Stat Card 1 -->
+<div class="snap-start shrink-0 w-36 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary mb-2" data-icon="lightbulb" style="font-variation-settings: 'FILL' 0;">lightbulb</span>
+<div>
+<div class="font-headline-md text-[32px] text-primary">7</div>
+<div class="font-label text-label text-on-surface-variant leading-tight">Recommendations</div>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="snap-start shrink-0 w-36 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col justify-between">
+<span class="material-symbols-outlined text-warning mb-2" data-icon="pending_actions" style="font-variation-settings: 'FILL' 0;">pending_actions</span>
+<div>
+<div class="font-headline-md text-[32px] text-on-surface">12</div>
+<div class="font-label text-label text-on-surface-variant leading-tight">Active Bids</div>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="snap-start shrink-0 w-36 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col justify-between">
+<span class="material-symbols-outlined text-success mb-2" data-icon="check_circle" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+<div>
+<div class="font-headline-md text-[32px] text-on-surface">3</div>
+<div class="font-label text-label text-on-surface-variant leading-tight">Accepted</div>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="snap-start shrink-0 w-40 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/5 rounded-full blur-xl"></div>
+<span class="material-symbols-outlined text-primary mb-2" data-icon="payments" style="font-variation-settings: 'FILL' 0;">payments</span>
+<div>
+<div class="font-headline-md text-[28px] text-primary">$1,840</div>
+<div class="font-label text-label text-on-surface-variant leading-tight">Potential Value</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 1. Featured Opportunity Card -->
+<section class="px-4 py-8">
+<div class="bg-surface rounded-xl border border-outline-variant/50 p-6 shadow-sm relative overflow-hidden">
+<div class="flex items-center gap-2 mb-4 text-error">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="font-label-caps text-label-caps tracking-wider">High Demand Alert</span>
+</div>
+<h2 class="font-headline-md text-[28px] text-primary mb-2 leading-tight">Homemade meals are surging near South Austin</h2>
+<p class="font-body-md text-on-surface-variant mb-6">Based on your culinary profile, there are 18 compatible requests within a 5-mile radius.</p>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="font-label text-label">&lt; 5mi radius</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="payments">payments</span>
+<span class="font-label text-label">$15-$25 avg</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+<span class="font-label text-label">Weekly frequency</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="group">group</span>
+<span class="font-label text-label">18 Active Reqs</span>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-primary text-on-primary font-label-caps text-label-caps py-3 rounded-lg hover:bg-primary-container transition-colors shadow-sm">Review Requests</button>
+<button class="flex-1 bg-surface text-primary border border-primary font-label-caps text-label-caps py-3 rounded-lg hover:bg-surface-container transition-colors">Open Map</button>
+</div>
+</div>
+</section>
+<!-- 2. AI Recommendation -->
+<section class="px-4 pb-8">
+<div class="bg-surface rounded-xl border border-outline-variant/50 p-5 flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<h3 class="font-label text-label text-primary mb-1">AI Suggestion</h3>
+<p class="font-body-md text-on-surface-variant mb-3">Consider a limited two-menu weekly test. Based on local willingness-to-pay, a $21 price point yields optimal conversion.</p>
+<button class="text-primary font-label-caps text-label-caps flex items-center gap-1 hover:text-primary-container transition-colors">
+        Build a Test Plan <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. Active Bids -->
+<section class="px-4 pb-8">
+<div class="flex justify-between items-end mb-4">
+<h2 class="font-display-mobile text-[28px] text-primary">Your Bids</h2>
+<button class="text-on-surface-variant font-label-caps text-label-caps">View All</button>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar mb-4 pb-2">
+<button class="shrink-0 px-4 py-1.5 rounded-full bg-surface-container-highest border border-outline-variant/50 text-on-surface font-label text-label">All</button>
+<button class="shrink-0 px-4 py-1.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant font-label text-label">Active (12)</button>
+<button class="shrink-0 px-4 py-1.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant font-label text-label">Accepted (3)</button>
+<button class="shrink-0 px-4 py-1.5 rounded-full bg-surface border border-outline-variant/50 text-on-surface-variant font-label text-label">Closed</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Expanded Card -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl overflow-hidden shadow-sm">
+<div class="p-4 border-b border-outline-variant/30 flex justify-between items-start bg-surface-container-low/30">
+<div>
+<h3 class="font-headline-md text-xl text-primary mb-1">Homemade Italian meals</h3>
+<p class="font-label text-label text-on-surface-variant">Requested by Maya • 2.1 mi away</p>
+</div>
+<div class="text-right">
+<div class="font-label text-label text-success mb-1">Under Review</div>
+<div class="font-body-md text-on-surface">$22 / meal</div>
+</div>
+</div>
+<div class="p-4 bg-surface-bright">
+<div class="flex gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary flex items-center justify-center font-label text-label shrink-0">M</div>
+<div class="bg-surface-container p-3 rounded-2xl rounded-tl-sm text-on-surface font-body-md">
+            "Your proposed menu sounds amazing! Can we swap the Thursday pasta for a lighter salad option?"
+          </div>
+</div>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface border border-outline-variant rounded-lg px-3 py-2 font-body-md focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm" placeholder="Type your reply..." type="text"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-caps text-label-caps">Reply</button>
+</div>
+</div>
+</div>
+<!-- Collapsed Card -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-4 flex justify-between items-center opacity-75">
+<div>
+<h3 class="font-headline-md text-lg text-primary">Office Lunch Catering</h3>
+<p class="font-label text-label text-on-surface-variant">Requested by TechCorp • 4 mi away</p>
+</div>
+<div class="text-right">
+<div class="font-label text-label text-warning mb-1">Pending</div>
+<div class="font-body-md text-on-surface">$350 total</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Demand Near You -->
+<section class="px-4 pb-8">
+<h2 class="font-display-mobile text-[28px] text-primary mb-4">Demand Near You</h2>
+<div class="bg-surface-container-low rounded-xl border border-outline-variant/50 overflow-hidden">
+<!-- Faux Map Preview -->
+<div class="h-32 bg-[#EFEFEF] relative w-full overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#3a4438 1px, transparent 1px); background-size: 10px 10px;"></div>
+<!-- Clusters -->
+<div class="absolute top-8 left-1/4 w-8 h-8 bg-error/80 rounded-full flex items-center justify-center text-white font-label text-xs shadow-md backdrop-blur-sm">42</div>
+<div class="absolute bottom-6 right-1/3 w-6 h-6 bg-warning/80 rounded-full flex items-center justify-center text-white font-label text-xs shadow-md backdrop-blur-sm">18</div>
+<div class="absolute top-4 right-1/4 w-5 h-5 bg-primary/80 rounded-full flex items-center justify-center text-white font-label text-[10px] shadow-md backdrop-blur-sm">7</div>
+<button class="z-10 bg-surface/90 backdrop-blur-sm px-4 py-1.5 rounded-full border border-outline-variant/50 font-label-caps text-label-caps text-primary shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="map">map</span> Expand Map
+       </button>
+</div>
+<div class="p-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-3">Top Categories in South Austin</div>
+<ul class="flex flex-col gap-3">
+<li class="flex justify-between items-center">
+<span class="font-body-md text-primary">1. Family Dinner Prep</span>
+<span class="font-label text-label text-error bg-error/10 px-2 py-0.5 rounded">High Demand</span>
+</li>
+<li class="flex justify-between items-center">
+<span class="font-body-md text-primary">2. Artisan Baked Goods</span>
+<span class="font-label text-label text-warning bg-warning/10 px-2 py-0.5 rounded">Moderate</span>
+</li>
+<li class="flex justify-between items-center">
+<span class="font-body-md text-primary">3. Custom Cakes</span>
+<span class="font-label text-label text-primary bg-primary/10 px-2 py-0.5 rounded">Steady</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- 5. Saved Requests -->
+<section class="pb-8">
+<div class="px-4 flex justify-between items-end mb-4">
+<h2 class="font-display-mobile text-[28px] text-primary">Saved Requests</h2>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar px-4 pb-4 snap-x">
+<!-- Card 1 -->
+<div class="snap-start shrink-0 w-64 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col h-full">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-surface-container-highest text-on-surface px-2 py-0.5 rounded text-[10px] font-label-caps uppercase tracking-wider">Baking</span>
+<button><span class="material-symbols-outlined text-primary text-lg" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span></button>
+</div>
+<h3 class="font-headline-md text-xl text-primary mb-1">Weekly Focaccia</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-4 line-clamp-2">Looking for someone to bake 2 loaves of fresh rosemary focaccia every Sunday.</p>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<div class="font-label text-label text-on-surface-variant">Budget</div>
+<div class="font-body-md font-semibold text-primary">$30/wk</div>
+</div>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View Details</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="snap-start shrink-0 w-64 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col h-full">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-surface-container-highest text-on-surface px-2 py-0.5 rounded text-[10px] font-label-caps uppercase tracking-wider">Meal Prep</span>
+<button><span class="material-symbols-outlined text-primary text-lg" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span></button>
+</div>
+<h3 class="font-headline-md text-xl text-primary mb-1">Vegetarian Prep</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-4 line-clamp-2">Need 5 days of healthy vegetarian lunches prepared in advance.</p>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<div class="font-label text-label text-on-surface-variant">Budget</div>
+<div class="font-body-md font-semibold text-primary">$75/wk</div>
+</div>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View Details</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="snap-start shrink-0 w-64 bg-surface border border-outline-variant/50 rounded-xl p-4 flex flex-col h-full">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-surface-container-highest text-on-surface px-2 py-0.5 rounded text-[10px] font-label-caps uppercase tracking-wider">Event</span>
+<button><span class="material-symbols-outlined text-primary text-lg" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span></button>
+</div>
+<h3 class="font-headline-md text-xl text-primary mb-1">Birthday Dinner</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-4 line-clamp-2">Small dinner party for 6 people. Italian menu preferred.</p>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<div class="font-label text-label text-on-surface-variant">Budget</div>
+<div class="font-body-md font-semibold text-primary">$300</div>
+</div>
+<button class="text-primary font-label-caps text-label-caps hover:underline">View Details</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Performance & Messages -->
+<section class="px-4 pb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Performance -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-5">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="bar_chart">bar_chart</span> Performance Metrics
+    </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-label text-label mb-1">
+<span class="text-on-surface">Response Rate</span>
+<span class="text-primary">85%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label text-label mb-1">
+<span class="text-on-surface">Bid Acceptance</span>
+<span class="text-primary">42%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label text-label mb-1">
+<span class="text-on-surface">Profile Views (30d)</span>
+<span class="text-primary">128</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Messages -->
+<div class="bg-surface border border-outline-variant/50 rounded-xl p-5">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="forum">forum</span> Recent Messages
+      </h3>
+<button class="text-primary font-label-caps text-[10px]">See All</button>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 pb-3 border-b border-outline-variant/30">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label text-label">S</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline">
+<div class="font-label text-label text-on-surface truncate">Sarah J.</div>
+<div class="font-label text-[10px] text-on-surface-variant">10m ago</div>
+</div>
+<div class="font-body-md text-sm text-on-surface-variant truncate">That sounds perfect, looking forward to it!</div>
+</div>
+</div>
+<div class="flex items-center gap-3 pb-3 border-b border-outline-variant/30">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label text-label">M</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline">
+<div class="font-label text-label text-on-surface truncate font-semibold">Maya</div>
+<div class="font-label text-[10px] text-primary font-semibold">2h ago</div>
+</div>
+<div class="font-body-md text-sm text-on-surface truncate font-medium">Your proposed menu sounds amazing! Can we...</div>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label text-label">D</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline">
+<div class="font-label text-label text-on-surface truncate">David T.</div>
+<div class="font-label text-[10px] text-on-surface-variant">Yesterday</div>
+</div>
+<div class="font-body-md text-sm text-on-surface-variant truncate">Thank you for the delicious meal!</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. Portfolio & Footer -->
+<section class="px-4 pb-12 text-center">
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-6 mb-8 inline-block max-w-sm w-full">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-primary" data-icon="photo_library">photo_library</span>
+</div>
+<h3 class="font-headline-md text-xl text-primary mb-2">Update Portfolio</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">Your profile is 78% complete. Add photos of your recent dishes to increase visibility.</p>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-caps text-label-caps hover:bg-primary-container transition-colors">Add Photos</button>
+</div>
+<footer class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-label text-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="hover:text-primary transition-colors" href="#">Safety Guidelines</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</footer>
+<div class="font-label text-xs text-outline mt-4">© 2024 EMBER Inc.</div>
+</section>
+<div class="h-section-mobile"></div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-bright dark:bg-surface-dim border-t border-outline-variant/30 shadow-sm md:hidden" style="padding-bottom: env(safe-area-inset-bottom);">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high scale-95 transition-transform duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-transform duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="radar" style="font-variation-settings: 'FILL' 0;">radar</span>
+<span class="font-label-caps text-label-caps mt-1">Demand</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-transform duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="gavel" style="font-variation-settings: 'FILL' 0;">gavel</span>
+<span class="font-label-caps text-label-caps mt-1">Bids</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-transform duration-150 p-2 rounded-lg relative">
+<span class="material-symbols-outlined" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 0;">chat_bubble</span>
+<span class="font-label-caps text-label-caps mt-1">Messages</span>
+<span class="absolute top-1 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-transform duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Account</span>
+</button>
+</nav>
+<script src="./ember-interactions.js?v=3"></script>
+</body></html>

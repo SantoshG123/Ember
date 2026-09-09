@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>EMBER — Request Detail — Homemade Italian meals</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&amp;family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "surface-container-low": "#f3f3f3",
+          "surface-container-highest": "#e2e2e2",
+          "background": "#F5F5F7",
+          "secondary-fixed-dim": "#c6c6c7",
+          "tertiary-fixed-dim": "#c6c6c6",
+          "primary-container": "#1b1b1b",
+          "inverse-primary": "#c6c6c6",
+          "graphite": "#1D1D1F",
+          "on-tertiary-container": "#848484",
+          "surface-dim": "#dadada",
+          "on-primary": "#ffffff",
+          "on-secondary-fixed": "#1a1c1c",
+          "warning": "#9A6700",
+          "secondary-fixed": "#e2e2e2",
+          "surface-bright": "#f9f9f9",
+          "divider": "#D2D2D7",
+          "on-secondary-fixed-variant": "#454747",
+          "surface-variant": "#e2e2e2",
+          "surface-muted": "#EEEEF0",
+          "on-surface": "#1b1b1b",
+          "on-error-container": "#93000a",
+          "inverse-on-surface": "#f1f1f1",
+          "secondary-container": "#dfe0e0",
+          "on-secondary": "#ffffff",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary-fixed": "#1b1b1b",
+          "on-primary-fixed": "#1b1b1b",
+          "surface-container": "#eeeeee",
+          "on-primary-container": "#848484",
+          "error": "#A61B16",
+          "primary-fixed": "#e2e2e2",
+          "outline-variant": "#cfc4c5",
+          "on-primary-fixed-variant": "#474747",
+          "secondary": "#5d5f5f",
+          "on-tertiary-fixed-variant": "#474747",
+          "outline": "#7e7576",
+          "muted": "#86868B",
+          "inverse-surface": "#303030",
+          "on-error": "#ffffff",
+          "primary": "#000000",
+          "on-tertiary": "#ffffff",
+          "ember-red": "#FF3B30",
+          "primary-fixed-dim": "#c6c6c6",
+          "on-secondary-container": "#616363",
+          "tertiary-fixed": "#e2e2e2",
+          "surface": "#ffffff",
+          "ember-red-pressed": "#D92D20",
+          "tertiary": "#000000",
+          "surface-container-high": "#e8e8e8",
+          "on-surface-variant": "#4c4546",
+          "tertiary-container": "#1b1b1b",
+          "success": "#168653",
+          "surface-tint": "#5e5e5e",
+          "on-background": "#1b1b1b",
+          "error-container": "#ffdad6",
+          "ember-red": "#FF3B30",
+          "crimson": "#A61B16"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin-desktop": "64px",
+          "base": "8px",
+          "section-mobile": "88px",
+          "gutter-desktop": "40px",
+          "section-desktop": "160px"
+        },
+        "fontFamily": {
+          "display-xl": [
+            "Poppins"
+          ],
+          "display-lg": [
+            "Poppins"
+          ],
+          "label-caps": [
+            "Manrope"
+          ],
+          "display-mobile": [
+            "Poppins"
+          ],
+          "headline-md": [
+            "Poppins"
+          ],
+          "body-md": [
+            "Manrope"
+          ],
+          "body-lg": [
+            "Manrope"
+          ],
+          "stat": [
+            "Poppins"
+          ],
+          "label": [
+            "Manrope"
+          ]
+        },
+        "fontSize": {
+          "display-xl": [
+            "120px",
+            {
+              "lineHeight": "90%",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-lg": [
+            "76px",
+            {
+              "lineHeight": "96%",
+              "letterSpacing": "-0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-caps": [
+            "12px",
+            {
+              "lineHeight": "17px",
+              "letterSpacing": "0.08em",
+              "fontWeight": "600"
+            }
+          ],
+          "display-mobile": [
+            "46px",
+            {
+              "lineHeight": "100%",
+              "letterSpacing": "-0.035em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "52px",
+            {
+              "lineHeight": "102%",
+              "letterSpacing": "-0.035em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "15px",
+            {
+              "lineHeight": "150%",
+              "fontWeight": "400"
+            }
+          ],
+          "body-lg": [
+            "18px",
+            {
+              "lineHeight": "155%",
+              "fontWeight": "400"
+            }
+          ],
+          "stat": [
+            "68px",
+            {
+              "lineHeight": "92%",
+              "letterSpacing": "-0.045em",
+              "fontWeight": "500"
+            }
+          ],
+          "label": [
+            "12px",
+            {
+              "lineHeight": "140%",
+              "letterSpacing": "0.08em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      },
+    },
+  }
+</script>
+<style>
+        body { background-color: #F5F5F7; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Smooth transitions for sheet */
+        .bottom-sheet {
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+        .sheet-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .sheet-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-background font-body-md antialiased pb-[100px] md:hidden">
+<!-- Sticky Header (Context: Transactional/Detail View, suppressing Nav Shells) -->
+<header class="sticky top-0 w-full z-50 bg-background/90 backdrop-blur-md pt-[env(safe-area-inset-top,20px)] border-b border-surface-container-high">
+<div class="flex justify-between items-center px-4 py-3 h-[60px]">
+<button aria-label="Go back" class="w-11 h-11 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="font-display-mobile text-[24px] text-primary tracking-tight">EMBER</div>
+<div class="flex items-center gap-1">
+<button aria-label="Share" class="w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="ios_share">ios_share</span>
+</button>
+</div>
+</div>
+</header>
+<main class="w-full">
+<!-- Media Gallery -->
+<section class="relative w-full h-[530px] min-h-[400px] bg-surface-container-high overflow-hidden">
+<div class="flex h-full w-full snap-x snap-mandatory overflow-x-auto no-scrollbar">
+<div class="min-w-full h-full snap-center relative">
+<img alt="Homemade Italian meals" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UOIaQUMZRVuwRvCVOCRm8I6zUpw8HZVOhQmvzhONoAowr7qE5TCI3W4FV-WlkxniUwxldJ_Bs1yEPbOlBKTMKHm-GMarL9OoWE0_9zD8QaFUO57p7_N_40Eg0Vb_RXakZweuIC97574ap8JRvzmzsLO6YtUMLfuJEfRdADdxa_9boIOMmd0mLAIcPdZLfb6yyRNGe5GWZl0u7i2AbeVqJU4qJSEwAinQYkgMXDUckdIdbF38b9yUjflw4"/>
+</div>
+<div class="min-w-full h-full snap-center relative">
+<img alt="Homemade Italian meals" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UOIaQUMZRVuwRvCVOCRm8I6zUpw8HZVOhQmvzhONoAowr7qE5TCI3W4FV-WlkxniUwxldJ_Bs1yEPbOlBKTMKHm-GMarL9OoWE0_9zD8QaFUO57p7_N_40Eg0Vb_RXakZweuIC97574ap8JRvzmzsLO6YtUMLfuJEfRdADdxa_9boIOMmd0mLAIcPdZLfb6yyRNGe5GWZl0u7i2AbeVqJU4qJSEwAinQYkgMXDUckdIdbF38b9yUjflw4"/>
+</div>
+<div class="min-w-full h-full snap-center relative">
+<img alt="Homemade Italian meals" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UOIaQUMZRVuwRvCVOCRm8I6zUpw8HZVOhQmvzhONoAowr7qE5TCI3W4FV-WlkxniUwxldJ_Bs1yEPbOlBKTMKHm-GMarL9OoWE0_9zD8QaFUO57p7_N_40Eg0Vb_RXakZweuIC97574ap8JRvzmzsLO6YtUMLfuJEfRdADdxa_9boIOMmd0mLAIcPdZLfb6yyRNGe5GWZl0u7i2AbeVqJU4qJSEwAinQYkgMXDUckdIdbF38b9yUjflw4"/>
+</div>
+</div>
+<!-- Pagination Indicator -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+<div class="w-2 h-2 rounded-full bg-surface"></div>
+<div class="w-2 h-2 rounded-full bg-surface/40"></div>
+<div class="w-2 h-2 rounded-full bg-surface/40"></div>
+</div>
+</section>
+<!-- Status & Info -->
+<section class="px-4 py-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#FF3B30]/10 text-[#FF3B30] font-label text-label">
+<span class="material-symbols-outlined text-[14px]" data-icon="local_fire_department">local_fire_department</span>
+                    HIGH DEMAND
+                </span>
+<span class="inline-flex items-center px-2.5 py-1 rounded border border-surface-container-high text-on-surface-variant font-label text-label">
+                    OPEN
+                </span>
+</div>
+<h1 class="font-display-lg text-[40px] leading-[1.1] text-on-surface mb-6">Homemade Italian meals</h1>
+<div class="grid grid-cols-2 gap-y-4 gap-x-6 py-4 border-y border-surface-container-high">
+<div>
+<div class="font-label text-label text-on-surface-variant mb-1 uppercase">Location</div>
+<div class="flex items-start gap-1">
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="location_on">location_on</span>
+<span>South Austin <br/><span class="text-xs text-outline">Approximate for privacy</span></span>
+</div>
+</div>
+<div>
+<div class="font-label text-label text-on-surface-variant mb-1 uppercase">Budget</div>
+<div class="text-primary font-medium">$15-$25/meal</div>
+</div>
+<div class="col-span-2">
+<div class="font-label text-label text-on-surface-variant mb-1 uppercase">Timeframe</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span>Weekly (Mondays or Tuesdays)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Consumer Profile -->
+<section class="px-4 py-2">
+<div class="bg-surface rounded-xl p-4 flex items-center justify-between shadow-sm border border-surface-container-high">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden border border-surface-container-high shrink-0">
+<img class="w-full h-full object-cover" data-alt="A close up, authentic portrait photo of a smiling woman with curly hair, natural sunlight, warm casual lighting, lifestyle photography, neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6BO-blqRrpF_GOFGnHbL6LM2P_4sWtLH7giDXE4eXJYFT0SLcic0lbRVf9JMMHyjyuz3mMryNOBwB77IHjamDyJusPrAJDlctCSRKJkWBTDLg09AZY2iAAfUO2oBvzb9PAlQy1qJXyQlStulZ_iS22EGj1xjWVE-DuKyK__4bcHxJxtevH2MOwp9nkPvZZ41jptHlpLHp_3ZXsZCc9VDaKCsGe0wtZkjQtZjZ_ZFFP5TMZ6lbliEP_pC6RxFjmUg6S_CAY95qHpAR"/>
+</div>
+<div>
+<div class="flex items-center gap-1">
+<span class="font-medium text-on-surface">Maya R.</span>
+<span class="material-symbols-outlined text-primary text-[16px] flex-shrink-0" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="text-xs text-on-surface-variant mt-0.5">100% Response Rate</div>
+</div>
+</div>
+<button class="px-4 py-2 rounded-lg border border-primary text-primary font-label text-label hover:bg-surface-muted transition-colors">
+                    Message
+                </button>
+</div>
+</section>
+<!-- Content Sections (Collapsible) -->
+<section class="px-4 py-6 space-y-4">
+<!-- Expanded Section -->
+<div class="border-b border-surface-container-high pb-4">
+<button aria-expanded="true" class="w-full flex justify-between items-center py-2 text-left">
+<h3 class="font-headline-md text-[24px] text-on-surface">Description</h3>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 rotate-180" data-icon="expand_more">expand_more</span>
+</button>
+<div class="mt-2 text-on-surface-variant leading-relaxed">
+                    Looking for a local chef or talented home cook to prepare 3-4 homemade Italian meals per week. We miss authentic, rich flavors—think hearty bolognese, fresh pasta, eggplant parmigiana, or rustic minestrone. Must be made with high-quality, fresh ingredients.
+                </div>
+</div>
+<!-- Collapsed Sections -->
+<div class="border-b border-surface-container-high pb-4">
+<button aria-expanded="false" class="w-full flex justify-between items-center py-2 text-left">
+<h3 class="font-headline-md text-[24px] text-on-surface">Requirements</h3>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<div class="border-b border-surface-container-high pb-4">
+<button aria-expanded="false" class="w-full flex justify-between items-center py-2 text-left">
+<h3 class="font-headline-md text-[24px] text-on-surface">Schedule</h3>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<div class="border-b border-surface-container-high pb-4">
+<button aria-expanded="false" class="w-full flex justify-between items-center py-2 text-left">
+<h3 class="font-headline-md text-[24px] text-on-surface">Fulfillment Notes</h3>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Demand Context -->
+<section class="px-4 py-4">
+<div class="bg-surface-container-high rounded-xl p-5 border border-surface-container-high flex flex-col gap-3 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 text-[#FF3B30]/10">
+<span class="material-symbols-outlined text-[100px]" data-icon="trending_up" data-weight="fill" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<div class="relative z-10 flex items-center gap-2 text-[#FF3B30]">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="font-label text-label font-bold uppercase">18 Similar requests nearby</span>
+</div>
+<p class="relative z-10 text-sm text-on-surface-variant">There is strong local demand for prepared meals and home cooking in your area.</p>
+<a class="relative z-10 font-label text-label text-primary underline mt-1 self-start inline-flex items-center gap-1 uppercase" href="#">
+                    View Aggregate Opportunity
+                    <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- Related Content -->
+<section class="py-8 pb-12">
+<div class="px-4 mb-4">
+<h2 class="font-headline-md text-[28px] text-on-surface">Similar Requests Nearby</h2>
+</div>
+<div class="flex overflow-x-auto gap-4 px-4 pb-4 snap-x no-scrollbar">
+<!-- Card 1 -->
+<div class="snap-start shrink-0 w-[240px] bg-surface rounded-xl border border-surface-container-high overflow-hidden shadow-sm flex flex-col">
+<div class="h-32 w-full bg-surface-container-high">
+<img alt="Vegetarian meal prep" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1VvRxS3DX0JB8VzDeAtdDWVc0_kXh9FYM428GC0HsBcb7w4ybmVwX2KjEzzkiZVnnwAXVn_1af2N62hipi844lCMGHuSd050pOwd5Ul_xoeXgmsMFdRlB4rHlkikWGhVFZlCT68sk_4iBnMXlQKovUOpEBoER1rLkSxdyCiQmBpyZ9DSgFNCjkRIq1i8Osu3NvwGja4C27i1zU-CGIlek3MVxLn1c_JeqY5JznkaCM0ypuTE-ZBtE6MRJ0j"/>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<div class="text-xs text-on-surface-variant font-medium">1.2 miles away</div>
+<h4 class="font-body-lg font-medium text-on-surface line-clamp-2">Vegetarian meal prep</h4>
+<div class="text-sm text-on-surface-variant mt-2">$20/meal</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="snap-start shrink-0 w-[240px] bg-surface rounded-xl border border-surface-container-high overflow-hidden shadow-sm flex flex-col">
+<div class="h-32 w-full bg-surface-container-high">
+<div class="bg-cover bg-center w-full h-full" data-alt="A beautifully crafted, rustic gluten-free birthday cake adorned with edible flowers and fresh berries, sitting on a wooden stand in a bright, sunlit modern kitchen, soft focus, warm light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBm38vERYAevgpRI9JzuMpop9auRmWRanf3BvFKFVwdhqLP_ik1Rr2umT8jV_euorePTb-Si_4XUDyNsInRN_70xpNB-8ZjCd_v3aOTXPpqlTwnk4Xnnlb_I23bom42mSbGp70YeN6ouEoUCScQxQLsykn6w6aT_J0Z-Ae9C0a0i5NqkTP1irKC1BfoGHfEDUZW0ZSeL2u5UrFi_SBI3Rc_XMVmqZ8jzd2Ap7MEPtkNmNljdY7dcAT9GJAe9CaTUJ_LfEswnQvbStIo')"></div>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<div class="text-xs text-on-surface-variant font-medium">3.5 miles away</div>
+<h4 class="font-body-lg font-medium text-on-surface line-clamp-2">Gluten-free birthday cake</h4>
+<div class="text-sm text-on-surface-variant mt-2">$60 flat</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="snap-start shrink-0 w-[240px] bg-surface rounded-xl border border-surface-container-high overflow-hidden shadow-sm flex flex-col">
+<div class="h-32 w-full bg-surface-container-high">
+<div class="bg-cover bg-center w-full h-full" data-alt="A basket of freshly baked artisanal sourdough bread and pastries on a linen cloth, warm bakery lighting, rustic and appetizing." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACjY110zX6Hk55qoJNCITe5sKuULr6T31mBpPQ_EGw4D0iVpEsyoWt_RUNADyQPA6RRdmH-YawA5aPBXPdHTrh7sZp3U3v8Wfl0nvDhzoGJGdTkMyFhTNRxk4YD9NliGAGiIZFe02dklTW60J77Uk1jZTqbYFcJFb9ndweENSRa9h4wNvOxlAxOG4e_47h_XzpBd0eewOeXCFj0ZPrW0iMNqdEHuBVO0o-ZhpWwsZz2I-Y9QkTKDpIUrq4wnvlCFJ8haqE_H0hSn2g')"></div>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<div class="text-xs text-on-surface-variant font-medium">0.8 miles away</div>
+<h4 class="font-body-lg font-medium text-on-surface line-clamp-2">Weekly baked goods</h4>
+<div class="text-sm text-on-surface-variant mt-2">$25/week</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Persistent Call to Action Bottom Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-surface-container-high px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] z-40 flex items-center justify-between shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<div class="flex flex-col">
+<span class="text-on-surface font-medium text-lg">$15-$25</span>
+<span class="text-xs text-on-surface-variant">per meal</span>
+</div>
+<button class="bg-[#FF3B30] text-[#ffffff] font-label text-label px-8 py-3.5 rounded-lg h-12 flex items-center justify-center hover:bg-[#FF3B30]/90 transition-colors uppercase tracking-widest" id="open-bid-sheet">
+            Submit a Bid
+        </button>
+</div>
+<!-- Interaction State: Submit a Bid Sheet -->
+<div class="sheet-backdrop fixed inset-0 bg-inverse-surface/40 z-50 backdrop-blur-sm" id="bid-sheet-backdrop"></div>
+<div class="bottom-sheet fixed inset-0 w-full h-full bg-surface z-50 flex flex-col" id="bid-sheet">
+<!-- Sheet Header -->
+<div class="px-4 py-3 pt-[env(safe-area-inset-top,20px)] flex justify-between items-center border-b border-surface-container-high shrink-0">
+<h2 class="font-headline-md text-[24px] text-on-surface">Submit a Bid</h2>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-muted rounded-full transition-colors" id="close-bid-sheet">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Sheet Content -->
+<div class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+<div class="bg-surface-container-high rounded-xl p-4 border border-surface-container-high flex items-start gap-3">
+<div class="w-10 h-10 rounded-md bg-surface overflow-hidden shrink-0">
+<img alt="Thumbnail" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UOIaQUMZRVuwRvCVOCRm8I6zUpw8HZVOhQmvzhONoAowr7qE5TCI3W4FV-WlkxniUwxldJ_Bs1yEPbOlBKTMKHm-GMarL9OoWE0_9zD8QaFUO57p7_N_40Eg0Vb_RXakZweuIC97574ap8JRvzmzsLO6YtUMLfuJEfRdADdxa_9boIOMmd0mLAIcPdZLfb6yyRNGe5GWZl0u7i2AbeVqJU4qJSEwAinQYkgMXDUckdIdbF38b9yUjflw4"/>
+</div>
+<div>
+<div class="font-medium text-sm text-on-surface">Homemade Italian meals</div>
+<div class="text-xs text-on-surface-variant mt-0.5">Budget: $15-$25/meal</div>
+</div>
+</div>
+<!-- Form -->
+<form class="space-y-6">
+<!-- Price Input -->
+<div>
+<label class="block font-label text-label text-on-surface-variant mb-2 uppercase" for="bid-price">Your Proposal (Per Meal)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-medium">$</span>
+<input class="w-full bg-surface border border-outline-variant rounded-lg py-3 pl-8 pr-4 text-on-surface font-body-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow" id="bid-price" type="number" value="21"/>
+</div>
+</div>
+<!-- Message Input -->
+<div>
+<label class="block font-label text-label text-on-surface-variant mb-2 uppercase" for="bid-message">Message to Maya</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-lg p-4 text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow resize-none" id="bid-message" rows="5">Hi Maya, I'd love to prepare these meals for you. I make fresh pasta weekly and have a great family recipe for minestrone. Let me know if you have any specific dietary restrictions!</textarea>
+</div>
+<div class="flex items-center gap-3">
+<input checked="" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+<label class="text-sm text-on-surface-variant" for="terms">I agree to the <a class="underline" href="#">terms of service</a> for fulfillment.</label>
+</div>
+</form>
+</div>
+<!-- Sheet Footer -->
+<div class="px-4 py-4 border-t border-surface-container-high bg-surface pb-[calc(1rem+env(safe-area-inset-bottom,0px))] shrink-0">
+<button class="w-full bg-[#FF3B30] text-[#ffffff] font-label text-label py-4 rounded-lg h-14 flex items-center justify-center hover:bg-[#FF3B30]/90 transition-colors uppercase tracking-widest">
+                Send Proposal
+            </button>
+</div>
+</div>
+<script>
+        // Simple script to handle bottom sheet interaction
+        document.addEventListener('DOMContentLoaded', () => {
+            const openBtn = document.getElementById('open-bid-sheet');
+            const closeBtn = document.getElementById('close-bid-sheet');
+            const sheet = document.getElementById('bid-sheet');
+            const backdrop = document.getElementById('bid-sheet-backdrop');
+
+            function openSheet() {
+                sheet.classList.add('open');
+                backdrop.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling on main body
+            }
+
+            function closeSheet() {
+                sheet.classList.remove('open');
+                backdrop.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            openBtn.addEventListener('click', openSheet);
+            closeBtn.addEventListener('click', closeSheet);
+            backdrop.addEventListener('click', closeSheet);
+            
+            // Handle collapsible sections
+            const collapsibles = document.querySelectorAll('button[aria-expanded]');
+            collapsibles.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                    const icon = btn.querySelector('.material-symbols-outlined');
+                    
+                    if(isExpanded) {
+                        btn.setAttribute('aria-expanded', 'false');
+                        icon.classList.remove('rotate-180');
+                        // Logic to hide content would go here if content existed for all
+                    } else {
+                        btn.setAttribute('aria-expanded', 'true');
+                        icon.classList.add('rotate-180');
+                    }
+                });
+            });
+        });
+    </script>
+<script src="./ember-interactions.js?v=3"></script>
+</body></html>

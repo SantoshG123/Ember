@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reverse Marketplace - Buyer Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&amp;family=Manrope:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#848484",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "graphite": "#1D1D1F",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "error": "#D92D20",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary-container": "#848484",
+                        "on-primary-fixed": "#1b1b1b",
+                        "inverse-on-surface": "#f1f1f1",
+                        "background": "#ffffff",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "secondary-fixed": "#e2e2e2",
+                        "signal-yellow-pressed": "#E5CA00",
+                        "surface-container-lowest": "#ffffff",
+                        "muted": "#86868B",
+                        "tertiary-container": "#1b1b1b",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "surface-container-high": "#e8e8e8",
+                        "surface-dim": "#dadada",
+                        "warning": "#9A6700",
+                        "surface-container-low": "#f3f3f3",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "surface-container": "#eeeeee",
+                        "primary": "#000000",
+                        "on-surface": "#1b1b1b",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#7e7576",
+                        "on-surface-variant": "#4c4546",
+                        "tertiary": "#000000",
+                        "success": "#168653",
+                        "inverse-primary": "#c6c6c6",
+                        "secondary-container": "#dfe0e0",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#5e5e5e",
+                        "primary-container": "#1b1b1b",
+                        "signal-yellow": "#FFE100",
+                        "tertiary-fixed": "#e2e2e2",
+                        "outline-variant": "#cfc4c5",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#454747",
+                        "divider": "#D2D2D7",
+                        "secondary": "#5d5f5f",
+                        "surface-variant": "#e2e2e2",
+                        "primary-fixed": "#e2e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#616363",
+                        "surface-muted": "#EEEEF0",
+                        "on-background": "#1b1b1b",
+                        "soft-stone": "#E5E5E5",
+                        "ember-red": "#FF3B30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-desktop": "160px",
+                        "gutter-desktop": "40px",
+                        "base": "8px",
+                        "section-mobile": "88px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "label": ["Manrope"],
+                        "stat": ["Poppins"],
+                        "display-lg": ["Poppins"],
+                        "display-mobile": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "body-lg": ["Manrope"],
+                        "display-xl": ["Poppins"],
+                        "label-caps": ["Manrope"],
+                        "body-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }],
+                        "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.primary'); }
+        .precision-divider { border-bottom: 1px solid theme('colors.divider'); }
+        .precision-border { border: 1px solid theme('colors.divider'); }
+        .precision-right { border-right: 1px solid theme('colors.divider'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopNavBar -->
+<nav class="backdrop-blur-md sticky top-0 w-full z-50 border-b border-soft-stone transition-all duration-300 ease-in-out hidden md:flex justify-between items-center px-margin-desktop py-4 max-w-[1440px] mx-auto bg-primary">
+<div class="flex items-center gap-12">
+<span class="font-display-lg text-headline-md text-primary tracking-tighter">EMBER</span>
+<div class="flex items-center gap-8">
+<a class="font-body-md text-body-md hover:text-secondary transition-colors duration-200 text-white" href="#">Discover</a>
+<a class="font-body-md text-body-md hover:text-secondary transition-colors duration-200 text-white" href="#">Markets</a>
+<a class="font-body-md text-body-md hover:text-secondary transition-colors duration-200 text-white" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<a class="font-bold border-b-2 border-primary pb-1 font-body-md text-body-md hover:text-secondary transition-colors duration-200 flex items-center gap-2 text-white border-white" href="#">
+                Messages
+                <span class="bg-ember-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+</a>
+<button class="bg-ember-red text-white font-label text-label-caps px-6 py-3 rounded hover:bg-red-700 transition-colors">Post a Request</button>
+</div>
+</nav>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container md:hidden border-t border-soft-stone scale-95 transition-transform duration-150">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:bg-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label text-label">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 active:bg-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="list_alt">list_alt</span>
+<span class="font-label text-label">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:bg-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="map">map</span>
+<span class="font-label text-label">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 active:bg-surface-variant" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label text-label">Account</span>
+</a>
+</nav>
+<!-- Main Workspace -->
+<main class="flex-grow max-w-[1440px] mx-auto w-full px-margin-desktop py-16 flex flex-col lg:flex-row gap-12">
+<!-- Left Rail: Filter & Navigation -->
+<aside class="w-full lg:w-1/5 flex flex-col gap-8">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface border border-divider rounded-md font-body-md text-primary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-muted" placeholder="Search requests..." type="text"/>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex justify-between items-center py-2 px-3 rounded bg-surface text-primary font-bold" href="#">
+<span>All Requests</span>
+<span class="text-muted font-normal text-sm">8</span>
+</a>
+<a class="flex justify-between items-center py-2 px-3 rounded hover:bg-surface text-on-surface-variant transition-colors" href="#">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-ember-red"></div>
+<span>Collecting Bids</span>
+</div>
+<span class="text-muted font-normal text-sm">3</span>
+</a>
+<a class="flex justify-between items-center py-2 px-3 rounded hover:bg-surface text-on-surface-variant transition-colors" href="#">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-ember-red"></div>
+<span>Ready to Compare</span>
+</div>
+<span class="text-muted font-normal text-sm">1</span>
+</a>
+<a class="flex justify-between items-center py-2 px-3 rounded hover:bg-surface text-on-surface-variant transition-colors" href="#">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-success"></div>
+<span>Completed</span>
+</div>
+<span class="text-muted font-normal text-sm">4</span>
+</a>
+</nav>
+<div class="mt-auto pt-8 precision-divider">
+<p class="text-xs text-muted leading-relaxed">Your requests are private until matched. EMBER connects demand directly to local supply.</p>
+</div>
+</aside>
+<!-- Center/Right Canvas: Metrics & Comparison -->
+<section class="w-full lg:w-4/5 flex flex-col gap-16">
+<!-- Header & Metrics -->
+<header class="flex flex-col md:flex-row justify-between items-end gap-8 pb-8 precision-divider">
+<div>
+<h1 class="font-display-lg text-headline-md tracking-tight mb-2">Your demand, organized.</h1>
+<p class="font-body-lg text-on-surface-variant">Reviewing bids for your active requests.</p>
+</div>
+<div class="flex gap-12">
+<div>
+<div class="font-label text-label-caps text-muted uppercase mb-1">Active Requests</div>
+<div class="font-stat text-stat tracking-tighter">04</div>
+</div>
+<div>
+<div class="font-label text-label-caps text-ember-red uppercase mb-1">New Bids</div>
+<div class="font-stat text-stat tracking-tighter">12</div>
+</div>
+</div>
+</header>
+<!-- Focus Area: Active Request Comparison -->
+<div class="flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<div>
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-surface border border-ember-red/30 rounded text-ember-red text-xs font-bold uppercase tracking-wider mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-ember-red"></span> Action Required
+                        </div>
+<h2 class="font-display-lg text-3xl tracking-tight">Weekly homemade Italian dinners for 4</h2>
+<p class="text-muted mt-1">Request #R-8924 • Posted 2 days ago</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1 font-label text-label">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span> Edit Request
+                    </button>
+</div>
+<!-- Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+<!-- Bid 1: Recommended -->
+<article class="precision-border p-6 rounded-md relative flex flex-col h-full ring-2 ring-primary bg-surface-bright">
+<div class="absolute -top-3 left-6 bg-primary text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                            Recommended
+                        </div>
+<div class="flex justify-between items-start mb-6 mt-2">
+<div>
+<h3 class="font-bold text-lg">Chef Maria L.</h3>
+<div class="flex items-center gap-1 text-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px] text-graphite" data-icon="star" data-weight="fill">star</span>
+<span class="font-bold text-primary">4.9</span>
+<span>(128 reviews)</span>
+</div>
+</div>
+<img class="w-12 h-12 rounded-full object-cover grayscale" data-alt="Professional headshot of a female chef in a bright, modern kitchen setting. She is wearing a crisp white chef coat, smiling warmly. The lighting is cinematic, highlighting a pristine, premium aesthetic. Deep blacks and stark whites dominate the background, with a soft focus on culinary tools." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQPW-X4pV7Wfru4eMejvKin5DcfbEdICMpO8vs86TtNrbAu_htwTQJ2o3xXPCgJ63oTQJvfcaPwqk-kEmwvHC3VN2E4IM6TjTCFjTRhH_cxD2PdvdQyTmmCwuZFxVOH5XvTDVl1BO8rnIAIQa6xVw79I2RdixRNI8LWgl-zndAT6vOmQ4NtIp1Y8zJ9UtWafO1tuQFCOyhgQIuoVLzDJ3DV31IIyi1idMY_uObskKrzfHemK55zuE8k6hOEruRRIjh9OwrFr0DD-k3"/>
+</div>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Price per meal</span>
+<span class="font-stat text-2xl tracking-tighter">$145</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Cadence</span>
+<span class="font-medium">Tue / Thu</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Earliest Start</span>
+<span class="font-medium">Sept 14</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Radius</span>
+<span class="font-medium">2.1 mi away</span>
+</div>
+<div class="pt-2">
+<span class="text-xs text-muted block mb-1">AI Summary</span>
+<p class="text-sm leading-relaxed">Experienced local chef offering authentic Sicilian family recipes. Includes grocery sourcing and clean-up. Highly rated for punctuality.</p>
+<p class="text-xs text-success font-bold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                                    Best balance of rating and proximity.
+                                </p>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-auto">
+<button class="w-full bg-ember-red text-white font-label text-label-caps py-4 rounded hover:bg-red-700 transition-colors">Accept Bid</button>
+<div class="flex gap-2">
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded">Message</button>
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded text-muted">Decline</button>
+</div>
+<button class="text-xs text-center text-muted hover:text-primary mt-2">View full proposal</button>
+</div>
+</article>
+<!-- Bid 2 -->
+<article class="precision-border p-6 rounded-md flex flex-col h-full bg-background hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-lg">Taste of Tuscany</h3>
+<div class="flex items-center gap-1 text-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px] text-graphite" data-icon="star" data-weight="fill">star</span>
+<span class="font-bold text-primary">4.7</span>
+<span>(84 reviews)</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-muted text-xl font-stat">T</div>
+</div>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Price per meal</span>
+<span class="font-stat text-2xl tracking-tighter">$120</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Cadence</span>
+<span class="font-medium">Wed / Fri</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Earliest Start</span>
+<span class="font-medium">Sept 20</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Radius</span>
+<span class="font-medium">5.4 mi away</span>
+</div>
+<div class="pt-2">
+<span class="text-xs text-muted block mb-1">AI Summary</span>
+<p class="text-sm leading-relaxed">Catering company offering family-style drop-off meals. Most cost-effective option, but requires reheating and minimal prep on your end.</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-auto">
+<button class="w-full bg-primary text-white font-label text-label-caps py-4 rounded hover:bg-gray-800 transition-colors">Accept Bid</button>
+<div class="flex gap-2">
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded">Message</button>
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded text-muted">Decline</button>
+</div>
+<button class="text-xs text-center text-muted hover:text-primary mt-2">View full proposal</button>
+</div>
+</article>
+<!-- Bid 3 -->
+<article class="precision-border p-6 rounded-md flex flex-col h-full bg-background hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-lg">Culinary Canvas</h3>
+<div class="flex items-center gap-1 text-sm text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px] text-graphite" data-icon="star" data-weight="fill">star</span>
+<span class="font-bold text-primary">5.0</span>
+<span>(212 reviews)</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-muted text-xl font-stat">C</div>
+</div>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Price per meal</span>
+<span class="font-stat text-2xl tracking-tighter">$210</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Cadence</span>
+<span class="font-medium">Flexible</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Earliest Start</span>
+<span class="font-medium">Sept 12</span>
+</div>
+<div class="flex justify-between items-end precision-divider pb-2">
+<span class="text-muted text-sm">Radius</span>
+<span class="font-medium">1.2 mi away</span>
+</div>
+<div class="pt-2">
+<span class="text-xs text-muted block mb-1">AI Summary</span>
+<p class="text-sm leading-relaxed">Premium private chef service. Highly customized menus, wine pairings included. Highest rated but premium price point.</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 mt-auto">
+<button class="w-full bg-primary text-white font-label text-label-caps py-4 rounded hover:bg-gray-800 transition-colors">Accept Bid</button>
+<div class="flex gap-2">
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded">Message</button>
+<button class="w-1/2 precision-border py-2 text-sm font-medium hover:bg-surface transition-colors rounded text-muted">Decline</button>
+</div>
+<button class="text-xs text-center text-muted hover:text-primary mt-2">View full proposal</button>
+</div>
+</article>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-desktop border-t border-soft-stone mt-auto bg-surface-container-lowest">
+<div class="max-w-[1280px] mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-display-lg text-headline-md text-primary tracking-tighter mb-2">EMBER</span>
+<span class="text-sm text-muted">Where demand sparks opportunity.</span>
+</div>
+<div class="flex gap-6 mt-6 md:mt-0">© 2026 EMBER Marketplace. All rights reserved.</div>
+<div class="text-on-surface-variant font-body-md text-body-md mt-6 md:mt-0">© 2026 EMBER Marketplace. All rights reserved.</div>
+</div>
+</footer>
+</body></html>

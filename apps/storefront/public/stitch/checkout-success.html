@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EMBER - Payment Authorized</title>
+<!-- Google Fonts: Poppins & Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "primary": "#000000",
+              "primary-fixed-dim": "#c6c6c6",
+              "tertiary-container": "#1b1b1b",
+              "primary-container": "#1b1b1b",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#e2e2e2",
+              "outline": "#7e7576",
+              "on-primary-fixed": "#1b1b1b",
+              "on-secondary-fixed": "#1a1c1c",
+              "on-tertiary-fixed-variant": "#474747",
+              "inverse-primary": "#c6c6c6",
+              "tertiary": "#000000",
+              "on-tertiary-container": "#848484",
+              "on-primary-fixed-variant": "#474747",
+              "error": "#D92D20",
+              "tertiary-fixed": "#e2e2e2",
+              "surface-tint": "#5e5e5e",
+              "secondary-container": "#dfe0e0",
+              "error-container": "#ffdad6",
+              "surface-muted": "#EEEEF0",
+              "on-surface": "#1b1b1b",
+              "secondary": "#5d5f5f",
+              "on-primary-container": "#848484",
+              "muted": "#86868B",
+              "on-background": "#1b1b1b",
+              "secondary-fixed-dim": "#c6c6c7",
+              "on-secondary-container": "#616363",
+              "on-secondary-fixed-variant": "#454747",
+              "success": "#168653",
+              "warning": "#9A6700",
+              "tertiary-fixed-dim": "#c6c6c6",
+              "on-primary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#303030",
+              "secondary-fixed": "#e2e2e2",
+              "surface-bright": "#f9f9f9",
+              "on-tertiary-fixed": "#1b1b1b",
+              "surface-variant": "#e2e2e2",
+              "surface-dim": "#dadada",
+              "signal-yellow": "#FFE100",
+              "surface-container-low": "#f3f3f3",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-error": "#ffffff",
+              "on-surface-variant": "#4c4546",
+              "surface": "#f9f9f9",
+              "divider": "#D2D2D7",
+              "graphite": "#1D1D1F",
+              "inverse-on-surface": "#f1f1f1",
+              "surface-container-high": "#e8e8e8",
+              "outline-variant": "#cfc4c5",
+              "surface-container-highest": "#e2e2e2",
+              "surface-container": "#eeeeee",
+              "signal-yellow-pressed": "#E5CA00",
+              "background": "#F5F5F7"
+            },
+            "borderRadius": {
+              "DEFAULT": "0.125rem",
+              "lg": "0.25rem",
+              "xl": "0.5rem",
+              "full": "0.75rem"
+            },
+            "spacing": {
+              "margin-desktop": "64px",
+              "gutter-desktop": "40px",
+              "section-desktop": "160px",
+              "section-mobile": "88px",
+              "base": "8px"
+            },
+            "fontFamily": {
+              "headline-md": ["Poppins"],
+              "display-xl": ["Poppins"],
+              "body-md": ["Manrope"],
+              "display-mobile": ["Poppins"],
+              "label-caps": ["Manrope"],
+              "body-lg": ["Manrope"],
+              "label": ["Manrope"],
+              "stat": ["Poppins"],
+              "display-lg": ["Poppins"]
+            },
+            "fontSize": {
+              "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+              "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+              "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }],
+              "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+              "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+              "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }],
+              "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+              "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }],
+              "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .material-symbols-outlined.fill {
+        font-variation-settings: 'FILL' 1;
+      }
+      /* Minimal fade-in animation for success state */
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-up {
+        animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .delay-100 { animation-delay: 100ms; opacity: 0; }
+      .delay-200 { animation-delay: 200ms; opacity: 0; }
+      .delay-300 { animation-delay: 300ms; opacity: 0; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-primary min-h-screen flex flex-col font-sans selection:bg-signal-yellow selection:text-primary">
+<!-- Suppressed Header for Transactional Success State -->
+<!-- Nav links hidden per 'Shell Visibility & Relevance' rule, but brand anchor maintained per prompt -->
+<header class="bg-primary dark:bg-primary flex justify-between items-center w-full px-6 md:px-margin-desktop h-20 z-50 docked full-width top-0 sticky border-b border-on-primary-container flat no shadows duration-200 ease-in-out">
+<div class="flex items-center gap-4">
+<span class="font-display-mobile text-display-mobile font-bold text-surface-container-lowest tracking-tighter">EMBER</span>
+<span class="hidden md:block w-px h-6 bg-on-primary-container mx-2"></span>
+<span class="hidden md:block font-label-caps text-label-caps text-on-primary-container">Where demand sparks opportunity</span>
+</div>
+<!-- Right side empty to enforce transactional focus -->
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-6 md:px-margin-desktop py-section-mobile md:py-24">
+<div class="max-w-3xl w-full flex flex-col items-center">
+<!-- Success Hero -->
+<div class="flex flex-col items-center text-center mb-16 animate-fade-up">
+<div class="w-24 h-24 rounded-full bg-success/10 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined fill text-success text-[64px]" data-icon="check_circle">check_circle</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary mb-4 tracking-tight">Payment Authorized</h1>
+<p class="font-body-lg text-body-lg text-muted max-w-lg mx-auto">
+                    Your funds are secure. Milestone 1 has been successfully initiated and is now held in escrow.
+                </p>
+</div>
+<!-- Transaction Details Bento Grid -->
+<div class="w-full grid grid-cols-1 md:grid-cols-12 gap-px bg-divider border border-divider rounded-xl overflow-hidden shadow-sm animate-fade-up delay-100">
+<!-- Left Panel: Request & Provider -->
+<div class="md:col-span-7 bg-surface-container-lowest p-8 md:p-10 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-muted mb-4 uppercase tracking-widest">Authorized Request</p>
+<h2 class="font-display-mobile text-display-mobile text-primary mb-6 leading-tight">Weekly homemade Italian dinners</h2>
+<div class="flex items-center gap-4 mt-8">
+<img alt="Chef Maria L." class="w-12 h-12 rounded-full object-cover border border-divider" data-alt="A professional, high-quality headshot of a female chef in a clean, modern kitchen environment. The lighting is soft and natural, highlighting a warm, confident expression. The overall aesthetic is premium, clean, and aligns with a high-end service platform. Shot on 35mm lens, cinematic depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvVq9oxUvW04W3zslEVmFBtpQjerBeClcyTY-HTfzIErRrf8pa9xWhhQh6x4RtHeaGi6jBWiNMBQc2t9G8jzWiuNIjlTQ7dlMsopX5aBxorHYc30w3rgrM0xWFPtWre_RpGQlrssSCdoQJAcXrg6uSRZY_96bv4T4np5793vA-BZXW2t9a60zIS-TyOZ9cV6wZCd3iu3AbYCHzP6DHu87622ZUwUbE15_nJb9d67dCueGxHwkcGlxm-rIuxKv2oSizDH_aR956Z0pn"/>
+<div>
+<p class="font-label text-label text-muted">Provided by</p>
+<p class="font-body-lg text-body-lg text-primary font-medium">Chef Maria L.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Financials & Status -->
+<div class="md:col-span-5 bg-surface-container-low p-8 md:p-10 flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-muted mb-4 uppercase tracking-widest">Milestone 1</p>
+<p class="font-stat text-stat text-primary mb-2">$68.00</p>
+<div class="inline-flex items-center gap-2 bg-surface-container-lowest border border-divider px-3 py-1.5 rounded-full mt-2">
+<span class="w-2 h-2 rounded-full bg-primary block"></span>
+<span class="font-label text-label text-primary uppercase">Held in Escrow</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Timeline -->
+<div class="w-full mt-12 animate-fade-up delay-200">
+<p class="font-label-caps text-label-caps text-muted mb-6 uppercase tracking-widest text-center">Transaction Progress</p>
+<div class="relative flex items-center justify-between max-w-xl mx-auto">
+<!-- Connecting Line Background -->
+<div class="absolute left-[10%] right-[10%] top-1/2 -translate-y-1/2 h-px bg-divider z-0"></div>
+<!-- Connecting Line Progress -->
+<div class="absolute left-[10%] w-[40%] top-1/2 -translate-y-1/2 h-px bg-primary z-0"></div>
+<!-- Step 1: Authorized (Completed) -->
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-surface-container-lowest text-sm" data-icon="check">check</span>
+</div>
+<span class="font-label text-label text-primary">Authorized</span>
+</div>
+<!-- Step 2: Escrow (Active - High contrast double ring) -->
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest border border-primary flex items-center justify-center ring-2 ring-primary ring-offset-2 ring-offset-surface-container-lowest">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+</div>
+<span class="font-label text-label text-primary font-bold">In Escrow</span>
+</div>
+<!-- Step 3: Delivery (Pending) -->
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container border border-divider flex items-center justify-center">
+<span class="material-symbols-outlined text-muted text-sm" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="font-label text-label text-muted">Delivery</span>
+</div>
+</div>
+</div>
+<!-- Next Steps -->
+<div class="w-full max-w-xl mx-auto mt-16 flex flex-col gap-4 animate-fade-up delay-300">
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container-low border border-divider">
+<span class="material-symbols-outlined text-primary mt-0.5" data-icon="notifications_active">notifications_active</span>
+<div>
+<p class="font-body-md text-body-md text-primary font-medium">Provider Notified</p>
+<p class="font-body-md text-body-md text-muted mt-1">Chef Maria L. has been alerted that funds are secured and work can begin.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-lg bg-surface-container-low border border-divider">
+<span class="material-symbols-outlined text-primary mt-0.5" data-icon="calendar_today">calendar_today</span>
+<div>
+<p class="font-body-md text-body-md text-primary font-medium">Delivery Scheduled</p>
+<p class="font-body-md text-body-md text-muted mt-1">First delivery is set for Wednesday at 6:30 PM.</p>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col sm:flex-row items-center justify-center gap-4 mt-16 animate-fade-up delay-300">
+<button class="w-full sm:w-auto px-8 py-4 bg-primary text-surface-container-lowest font-label-caps text-label-caps rounded-lg hover:opacity-80 transition-opacity duration-200">
+                    View Workspace
+                </button>
+<button class="w-full sm:w-auto px-8 py-4 bg-transparent border border-outline text-primary font-label-caps text-label-caps rounded-lg hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat">chat</span>
+                    Go to Messaging
+                </button>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EMBER - Protected Checkout</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#454747",
+                "on-primary-container": "#848484",
+                "on-surface": "#1b1b1b",
+                "background": "#F5F5F7",
+                "surface-bright": "#f9f9f9",
+                "primary-fixed": "#e2e2e2",
+                "on-tertiary-fixed": "#1b1b1b",
+                "secondary": "#5d5f5f",
+                "error": "#D92D20",
+                "on-tertiary-fixed-variant": "#474747",
+                "on-tertiary-container": "#848484",
+                "inverse-on-surface": "#f1f1f1",
+                "tertiary-fixed": "#e2e2e2",
+                "on-primary": "#ffffff",
+                "surface-container": "#eeeeee",
+                "primary-container": "#1b1b1b",
+                "tertiary-container": "#1b1b1b",
+                "on-secondary-fixed": "#1a1c1c",
+                "on-background": "#1b1b1b",
+                "surface-variant": "#e2e2e2",
+                "signal-yellow": "#FFE100",
+                "on-error-container": "#93000a",
+                "primary": "#000000",
+                "divider": "#D2D2D7",
+                "on-secondary": "#ffffff",
+                "inverse-surface": "#303030",
+                "signal-yellow-pressed": "#E5CA00",
+                "surface-container-high": "#e8e8e8",
+                "on-primary-fixed-variant": "#474747",
+                "primary-fixed-dim": "#c6c6c6",
+                "surface-container-low": "#f3f3f3",
+                "secondary-fixed": "#e2e2e2",
+                "on-error": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#616363",
+                "tertiary": "#000000",
+                "surface-container-highest": "#e2e2e2",
+                "surface": "#f9f9f9",
+                "secondary-container": "#dfe0e0",
+                "secondary-fixed-dim": "#c6c6c7",
+                "graphite": "#1D1D1F",
+                "surface-tint": "#5e5e5e",
+                "surface-muted": "#EEEEF0",
+                "inverse-primary": "#c6c6c6",
+                "on-primary-fixed": "#1b1b1b",
+                "tertiary-fixed-dim": "#c6c6c6",
+                "success": "#168653",
+                "outline": "#7e7576",
+                "outline-variant": "#cfc4c5",
+                "on-surface-variant": "#4c4546",
+                "surface-dim": "#dadada",
+                "muted": "#86868B",
+                "warning": "#9A6700"
+              },
+              borderRadius: {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+              },
+              spacing: {
+                "margin-desktop": "64px",
+                "section-mobile": "88px",
+                "section-desktop": "160px",
+                "base": "8px",
+                "gutter-desktop": "40px"
+              },
+              fontFamily: {
+                "headline-md": ["Poppins"],
+                "stat": ["Poppins"],
+                "label": ["Manrope"],
+                "display-xl": ["Poppins"],
+                "display-mobile": ["Poppins"],
+                "label-caps": ["Manrope"],
+                "body-md": ["Manrope"],
+                "display-lg": ["Poppins"],
+                "body-lg": ["Manrope"]
+              },
+              fontSize: {
+                "headline-md": ["52px", { lineHeight: "102%", letterSpacing: "-0.035em", fontWeight: "600" }],
+                "stat": ["68px", { lineHeight: "92%", letterSpacing: "-0.045em", fontWeight: "500" }],
+                "label": ["12px", { lineHeight: "140%", letterSpacing: "0.08em", fontWeight: "600" }],
+                "display-xl": ["120px", { lineHeight: "90%", letterSpacing: "-0.05em", fontWeight: "600" }],
+                "display-mobile": ["46px", { lineHeight: "100%", letterSpacing: "-0.035em", fontWeight: "600" }],
+                "label-caps": ["12px", { lineHeight: "17px", letterSpacing: "0.08em", fontWeight: "600", textTransform: "uppercase" }],
+                "body-md": ["15px", { lineHeight: "150%", fontWeight: "400" }],
+                "display-lg": ["76px", { lineHeight: "96%", letterSpacing: "-0.04em", fontWeight: "600" }],
+                "body-lg": ["18px", { lineHeight: "155%", fontWeight: "400" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom Input Styles */
+        .ember-input {
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid theme('colors.divider');
+            border-radius: theme('borderRadius.lg');
+            padding: 1rem 1rem;
+            color: theme('colors.primary');
+            transition: all 0.2s ease-in-out;
+        }
+        .ember-input:focus {
+            outline: none;
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 0 1px theme('colors.primary');
+        }
+        .ember-input::placeholder {
+            color: theme('colors.muted');
+        }
+
+        /* Radio Card Selection */
+        .radio-card-input:checked + .radio-card-content {
+            border-color: theme('colors.primary');
+            background-color: theme('colors.surface-container-low');
+        }
+        .radio-card-input:checked + .radio-card-content .radio-indicator {
+            border-color: theme('colors.primary');
+            border-width: 5px;
+        }
+
+        /* Checkout View Transitions */
+        #checkout-view { transition: opacity 0.4s ease, transform 0.4s ease; }
+        #success-view { transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s; }
+        .hidden-view { opacity: 0; pointer-events: none; position: absolute; transform: translateY(20px); visibility: hidden; }
+        .active-view { opacity: 1; pointer-events: auto; position: relative; transform: translateY(0); visibility: visible; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-primary font-body-md antialiased min-h-screen flex flex-col selection:bg-surface-dim selection:text-primary">
+<!-- Focused Header -->
+<header class="bg-primary text-on-primary h-20 w-full px-margin-desktop flex items-center justify-between sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold tracking-tighter text-on-primary" style="font-size: 28px; line-height: 1;">EMBER</span>
+<div class="h-6 w-px bg-on-primary-container opacity-50 hidden md:block"></div>
+<div class="hidden md:flex items-center gap-2 text-on-primary-container">
+<span class="material-symbols-outlined text-[20px] icon-fill">shield</span>
+<span class="font-label text-label">Protected payment</span>
+</div>
+</div>
+<a class="flex items-center gap-2 text-on-primary-container hover:text-on-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label text-label hidden md:block">Return to Chef Maria conversation</span>
+<span class="font-label text-label md:hidden">Return</span>
+</a>
+</header>
+<!-- Main Workspace -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-5 md:px-margin-desktop py-12 md:py-24 relative overflow-hidden">
+<!-- Checkout Flow View -->
+<div class="active-view grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-gutter-desktop w-full" id="checkout-view">
+<!-- Left Content: Dominant Payment Form (8 cols) -->
+<div class="md:col-span-8 flex flex-col max-w-3xl">
+<h1 class="font-headline-md text-headline-md mb-4 text-primary">Fund the first delivery</h1>
+<p class="font-body-lg text-body-lg text-secondary mb-12">
+                    EMBER authorizes the first milestone ($68.00) today. Future deliveries are charged only after you confirm they have arrived to your satisfaction.
+                </p>
+<!-- Funds Path Visualization -->
+<div class="mb-16">
+<div class="font-label-caps text-label-caps text-muted mb-6 tracking-widest">Funds Escrow Path</div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-0">
+<!-- Step 1 -->
+<div class="flex items-center flex-1">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container text-primary border border-divider z-10 shrink-0">
+<span class="material-symbols-outlined text-[20px]">lock_clock</span>
+</div>
+<div class="ml-4 md:ml-0 md:absolute md:mt-16 md:-ml-8 md:text-center w-40">
+<p class="font-label text-label text-primary">Authorized today</p>
+<p class="font-body-md text-body-md text-muted">$68.00</p>
+</div>
+<div class="hidden md:block flex-grow h-px bg-divider -ml-4 -mr-4"></div>
+</div>
+<!-- Step 2 -->
+<div class="flex items-center flex-1">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container text-primary border border-divider z-10 shrink-0">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<div class="ml-4 md:ml-0 md:absolute md:mt-16 md:-ml-6 md:text-center w-36">
+<p class="font-label text-label text-primary">Held by EMBER</p>
+<p class="font-body-md text-body-md text-muted">In Escrow</p>
+</div>
+<div class="hidden md:block flex-grow h-px bg-divider -ml-4 -mr-4"></div>
+</div>
+<!-- Step 3 -->
+<div class="flex items-center">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-lowest text-muted border border-divider border-dashed z-10 shrink-0">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="ml-4 md:ml-0 md:absolute md:mt-16 md:-ml-12 md:text-center w-48">
+<p class="font-label text-label text-muted">Released to Seller</p>
+<p class="font-body-md text-body-md text-muted">After delivery confirmation</p>
+</div>
+</div>
+</div>
+<!-- Spacer for absolute positioned labels on desktop -->
+<div class="hidden md:block h-16"></div>
+</div>
+<hr class="border-t border-divider mb-12"/>
+<!-- Payment Method Selection -->
+<div class="mb-12">
+<div class="font-label-caps text-label-caps text-muted mb-6 tracking-widest">Payment Method</div>
+<div class="flex flex-col gap-4">
+<!-- Saved Card -->
+<label class="relative cursor-pointer group">
+<input checked="" class="peer radio-card-input sr-only" name="payment_method" onchange="toggleNewCardForm()" type="radio" value="saved"/>
+<div class="radio-card-content p-5 border border-divider rounded-lg flex items-center gap-4 transition-all hover:bg-surface-container-lowest group-hover:border-primary">
+<div class="w-5 h-5 rounded-full border border-divider flex items-center justify-center radio-indicator transition-all"></div>
+<div class="flex items-center gap-3 flex-grow">
+<div class="w-12 h-8 bg-surface-container-high rounded flex items-center justify-center border border-divider">
+<span class="font-label text-[10px] font-bold">VISA</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-primary font-medium">Visa ending in 4242</p>
+<p class="font-label text-[11px] text-muted">Expires 12/25</p>
+</div>
+</div>
+</div>
+</label>
+<!-- New Card -->
+<label class="relative cursor-pointer group">
+<input class="peer radio-card-input sr-only" name="payment_method" onchange="toggleNewCardForm()" type="radio" value="new"/>
+<div class="radio-card-content p-5 border border-divider rounded-lg flex items-center gap-4 transition-all hover:bg-surface-container-lowest group-hover:border-primary">
+<div class="w-5 h-5 rounded-full border border-divider flex items-center justify-center radio-indicator transition-all"></div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-muted">add_card</span>
+<p class="font-body-md text-body-md text-primary font-medium">Use a new card</p>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- New Card Form (Hidden by default) -->
+<div class="mb-12 hidden transition-all duration-300 opacity-0 h-0 overflow-hidden" id="new-card-form">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label text-label text-primary mb-2">Card Number</label>
+<div class="relative">
+<input class="ember-input pl-12" placeholder="0000 0000 0000 0000" type="text"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted">credit_card</span>
+</div>
+</div>
+<div>
+<label class="block font-label text-label text-primary mb-2">Expiration</label>
+<input class="ember-input" placeholder="MM/YY" type="text"/>
+</div>
+<div>
+<label class="block font-label text-label text-primary mb-2">CVC</label>
+<input class="ember-input" placeholder="123" type="text"/>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label text-label text-primary mb-2">Name on Card</label>
+<input class="ember-input" placeholder="Jane Doe" type="text"/>
+</div>
+<div class="col-span-1 md:col-span-2">
+<label class="block font-label text-label text-primary mb-2">Billing ZIP</label>
+<input class="ember-input" placeholder="12345" type="text"/>
+</div>
+</div>
+</div>
+<!-- Disclosure & Actions -->
+<div class="mt-8 pt-8 border-t border-divider">
+<p class="font-label text-[11px] text-muted mb-8 leading-relaxed max-w-2xl">
+                        By clicking "Authorize", you agree to EMBER's Terms of Service and Escrow Agreement. Funds will be held securely and only released after your explicit confirmation of delivery. Cancellations must be made at least 24 hours prior to the scheduled delivery time for a full refund.
+                    </p>
+<!-- Ember Red CTA -->
+<button class="w-full md:w-auto min-w-[240px] h-[56px] px-8 bg-error text-on-error font-label-caps text-label-caps tracking-widest flex items-center justify-center hover:bg-error/90 transition-colors duration-200" onclick="processPayment()">
+                        AUTHORIZE $68.00
+                    </button>
+<div class="hidden items-center gap-3 mt-4 text-primary font-label text-label" id="processing-state">
+<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+                        Processing securely...
+                    </div>
+</div>
+</div>
+<!-- Right Sidebar: Sticky Proposal Ledger (4 cols) -->
+<div class="md:col-span-4 mt-12 md:mt-0">
+<aside class="sticky top-32 bg-surface p-8 border border-divider rounded-DEFAULT shadow-sm">
+<div class="flex items-center justify-between mb-8 pb-6 border-b border-divider">
+<h2 class="font-headline-md text-[24px] font-semibold text-primary tracking-tight">Accepted Proposal</h2>
+<span class="material-symbols-outlined text-muted">receipt_long</span>
+</div>
+<div class="flex items-start gap-4 mb-8">
+<div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden shrink-0 border border-divider">
+<!-- Image Placeholder -->
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a female chef in a clean white kitchen setting. Soft, natural light illuminates her face. She has a welcoming, confident expression. Minimalist, high-end culinary aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAHre_CxTt4Sm7jSMA4XiZmdGbIWxDM3SSyIxFdMd5hmomXXPHf8DGWD_BHhyJ-IJmHyIyiUzT_ijZdaianOtJc9kvyYEv265hsVHGCAwbEx7P-wQjAtWF03JOtB6XxDbQ7FJT1CXObJIGsR6cWDoULdw8jc4U3ZW78MGLZM1SkzDhOSUpnuTe8r-0FFHUy00ovJ5XHpYR-lHjnFZmDcq6MHfTbGwR1mEAppXHIkv56LG2RLYRRUXoy9RFlWicYM0ppIpfUuzhJIMu"/>
+</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-primary">Chef Maria L.</p>
+<div class="flex items-center gap-1 mt-1 text-success">
+<span class="material-symbols-outlined text-[14px] icon-fill">verified</span>
+<span class="font-label text-[11px] uppercase tracking-widest">Verified Seller</span>
+</div>
+</div>
+</div>
+<div class="space-y-6 font-body-md text-body-md">
+<div>
+<p class="font-label text-[11px] text-muted uppercase tracking-widest mb-1">Request Ref</p>
+<p class="text-primary font-medium">R-8924</p>
+</div>
+<div>
+<p class="font-label text-[11px] text-muted uppercase tracking-widest mb-1">Service Outline</p>
+<p class="text-primary">Weekly homemade Italian dinners</p>
+<p class="text-secondary mt-1">4 portions per delivery</p>
+<p class="text-secondary">No shellfish</p>
+</div>
+<div>
+<p class="font-label text-[11px] text-muted uppercase tracking-widest mb-1">Schedule</p>
+<p class="text-primary">Wednesdays at 6:30 PM</p>
+<p class="text-secondary mt-1">Hyde Park, Austin</p>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-divider">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label text-label text-secondary">Milestone 1</span>
+<span class="font-body-md text-primary">$68.00</span>
+</div>
+<div class="flex justify-between items-center mb-4">
+<span class="font-label text-label text-secondary">Platform Fee</span>
+<span class="font-body-md text-primary">$0.00</span>
+</div>
+<div class="flex justify-between items-end pt-4 border-t border-divider border-dashed">
+<span class="font-headline-md text-[18px] font-semibold text-primary">Total Due Today</span>
+<span class="font-stat text-[32px] tracking-tight text-primary leading-none">$68.00</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Success State View (Hidden by default) -->
+<div class="hidden-view absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-surface-container-lowest px-5 z-10 pt-10" id="success-view">
+<div class="max-w-md w-full text-center">
+<div class="w-20 h-20 bg-primary text-on-primary rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+<span class="material-symbols-outlined text-[40px]">check</span>
+</div>
+<h2 class="font-headline-md text-display-mobile mb-4 text-primary">Authorized — $68.00</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-10">
+                    Funds are secure in EMBER Escrow. They will not be released to Chef Maria until you confirm the first delivery.
+                </p>
+<div class="bg-surface border border-divider rounded-lg p-6 mb-10 text-left">
+<div class="flex justify-between items-center mb-4 pb-4 border-b border-divider">
+<span class="font-label-caps text-label-caps text-muted">Receipt ID</span>
+<span class="font-body-md font-medium text-primary">TXN-8924-A1</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-label-caps text-muted">Next Action</span>
+<span class="font-body-md font-medium text-primary text-right">Receive Delivery<br/><span class="text-secondary text-[13px]">Wed, Sept 14 @ 6:30 PM</span></span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<button class="w-full h-[56px] bg-primary text-on-primary font-label-caps text-label-caps tracking-widest hover:bg-graphite transition-colors duration-200">
+                        RETURN TO MESSAGES
+                    </button>
+<button class="w-full h-[56px] bg-transparent border border-divider text-primary font-label-caps text-label-caps tracking-widest hover:bg-surface transition-colors duration-200">
+                        VIEW FULL RECEIPT
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Toggle New Card Form
+        function toggleNewCardForm() {
+            const newCardRadio = document.querySelector('input[value="new"]');
+            const newCardForm = document.getElementById('new-card-form');
+            
+            if (newCardRadio.checked) {
+                newCardForm.classList.remove('hidden');
+                // Small delay to allow display block to apply before animating opacity/height
+                setTimeout(() => {
+                    newCardForm.classList.remove('opacity-0', 'h-0');
+                    newCardForm.classList.add('opacity-100', 'h-auto');
+                }, 10);
+            } else {
+                newCardForm.classList.remove('opacity-100', 'h-auto');
+                newCardForm.classList.add('opacity-0', 'h-0');
+                setTimeout(() => {
+                    newCardForm.classList.add('hidden');
+                }, 300); // Wait for transition
+            }
+        }
+
+        // Simulate Payment Processing and Success State
+        function processPayment() {
+            const btn = document.querySelector('button[onclick="processPayment()"]');
+            const processingState = document.getElementById('processing-state');
+            
+            // UI Feedback
+            btn.classList.add('hidden');
+            processingState.classList.remove('hidden');
+            processingState.classList.add('flex');
+
+            // Simulate Network Request
+            setTimeout(() => {
+                const checkoutView = document.getElementById('checkout-view');
+                const successView = document.getElementById('success-view');
+
+                // Transition out checkout
+                checkoutView.classList.remove('active-view');
+                checkoutView.classList.add('hidden-view');
+
+                // Transition in success
+                setTimeout(() => {
+                    successView.classList.remove('hidden-view');
+                    successView.classList.add('active-view');
+                    // Scroll to top for success view
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 400);
+
+            }, 1500);
+        }
+    </script>
+</body></html>

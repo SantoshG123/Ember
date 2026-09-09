@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EMBER - Authentication</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "tertiary": "#000000",
+            "surface-bright": "#f9f9f9",
+            "signal-yellow-pressed": "#E5CA00",
+            "secondary-fixed": "#e2e2e2",
+            "on-tertiary": "#ffffff",
+            "warning": "#9A6700",
+            "on-surface": "#1b1b1b",
+            "surface": "#f9f9f9",
+            "outline-variant": "#cfc4c5",
+            "graphite": "#1D1D1F",
+            "surface-container-highest": "#e2e2e2",
+            "error": "#D92D20",
+            "inverse-on-surface": "#f1f1f1",
+            "background": "#F5F5F7",
+            "on-secondary-container": "#616363",
+            "tertiary-fixed-dim": "#c6c6c6",
+            "surface-variant": "#e2e2e2",
+            "surface-container": "#eeeeee",
+            "on-primary-fixed-variant": "#474747",
+            "on-tertiary-fixed": "#1b1b1b",
+            "on-primary-container": "#848484",
+            "divider": "#D2D2D7",
+            "on-secondary-fixed": "#1a1c1c",
+            "primary-fixed": "#e2e2e2",
+            "secondary": "#5d5f5f",
+            "primary-fixed-dim": "#c6c6c6",
+            "surface-muted": "#EEEEF0",
+            "surface-container-high": "#e8e8e8",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#e2e2e2",
+            "primary-container": "#1b1b1b",
+            "surface-tint": "#5e5e5e",
+            "on-error": "#ffffff",
+            "inverse-primary": "#c6c6c6",
+            "on-secondary": "#ffffff",
+            "tertiary-container": "#1b1b1b",
+            "success": "#168653",
+            "muted": "#86868B",
+            "surface-dim": "#dadada",
+            "on-secondary-fixed-variant": "#454747",
+            "on-tertiary-fixed-variant": "#474747",
+            "on-primary-fixed": "#1b1b1b",
+            "inverse-surface": "#303030",
+            "on-error-container": "#93000a",
+            "secondary-container": "#dfe0e0",
+            "surface-container-low": "#f3f3f3",
+            "signal-yellow": "#FFE100",
+            "on-primary": "#ffffff",
+            "on-surface-variant": "#4c4546",
+            "on-tertiary-container": "#848484",
+            "secondary-fixed-dim": "#c6c6c7",
+            "outline": "#7e7576",
+            "primary": "#000000",
+            "on-background": "#1b1b1b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "base": "8px",
+            "margin-desktop": "64px",
+            "section-mobile": "88px",
+            "section-desktop": "160px",
+            "gutter-desktop": "40px"
+          },
+          "fontFamily": {
+            "label-caps": ["Manrope"],
+            "label": ["Manrope"],
+            "display-mobile": ["Poppins"],
+            "headline-md": ["Poppins"],
+            "body-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "display-lg": ["Poppins"],
+            "stat": ["Poppins"],
+            "display-xl": ["Poppins"]
+          },
+          "fontSize": {
+            "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+            "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+            "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+            "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }],
+            "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }],
+            "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+            "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }],
+            "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Technical Activity Trace */
+    .trace-line {
+      position: absolute;
+      left: 11px;
+      top: 24px;
+      bottom: 24px;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+      z-index: 0;
+    }
+    .trust-item {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Input Focus Styles */
+    .input-field:focus-within label {
+      color: #000;
+    }
+    .input-field:focus-within input {
+      border-color: #000;
+    }
+    
+    /* Radio Card Checked State */
+    input[type="radio"]:checked + div {
+      border-color: #000;
+      background-color: #f9f9f9;
+    }
+    input[type="radio"]:checked + div .radio-circle {
+      border-color: #000;
+    }
+    input[type="radio"]:checked + div .radio-circle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+    
+    /* Ember Red Override */
+    .bg-ember-red { background-color: #FF3B30; }
+    .text-ember-red { color: #FF3B30; }
+    .hover\:bg-ember-red-dark:hover { background-color: #D92D20; }
+  </style>
+</head>
+<body class="bg-background min-h-screen text-on-surface antialiased overflow-x-hidden">
+<!-- Suppressed Global Nav per instructions for Transactional/Login page -->
+<main class="w-full min-h-screen flex flex-col lg:flex-row">
+<!-- Left Chapter (Absolute Black) -->
+<section class="lg:w-5/12 bg-primary text-on-primary flex flex-col justify-between p-8 md:p-12 lg:p-16 relative overflow-hidden shrink-0">
+<!-- Subtle Background Image -->
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none" data-alt="A high-fidelity documentary style monochrome photograph of skilled local hands working precisely with tools. Deep cinematic shadows and bright silver-gray highlights create a dramatic, premium industrial aesthetic suitable for a modern marketplace brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRGO4RMKlYWFfu2PUUGSE1A0ts_NPy2_Kf3qkobvMpxy8INnDJZyfv_tEp8x2saXB0kx48B4uvqCVvKci_E830JOZ1V4OsuqOm2WFW-LMSAwRfIkTtQ89Am_0Nu3ADWr870a6Fg6v96KVXapMyZ_Qr9e3dUaqxYjHnqI1yaKHGoYBHOYu9qjYXt8RmRA9mFxTpWawm6S1e-Ph6r7iXcZZ4_TVCp-n201s7PImm8mRWwlG1qTScDnfLcRkZZxMilDXbGlBKm6V7WBZJ')"></div>
+<!-- Gradient overlay to ensure text legibility -->
+<div class="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/50 to-primary z-0 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col h-full">
+<!-- Brand -->
+<header>
+<h1 class="font-display-lg text-display-lg tracking-tighter text-on-primary">EMBER</h1>
+<p class="font-body-lg text-body-lg text-on-primary/80 mt-4 max-w-md">Where demand sparks opportunity.</p>
+</header>
+<!-- Trust Signals -->
+<div class="mt-section-mobile lg:mt-auto relative pl-4">
+<div class="trace-line hidden lg:block"></div>
+<ul class="space-y-8">
+<li class="trust-item flex items-start gap-4 group">
+<div class="w-6 h-6 rounded-full bg-graphite border border-outline-variant/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-signal-yellow transition-colors">
+<div class="w-1.5 h-1.5 rounded-full bg-on-primary"></div>
+</div>
+<div>
+<h3 class="font-label text-label text-on-primary">Local demand visibility</h3>
+<p class="font-body-md text-body-md text-on-primary/60 mt-1 max-w-[280px]">Real-time insights into what your community needs right now.</p>
+</div>
+</li>
+<li class="trust-item flex items-start gap-4 group">
+<div class="w-6 h-6 rounded-full bg-graphite border border-outline-variant/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-signal-yellow transition-colors">
+<div class="w-1.5 h-1.5 rounded-full bg-on-primary"></div>
+</div>
+<div>
+<h3 class="font-label text-label text-on-primary">Verified marketplace activity</h3>
+<p class="font-body-md text-body-md text-on-primary/60 mt-1 max-w-[280px]">Transparent transaction histories and validated user identities.</p>
+</div>
+</li>
+<li class="trust-item flex items-start gap-4 group">
+<div class="w-6 h-6 rounded-full bg-graphite border border-outline-variant/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:border-signal-yellow transition-colors">
+<div class="w-1.5 h-1.5 rounded-full bg-on-primary"></div>
+</div>
+<div>
+<h3 class="font-label text-label text-on-primary">Protected contact &amp; payment</h3>
+<p class="font-body-md text-body-md text-on-primary/60 mt-1 max-w-[280px]">Secure communication channels and escrow-backed milestones.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Right Chapter (Cloud White) -->
+<section class="lg:w-7/12 bg-surface-container-lowest flex flex-col justify-center items-center p-8 md:p-12 lg:p-20 relative">
+<div class="w-full max-w-[480px]">
+<!-- Tab Control -->
+<div class="flex border-b border-divider/40 mb-10">
+<a class="pb-4 px-2 font-label text-label text-muted hover:text-primary transition-colors flex-1 text-center" href="#">Sign in</a>
+<a class="pb-4 px-2 font-label text-label text-primary border-b-2 border-primary flex-1 text-center" href="#">Create account</a>
+</div>
+<form class="space-y-6">
+<!-- Inputs -->
+<div class="space-y-4">
+<div class="input-field relative">
+<label class="absolute left-4 top-2 font-label-caps text-[10px] text-muted transition-colors" for="email">Email address</label>
+<input class="w-full h-[64px] pt-6 pb-2 px-4 bg-surface-container-low border border-transparent rounded focus:ring-0 focus:outline-none transition-colors font-body-md text-body-md text-primary" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+<div class="input-field relative">
+<label class="absolute left-4 top-2 font-label-caps text-[10px] text-muted transition-colors" for="password">Password</label>
+<input class="w-full h-[64px] pt-6 pb-2 px-4 pr-16 bg-surface-container-low border border-transparent rounded focus:ring-0 focus:outline-none transition-colors font-body-md text-body-md text-primary" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 font-label text-label text-muted hover:text-primary transition-colors" type="button">Show</button>
+</div>
+</div>
+<!-- Role Selection -->
+<div class="pt-4">
+<h3 class="font-label text-label text-primary mb-4">How will you use EMBER?</h3>
+<div class="space-y-3">
+<label class="relative block cursor-pointer group">
+<input checked="" class="peer sr-only" name="role" type="radio" value="buyer"/>
+<div class="p-4 rounded border border-divider/40 hover:border-outline-variant transition-colors flex items-start gap-4">
+<div class="radio-circle w-5 h-5 rounded-full border border-divider flex-shrink-0 mt-0.5 relative transition-colors group-hover:border-outline-variant"></div>
+<div>
+<div class="font-label text-label text-primary">I’m looking for something</div>
+<div class="font-body-md text-body-md text-muted mt-1 text-[13px]">Post needs and compare bids.</div>
+</div>
+</div>
+</label>
+<label class="relative block cursor-pointer group">
+<input class="peer sr-only" name="role" type="radio" value="seller"/>
+<div class="p-4 rounded border border-divider/40 hover:border-outline-variant transition-colors flex items-start gap-4">
+<div class="radio-circle w-5 h-5 rounded-full border border-divider flex-shrink-0 mt-0.5 relative transition-colors group-hover:border-outline-variant"></div>
+<div>
+<div class="font-label text-label text-primary">I can fulfill requests</div>
+<div class="font-body-md text-body-md text-muted mt-1 text-[13px]">Discover demand and build offers.</div>
+</div>
+</div>
+</label>
+<label class="relative block cursor-pointer group">
+<input class="peer sr-only" name="role" type="radio" value="both"/>
+<div class="p-4 rounded border border-divider/40 hover:border-outline-variant transition-colors flex items-start gap-4">
+<div class="radio-circle w-5 h-5 rounded-full border border-divider flex-shrink-0 mt-0.5 relative transition-colors group-hover:border-outline-variant"></div>
+<div>
+<div class="font-label text-label text-primary">Both</div>
+<div class="font-body-md text-body-md text-muted mt-1 text-[13px]">I plan to buy and sell on the platform.</div>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-6 space-y-6">
+<button class="w-full min-h-[56px] bg-ember-red hover:bg-ember-red-dark text-on-primary font-label text-label rounded flex items-center justify-center transition-colors" type="submit">
+              Continue
+            </button>
+<div class="relative flex items-center py-2">
+<div class="flex-grow border-t border-divider/40"></div>
+<span class="flex-shrink-0 px-4 font-label-caps text-label-caps text-muted bg-surface-container-lowest">or</span>
+<div class="flex-grow border-t border-divider/40"></div>
+</div>
+<button class="w-full min-h-[56px] bg-transparent border border-divider/40 hover:border-primary text-primary font-label text-label rounded flex items-center justify-center transition-colors" type="button">
+              Email me a secure link
+            </button>
+</div>
+<!-- Disclosure -->
+<p class="font-body-md text-[13px] text-muted text-center pt-4">
+            Buyers can post before completing a full profile. Sellers add verification after account creation.
+          </p>
+</form>
+</div>
+<!-- Footer-style Links -->
+<div class="absolute bottom-8 w-full flex justify-center gap-6 font-label text-label text-muted">
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</section>
+</main>
+<script>
+    // Simple password toggle logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.querySelector('button[type="button"]');
+      const passwordInput = document.getElementById('password');
+      
+      if(toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', () => {
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleBtn.textContent = 'Hide';
+          } else {
+            passwordInput.type = 'password';
+            toggleBtn.textContent = 'Show';
+          }
+        });
+      }
+    });
+  </script>
+</body></html>

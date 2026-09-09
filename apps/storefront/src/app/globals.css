@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: #f4f5f7;
+  --surface: #ffffff;
+  --surface-subtle: #fafafa;
+  --surface-strong: #e9ebef;
+  --foreground: #000000;
+  --graphite: #18191c;
+  --muted: #eceef2;
+  --subtle: #5f636b;
+  --divider: #d9dce2;
+  --ember: #ff3b30;
+  --ember-pressed: #d92d20;
+  /* Bright red remains the brand mark; deeper shades keep small text legible. */
+  --ember-action: #d92d20;
+  --ember-ink: #bd271b;
+  --app-header-height: 4rem;
+  --error: #a61b16;
+  --success: #168653;
+  --ring: #18191c;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.04);
+  --shadow-md: 0 12px 32px rgb(15 23 42 / 0.08), 0 2px 8px rgb(15 23 42 / 0.04);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-strong: var(--surface-strong);
+  --color-foreground: var(--foreground);
+  --color-graphite: var(--graphite);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-divider: var(--divider);
+  --color-ember: var(--ember);
+  --color-ember-pressed: var(--ember-pressed);
+  --color-ember-action: var(--ember-action);
+  --color-ember-ink: var(--ember-ink);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-ring: var(--ring);
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--background); scroll-behavior: smooth; scroll-padding-top: calc(var(--app-header-height) + 1rem); }
+
+@media (min-width: 48rem) {
+  :root { --app-header-height: 4.5rem; }
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button, input, textarea, select { font: inherit; }
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:not(:disabled),
+a[href],
+select:not(:disabled),
+summary {
+  cursor: pointer;
+}
+
+button:disabled { cursor: not-allowed; }
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+.font-display { font-family: "Poppins", ui-sans-serif, system-ui, sans-serif; }
+
+.eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+@layer components {
+ .enterprise-panel {
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.enterprise-panel-raised {
+  border: 1px solid rgb(217 220 226 / 0.88);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+}
+
+.metric-number {
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.045em;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  transform: translateY(-160%);
+  border-radius: 8px;
+  background: white;
+  color: black;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+  transition: transform 160ms ease-out;
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::selection { background: var(--ember-action); color: white; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

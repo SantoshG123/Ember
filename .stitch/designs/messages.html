@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EMBER - Messages</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#dadada",
+                        "divider": "#D2D2D7",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-secondary-container": "#616363",
+                        "on-secondary-fixed-variant": "#454747",
+                        "inverse-on-surface": "#f1f1f1",
+                        "muted": "#86868B",
+                        "tertiary-fixed": "#e2e2e2",
+                        "tertiary-container": "#1b1b1b",
+                        "surface-container-highest": "#e2e2e2",
+                        "outline": "#7e7576",
+                        "surface-muted": "#EEEEF0",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container": "#eeeeee",
+                        "inverse-primary": "#c6c6c6",
+                        "warning": "#9A6700",
+                        "secondary-fixed": "#e2e2e2",
+                        "background": "#F5F5F7",
+                        "tertiary": "#000000",
+                        "surface-tint": "#5e5e5e",
+                        "secondary-container": "#dfe0e0",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#848484",
+                        "signal-yellow": "#FFE100",
+                        "primary-fixed": "#e2e2e2",
+                        "success": "#168653",
+                        "signal-yellow-pressed": "#E5CA00",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-surface": "#1b1b1b",
+                        "secondary": "#5d5f5f",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e8e8e8",
+                        "primary": "#000000",
+                        "inverse-surface": "#303030",
+                        "outline-variant": "#cfc4c5",
+                        "graphite": "#1D1D1F",
+                        "primary-container": "#1b1b1b",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "on-background": "#1b1b1b",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "surface-container-low": "#f3f3f3",
+                        "on-surface-variant": "#4c4546",
+                        "surface-bright": "#f9f9f9",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "error": "#D92D20",
+                        "on-primary-container": "#848484",
+                        "on-primary-fixed-variant": "#474747",
+                        "ember-red": "#FF3B30"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "md": "0.375rem", // 6px
+                        "lg": "0.75rem",  // 12px
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "margin-desktop": "64px",
+                        "base": "8px",
+                        "section-desktop": "160px",
+                        "section-mobile": "88px",
+                        "gutter-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Manrope"],
+                        "display-xl": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "label": ["Manrope"],
+                        "display-lg": ["Poppins"],
+                        "stat": ["Poppins"],
+                        "display-mobile": ["Poppins"],
+                        "body-md": ["Manrope"],
+                        "label-caps": ["Manrope"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }],
+                        "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md h-screen overflow-hidden flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-graphite text-on-primary font-label text-label tracking-widest uppercase docked full-width top-0 sticky flat no shadows flex justify-between items-center w-full px-margin-desktop h-16 z-50">
+<div class="flex items-center gap-8">
+<span class="font-display-mobile text-display-mobile font-bold text-signal-yellow">EMBER</span>
+<div class="hidden md:flex gap-6">
+<a class="text-muted hover:text-on-primary transition-colors cursor-pointer active:opacity-80" href="#">Marketplace</a>
+<a class="text-on-primary border-b-2 border-signal-yellow pb-1 cursor-pointer active:opacity-80" href="#">Messages</a>
+<a class="text-muted hover:text-on-primary transition-colors cursor-pointer active:opacity-80" href="#">Activity</a>
+<a class="text-muted hover:text-on-primary transition-colors cursor-pointer active:opacity-80" href="#">Proposals</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-ember-red text-white px-4 py-2 rounded-md font-label hover:opacity-90 transition-opacity">Post a Request</button>
+<span class="material-symbols-outlined cursor-pointer hover:text-signal-yellow transition-all" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-signal-yellow transition-all" data-icon="settings">settings</span>
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover border border-white/20" data-alt="A small circular avatar of a professional user with a calm expression, studio lighting, minimal background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuGfR7M3HQG0CYI_2znL1CqKmKyslN-A_BxckfKlJ62BKK1NVvZdEkk-075yw2akGLNFULV10pC7KZEr9DLCqM6uB6nfsTOeaiDKWOCmJWYDXgyx8GmS-KAHGxNFrY4d4TDQW0L9ZbDND5QGcJvy5umBgETmMegpT-vYeAyDx53smpuzAZwryRqz1kO6Wopfaoaq3C1nqCsFDgYd8pvMA4UZDHnzo-WjmUabJkJ385pZ9dEf-eTKOioUnAe73jaCv_nodJmVKPD5uW"/>
+<span class="text-muted hover:text-on-primary transition-colors cursor-pointer active:opacity-80">Support</span>
+</div>
+</nav>
+<!-- Main Workspace -->
+<main class="flex-1 flex overflow-hidden bg-background">
+<!-- Left Panel: Conversation List -->
+<aside class="w-80 border-r border-divider bg-surface flex flex-col hidden md:flex">
+<div class="p-4 border-b border-divider">
+<div class="relative mb-4">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-muted" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-muted border-none rounded-md text-body-md focus:ring-1 focus:ring-primary" placeholder="Search messages..." type="text"/>
+</div>
+<div class="flex gap-4 font-label text-muted">
+<span class="text-primary cursor-pointer font-bold">All</span>
+<span class="cursor-pointer hover:text-primary transition-colors">Unread</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Active Thread -->
+<div class="p-4 border-b border-divider bg-surface-muted cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-bold text-on-surface">Chef Maria L.</span>
+<span class="text-label text-muted">10:42 AM</span>
+</div>
+<p class="text-body-md text-on-surface-variant truncate">Weekly homemade Italian dinners...</p>
+</div>
+<!-- Inactive Threads -->
+<div class="p-4 border-b border-divider cursor-pointer hover:bg-surface-muted transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-bold text-on-surface">Green Thumb Pros</span>
+<span class="text-label text-muted">Yesterday</span>
+</div>
+<p class="text-body-md text-on-surface-variant truncate">Weekly lawn care - The yard looks...</p>
+</div>
+<div class="p-4 border-b border-divider cursor-pointer hover:bg-surface-muted transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="font-bold text-on-surface">Dr. A. Chen</span>
+<span class="text-label text-muted">Tue</span>
+</div>
+<p class="text-body-md text-on-surface-variant truncate">Calculus tutoring - Here are the notes...</p>
+</div>
+</div>
+</aside>
+<!-- Center Panel: Active Chat -->
+<section class="flex-1 flex flex-col bg-surface relative">
+<!-- Chat Header -->
+<div class="h-16 border-b border-divider flex items-center justify-between px-6 bg-surface z-10">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a professional female chef in a clean white uniform, smiling gently, softly lit modern kitchen background, monochrome tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCExAEfAhbarNI1yBQYicWYj8awX0RuMfj8kBKqtRy5zPZOabyUQq5QL1LIzuDKAYd0FW5djWOQ-ng9Ntgzt6ejOAmO0O7r8hn961MNp7roRs8jUJBwhUYKqJCAPf9K7iKVb22ee9BTow8JW_1QkylOE1VYPVS32ikKTeFviN2H_h7Dg5EeB2KqlYXWffvIRYvQIqNrz3Uzmu3kZGNDHICiyM-04g8wnPwwZJPKfTrx1Cvb4hy-togPTiaXYHVYzBriMxzH4ZoHfu8r"/>
+<div>
+<h2 class="font-bold text-on-surface">Chef Maria L.</h2>
+<p class="text-label text-muted">Weekly homemade Italian dinners</p>
+</div>
+</div>
+<div class="flex gap-4 text-muted">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors" data-icon="videocam">videocam</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div class="flex justify-center">
+<span class="text-label text-muted bg-surface-muted px-3 py-1 rounded-full">Today</span>
+</div>
+<!-- Received Message -->
+<div class="flex items-start gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small circular avatar of a professional female chef, clean white uniform, smiling gently." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGd0FWnucYbHjzk-kk3ViVlerfCxmqJRE2PqXjFJ7ZYFb9ltY--sa6EyEHXAmVOB-tCuVpaEXvxSx_WzLzCzQsVw-k63cDFcyAzGgODKraRc9ziEhOVrKjrT52VoNn0n85I5qmuNcYHXJ0OfPcq_vTGkrOUqMYuCRbKiNF8fut1rxrNMWtvBD7R_y4dRoPmBq50qixTjh93MvJwAnGa9xfxdQMs_roRdBEwRGqsIuP0mu_-6LjIdD_IeNxi4elRCeuwqTU-BBZah5w"/>
+<div class="bg-surface-muted p-4 rounded-lg rounded-tl-none max-w-2xl">
+<p class="text-body-md text-on-surface mb-2">Hi Jordan! I've put together a proposed menu for next week's deliveries based on your preferences. Let me know what you think!</p>
+<!-- Attachment -->
+<div class="flex items-center gap-3 p-3 bg-surface border border-divider rounded-md cursor-pointer hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-ember-red" data-icon="description">description</span>
+<div>
+<p class="font-bold text-sm text-on-surface">Menu_Proposal_Sept_W2.pdf</p>
+<p class="text-label text-muted">1.2 MB</p>
+</div>
+</div>
+<span class="text-label text-muted mt-2 block">10:42 AM</span>
+</div>
+</div>
+<!-- Sent Message -->
+<div class="flex items-start gap-3 flex-row-reverse">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small circular avatar of a professional male user, calm expression, minimal background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlGsJPyn9aJJzjGmKBrKQqQwkc0tsfK-gx067jHWho_BMMDOv7w_8VoSImmov22zj1HfmUWzMS0Qy0vdsJxaX71xJjE68c1zkG-ioJioWNqLKSBoaYcxSACtysgYdWSQaP1UHYn1xjwbCJ_is-PZqHopEXKeWqpA4TE70bS33KLisIIblH6LwYXvs5w0g29rY9q9dYXGNaIF02bE3frwljpym39tCW8O4_Qj6_P5bnGjWd8mE_lmxJ9Sn2OuCri3Z5ULwMGHW1_Dhe"/>
+<div class="bg-graphite text-white p-4 rounded-lg rounded-tr-none max-w-2xl">
+<p class="text-body-md">This looks fantastic Maria! The truffle risotto sounds amazing. We are good to go for Wednesday.</p>
+<span class="text-label text-muted mt-2 block text-right">10:45 AM</span>
+</div>
+</div>
+</div>
+<!-- Message Composer -->
+<div class="p-6 bg-surface border-t border-divider">
+<div class="flex items-end gap-3 bg-surface-muted p-2 rounded-lg border border-divider focus-within:border-primary transition-colors">
+<button class="p-2 text-muted hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="attach_file">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 resize-none text-body-md max-h-32" placeholder="Type a message..." rows="1"></textarea>
+<button class="bg-ember-red text-white p-2 rounded-md hover:opacity-90 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Right Panel: Deal Context -->
+<aside class="w-80 border-l border-divider bg-surface-bright hidden lg:flex flex-col p-6 overflow-y-auto">
+<div class="mb-8">
+<span class="inline-block px-2 py-1 bg-surface-muted border border-divider rounded-md text-label font-bold text-on-surface mb-4 uppercase">Accepted Proposal</span>
+<h3 class="font-headline-md text-2xl text-on-surface mb-6">Weekly homemade Italian dinners</h3>
+<div class="space-y-4 text-body-md">
+<div class="flex justify-between border-b border-divider pb-2">
+<span class="text-muted">Rate</span>
+<span class="font-bold text-on-surface">$68 per delivery</span>
+</div>
+<div class="flex justify-between border-b border-divider pb-2">
+<span class="text-muted">Quantity</span>
+<span class="font-bold text-on-surface">4 portions</span>
+</div>
+<div class="flex justify-between border-b border-divider pb-2">
+<span class="text-muted">Schedule</span>
+<span class="font-bold text-on-surface">Wednesdays, 6:30 PM</span>
+</div>
+<div class="flex justify-between border-b border-divider pb-2">
+<span class="text-muted">Location</span>
+<span class="font-bold text-on-surface">Hyde Park</span>
+</div>
+<div class="flex justify-between border-b border-divider pb-2">
+<span class="text-muted">Dietary</span>
+<span class="font-bold text-ember-red">No Shellfish</span>
+</div>
+</div>
+</div>
+<!-- Milestone Block -->
+<div class="bg-surface p-4 rounded-lg border border-divider mb-6 shadow-sm">
+<div class="flex items-center gap-2 text-muted mb-2 font-label uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm" data-icon="event">event</span>
+                    Next Delivery
+                </div>
+<div class="font-display-mobile text-3xl font-bold text-on-surface">Sept 14</div>
+<div class="text-body-md text-on-surface-variant mt-1">6:30 PM - Hyde Park</div>
+</div>
+<a class="text-center text-label text-muted hover:text-primary transition-colors uppercase tracking-widest border border-divider py-3 rounded-md hover:bg-surface-muted" href="#">View full request</a>
+</aside>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="bg-graphite text-on-primary font-label-caps text-label-caps fixed bottom-0 w-full z-50 md:hidden border-t border-white/10 shadow-lg flex justify-around items-center py-3 px-4">
+<div class="flex flex-col items-center justify-center text-muted active:bg-tertiary-container scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-signal-yellow active:bg-tertiary-container scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span>Messages</span>
+</div>
+<div class="flex flex-col items-center justify-center text-muted active:bg-tertiary-container scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Proposals</span>
+</div>
+<div class="flex flex-col items-center justify-center text-muted active:bg-tertiary-container scale-95 active:scale-90 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>Profile</span>
+</div>
+</nav>
+<footer class="hidden md:block bg-graphite text-muted text-center py-2 text-label">
+        EMBER — Where demand sparks opportunity.
+    </footer>
+</body></html>

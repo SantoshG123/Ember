@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Opportunity: East Austin Team Lunch | EMBER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#dadada",
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "muted": "#86868B",
+                        "on-primary-container": "#848484",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "signal-yellow": "#FFE100",
+                        "surface-muted": "#EEEEF0",
+                        "outline-variant": "#cfc4c5",
+                        "warning": "#9A6700",
+                        "on-tertiary-container": "#848484",
+                        "signal-yellow-pressed": "#E5CA00",
+                        "inverse-on-surface": "#f1f1f1",
+                        "tertiary-container": "#1b1b1b",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#1b1b1b",
+                        "tertiary": "#000000",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "on-primary-fixed-variant": "#474747",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-secondary-fixed-variant": "#454747",
+                        "surface-bright": "#f9f9f9",
+                        "secondary": "#5d5f5f",
+                        "outline": "#7e7576",
+                        "on-background": "#1b1b1b",
+                        "background": "#F5F5F7",
+                        "error": "#D92D20",
+                        "tertiary-fixed": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "on-surface-variant": "#4c4546",
+                        "surface-tint": "#5e5e5e",
+                        "primary-fixed": "#e2e2e2",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#dfe0e0",
+                        "divider": "#D2D2D7",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-secondary-container": "#616363",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#1b1b1b",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-container": "#eeeeee",
+                        "secondary-fixed": "#e2e2e2",
+                        "success": "#168653",
+                        "graphite": "#1D1D1F",
+                        "on-surface": "#1b1b1b",
+                        "inverse-primary": "#c6c6c6",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container-high": "#e8e8e8",
+                        "ember-red": "#FF3B30"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "section-mobile": "88px",
+                        "base": "8px",
+                        "gutter-desktop": "40px",
+                        "section-desktop": "160px"
+                    },
+                    "fontFamily": {
+                        "label": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "display-xl": ["Poppins"],
+                        "display-lg": ["Poppins"],
+                        "headline-md": ["Poppins"],
+                        "body-md": ["Manrope"],
+                        "label-caps": ["Manrope"],
+                        "display-mobile": ["Poppins"],
+                        "stat": ["Poppins"]
+                    },
+                    "fontSize": {
+                        "label": ["12px", { "lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "155%", "fontWeight": "400" }],
+                        "display-xl": ["120px", { "lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600" }],
+                        "display-lg": ["76px", { "lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "headline-md": ["52px", { "lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "150%", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "display-mobile": ["46px", { "lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600" }],
+                        "stat": ["68px", { "lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .precision-divider { border-bottom: 1px solid theme('colors.divider'); }
+        .dark .precision-divider { border-bottom: 1px solid theme('colors.on-tertiary-fixed-variant'); }
+        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-ember-red selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-tertiary dark:bg-tertiary border-b border-divider dark:border-on-tertiary-fixed-variant transition-all duration-300">
+<div class="flex justify-between items-center px-margin-desktop h-20 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-12">
+<a class="font-display-lg text-display-lg-mobile tracking-tighter text-on-tertiary dark:text-on-tertiary" href="#">EMBER</a>
+<div class="hidden md:flex gap-8">
+<a class="font-label-caps text-label-caps text-on-tertiary dark:text-on-tertiary border-b-2 border-ember-red pb-1 hover:text-ember-red transition-colors duration-200" href="#">Discover</a>
+<a class="font-label-caps text-label-caps text-muted dark:text-on-primary-container hover:text-ember-red transition-colors duration-200" href="#">Markets</a>
+<a class="font-label-caps text-label-caps text-muted dark:text-on-primary-container hover:text-ember-red transition-colors duration-200" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="hidden md:flex items-center justify-center bg-ember-red text-white font-label-caps text-label-caps px-6 py-3 rounded hover:bg-red-700 transition-colors duration-200 min-h-[44px]">
+                    Post a Request
+                </button>
+<button class="md:hidden text-on-tertiary min-h-[44px] min-w-[44px] flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section (Absolute Black) -->
+<header class="bg-tertiary text-on-tertiary pt-[160px] pb-section-desktop px-margin-desktop min-h-[921px] flex flex-col justify-center relative overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-40 mix-blend-luminosity">
+<div class="bg-cover bg-center w-full h-full" data-alt="A cinematic, high-contrast, black and white documentary-style photograph of a modern, minimal creative office space in East Austin. Professionals collaborating around a large wooden table during lunch. Dramatic lighting, deep shadows, premium corporate aesthetic, razor-sharp focus." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBo8Uo6ayX5FpJJ0Fb4WcCwBtR2wgH6g7IpiI4SblDYQVw2zqOfyKQaVUo4gGbI8-o0Q_H5ZaAs7G_oOV-m9qPdXaiX_ya5f_61vRK_PIsp1UiOSQALaDE7uigDNrRyFPKcpdl2Ms2POQvm2f36f21y1nM1-_Ru4tfrStb2QWSddS0RDvy9BkMyeasulBtBQVv_nmRyhBvYzndqIF4yZVNhrJQH6js_vHerO_3ocsVA2EIRXWgJSOpos1DHKNPNOCWlORzkk2_VUy6p')"></div>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-tertiary via-tertiary/90 to-transparent z-10"></div>
+<div class="max-w-[1440px] mx-auto w-full relative z-20 grid grid-cols-1 md:grid-cols-12 gap-gutter-desktop items-center">
+<div class="md:col-span-7 flex flex-col gap-8">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-ember-red animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-ember-red uppercase tracking-widest">VERIFIED DEMAND CLUSTER</span>
+</div>
+<h1 class="font-headline-md text-headline-md md:font-display-lg md:text-display-lg text-on-tertiary leading-tight">
+                    Weekday lunch delivery for creative offices in East Austin.
+                </h1>
+<p class="font-body-lg text-body-lg text-muted max-w-2xl">
+                    Aggregated demand from 14 distinct creative agencies and tech startups seeking reliable, high-quality, and sustainably packaged lunch options.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-8">
+<button class="bg-ember-red text-white font-label-caps text-label-caps px-8 py-4 rounded hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px]">
+                        Build an offer
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+<button class="glass-panel text-on-tertiary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-white/10 transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px]">
+<span class="material-symbols-outlined">bookmark</span>
+                        Save Opportunity
+                    </button>
+</div>
+</div>
+<div class="md:col-span-4 md:col-start-9 flex flex-col gap-12 mt-12 md:mt-0 glass-panel p-10 rounded-xl">
+<div class="flex flex-col gap-2">
+<span class="font-label-caps text-label-caps text-muted">Primary Metric</span>
+<div class="flex flex-col">
+<span class="font-stat text-stat text-on-tertiary leading-none">28</span>
+<span class="font-body-lg text-body-lg text-ember-red mt-2">Active Requests</span>
+</div>
+</div>
+<div class="h-[1px] bg-white/10 w-full"></div>
+<div class="flex flex-col gap-2">
+<span class="font-label-caps text-label-caps text-muted">Estimated Weekly Value</span>
+<div class="font-stat text-stat text-on-tertiary flex items-baseline gap-2">
+                        $2.4k<span class="font-body-lg text-body-lg text-muted">/wk</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Specification Band (White) -->
+<section class="bg-surface-container-lowest py-16 px-margin-desktop border-b border-divider">
+<div class="max-w-[1440px] mx-auto w-full">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-8 divide-x divide-divider">
+<div class="flex flex-col gap-2 pl-0 md:px-6 first:pl-0 border-none md:border-solid">
+<span class="font-label-caps text-label-caps text-muted">Volume</span>
+<span class="font-headline-md text-headline-md text-primary">146</span>
+<span class="font-label text-label text-secondary">meals per week</span>
+</div>
+<div class="flex flex-col gap-2 px-6">
+<span class="font-label-caps text-label-caps text-muted">Median Budget</span>
+<span class="font-headline-md text-headline-md text-primary">$17</span>
+<span class="font-label text-label text-secondary">per meal</span>
+</div>
+<div class="flex flex-col gap-2 px-6">
+<span class="font-label-caps text-label-caps text-muted">Density</span>
+<span class="font-headline-md text-headline-md text-primary">3.1</span>
+<span class="font-label text-label text-secondary">mile radius</span>
+</div>
+<div class="flex flex-col gap-2 px-6">
+<span class="font-label-caps text-label-caps text-muted">Peak Days</span>
+<span class="font-headline-md text-headline-md text-primary">T-Th</span>
+<span class="font-label text-label text-secondary">highest volume</span>
+</div>
+<div class="flex flex-col gap-2 px-6">
+<span class="font-label-caps text-label-caps text-muted">Schedule Overlap</span>
+<span class="font-headline-md text-headline-md text-primary">82%</span>
+<span class="font-label text-label text-secondary">delivery windows</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Demand Timeline & Buyer Analysis (Light Surface) -->
+<section class="bg-surface py-section-desktop px-margin-desktop">
+<div class="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop">
+<!-- Left Col: Buyer Analysis -->
+<div class="lg:col-span-4 flex flex-col gap-10">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Buyer Analysis</h2>
+<p class="font-body-md text-body-md text-secondary">Granular view of demand concentration across key East Austin neighborhoods.</p>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Neighborhood Items -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest border border-divider rounded-lg hover:border-primary transition-colors cursor-pointer min-h-[44px]">
+<div class="flex flex-col">
+<span class="font-label text-label text-primary">East Cesar Chavez</span>
+<span class="font-body-md text-body-md text-secondary text-sm">42% of volume</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-divider flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest border border-divider rounded-lg hover:border-primary transition-colors cursor-pointer min-h-[44px]">
+<div class="flex flex-col">
+<span class="font-label text-label text-primary">Holly</span>
+<span class="font-body-md text-body-md text-secondary text-sm">28% of volume</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-divider flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest border border-divider rounded-lg hover:border-primary transition-colors cursor-pointer min-h-[44px]">
+<div class="flex flex-col">
+<span class="font-label text-label text-primary">Govalle</span>
+<span class="font-body-md text-body-md text-secondary text-sm">18% of volume</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-divider flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest border border-divider rounded-lg hover:border-primary transition-colors cursor-pointer min-h-[44px]">
+<div class="flex flex-col">
+<span class="font-label text-label text-primary">Mueller</span>
+<span class="font-body-md text-body-md text-secondary text-sm">12% of volume</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-divider flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Col: Demand Timeline -->
+<div class="lg:col-span-8 flex flex-col gap-10">
+<div class="flex flex-row justify-between items-end">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Demand Velocity</h2>
+<p class="font-body-md text-body-md text-secondary">Request volume over the trailing 6 weeks.</p>
+</div>
+<div class="flex gap-2 bg-surface-container p-1 rounded-lg border border-divider">
+<button class="px-4 py-1.5 font-label-caps text-label-caps text-secondary hover:text-primary transition-colors rounded min-h-[44px]">2W</button>
+<button class="px-4 py-1.5 font-label-caps text-label-caps text-secondary hover:text-primary transition-colors rounded min-h-[44px]">4W</button>
+<button class="px-4 py-1.5 font-label-caps text-label-caps bg-surface-container-lowest text-primary shadow-sm rounded min-h-[44px]">6W</button>
+</div>
+</div>
+<!-- Abstract Timeline Chart -->
+<div class="bg-surface-container-lowest border border-divider rounded-xl p-8 h-80 flex items-end gap-4 relative overflow-hidden">
+<!-- Y-Axis labels -->
+<div class="absolute left-4 top-8 bottom-8 flex flex-col justify-between text-muted font-label-caps text-[10px]">
+<span>30</span>
+<span>20</span>
+<span>10</span>
+<span>0</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 ml-12 pointer-events-none flex flex-col justify-between py-8">
+<div class="w-full h-px bg-divider/50"></div>
+<div class="w-full h-px bg-divider/50"></div>
+<div class="w-full h-px bg-divider/50"></div>
+<div class="w-full h-px bg-divider/50"></div>
+</div>
+<!-- Bars -->
+<div class="flex-1 flex items-end justify-around h-full pt-8 pl-8 z-10">
+<div class="w-12 bg-surface-variant hover:bg-primary-fixed-dim transition-colors rounded-t-sm h-[20%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">6</div>
+</div>
+<div class="w-12 bg-surface-variant hover:bg-primary-fixed-dim transition-colors rounded-t-sm h-[35%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">10</div>
+</div>
+<div class="w-12 bg-surface-variant hover:bg-primary-fixed-dim transition-colors rounded-t-sm h-[40%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">12</div>
+</div>
+<div class="w-12 bg-ember-red hover:bg-red-700 transition-colors rounded-t-sm h-[80%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">24</div>
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-ember-red rounded-full blur-md opacity-50"></div>
+</div>
+<div class="w-12 bg-surface-variant hover:bg-primary-fixed-dim transition-colors rounded-t-sm h-[60%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">18</div>
+</div>
+<div class="w-12 bg-surface-variant hover:bg-primary-fixed-dim transition-colors rounded-t-sm h-[95%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity font-label text-label bg-primary text-white px-2 py-1 rounded">28</div>
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-primary rounded-full blur-md opacity-20"></div>
+</div>
+</div>
+</div>
+<div class="flex justify-around pl-12 font-label-caps text-label-caps text-muted">
+<span>Wk 1</span>
+<span>Wk 2</span>
+<span>Wk 3</span>
+<span>Wk 4</span>
+<span>Wk 5</span>
+<span>Current</span>
+</div>
+</div>
+</div>
+</section>
+<!-- New: What buyers are asking for & Why this signal is credible -->
+<section class="bg-surface-container-lowest py-section-desktop px-margin-desktop border-t border-divider">
+<div class="max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-gutter-desktop">
+<!-- What buyers are asking for -->
+<div class="flex flex-col gap-8">
+<h2 class="font-headline-md text-headline-md text-primary">What buyers are asking for</h2>
+<div class="flex flex-col">
+<div class="py-4 border-b border-divider flex items-start gap-4">
+<span class="material-symbols-outlined text-muted mt-1">format_quote</span>
+<p class="font-body-lg text-body-lg text-primary">"Weekly vegetarian office lunch for 12"</p>
+</div>
+<div class="py-4 border-b border-divider flex items-start gap-4">
+<span class="material-symbols-outlined text-muted mt-1">format_quote</span>
+<p class="font-body-lg text-body-lg text-primary">"Gluten-free catering for tech agency"</p>
+</div>
+<div class="py-4 border-b border-divider flex items-start gap-4">
+<span class="material-symbols-outlined text-muted mt-1">format_quote</span>
+<p class="font-body-lg text-body-lg text-primary">"Daily fresh salads for studio team"</p>
+</div>
+</div>
+<div class="flex flex-col gap-4 mt-4">
+<div class="flex justify-between items-center py-2 border-b border-divider/50">
+<span class="font-label-caps text-label-caps text-muted">Recurring Dietary Requirements</span>
+<span class="font-body-md text-body-md text-primary font-medium">Vegan, Nut-free, GF</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider/50">
+<span class="font-label-caps text-label-caps text-muted">Packaging Preference</span>
+<span class="font-body-md text-body-md text-primary font-medium">Reusable packaging</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-divider/50">
+<span class="font-label-caps text-label-caps text-muted">Preferred Delivery Windows</span>
+<span class="font-body-md text-body-md text-primary font-medium">11:30 AM - 12:30 PM</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-12">
+<!-- Why this signal is credible -->
+<div class="flex flex-col gap-8">
+<h2 class="font-headline-md text-headline-md text-primary">Why this signal is credible</h2>
+<div class="grid grid-cols-2 gap-6">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-muted">Sample Size</span>
+<span class="font-display-mobile text-display-mobile text-primary">28</span>
+<span class="font-label text-label text-secondary">matched requests</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-muted">Freshness</span>
+<span class="font-display-mobile text-display-mobile text-primary">24</span>
+<span class="font-label text-label text-secondary">requests in last 21 days</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-muted">Repeat Intent</span>
+<span class="font-display-mobile text-display-mobile text-primary">71%</span>
+<span class="font-label text-label text-secondary">recurring potential</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-muted">Schedule Overlap</span>
+<span class="font-display-mobile text-display-mobile text-primary">82%</span>
+<span class="font-label text-label text-secondary">delivery alignment</span>
+</div>
+</div>
+</div>
+<!-- Seller-readiness checklist -->
+<div class="bg-surface p-8 rounded-xl border border-divider">
+<h3 class="font-body-lg text-body-lg font-semibold text-primary mb-6">Seller-readiness checklist</h3>
+<ul class="flex flex-col gap-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md text-body-md text-primary">Weekday production capacity</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md text-body-md text-primary">Delivery within 3.1 miles</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md text-body-md text-primary">Reusable container logistics</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-md text-body-md text-primary">Dietary labeling capability</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Final Conversion Chapter -->
+<section class="bg-tertiary text-on-tertiary py-section-desktop px-margin-desktop flex flex-col items-center justify-center text-center">
+<div class="max-w-3xl flex flex-col items-center gap-8">
+<h2 class="font-display-lg text-display-lg text-on-tertiary">Ready to fulfill this demand?</h2>
+<div class="flex flex-col sm:flex-row gap-4 mt-4">
+<button class="bg-ember-red text-white font-label-caps text-label-caps px-8 py-4 rounded hover:bg-red-700 transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px]">
+                Build an offer
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+<button class="glass-panel text-on-tertiary font-label-caps text-label-caps px-8 py-4 rounded hover:bg-white/10 transition-colors duration-200 flex items-center justify-center gap-2 min-h-[44px]">
+<span class="material-symbols-outlined">bookmark</span>
+                Save opportunity
+            </button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-tertiary dark:bg-tertiary w-full py-12 border-t border-divider dark:border-on-tertiary-fixed-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop w-full max-w-[1440px] mx-auto gap-8 md:gap-0">
+<div class="flex flex-col md:flex-row items-center gap-4 md:gap-8 flex-1">
+<span class="font-display-mobile text-display-mobile text-white leading-none">EMBER</span>
+<span class="font-body-md text-body-md text-muted">Where demand sparks opportunity.</span>
+</div>
+<div class="flex gap-8 flex-1 justify-center">
+<a class="font-label-caps text-label-caps text-muted hover:text-white transition-all duration-300 min-h-[44px] flex items-center" href="#">About</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-white transition-all duration-300 min-h-[44px] flex items-center" href="#">Terms</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-white transition-all duration-300 min-h-[44px] flex items-center" href="#">Privacy</a>
+<a class="font-label-caps text-label-caps text-muted hover:text-white transition-all duration-300 min-h-[44px] flex items-center" href="#">Support</a>
+</div>
+<div class="flex-1 flex justify-end">
+<span class="font-body-md text-body-md text-muted">© 2026 EMBER Marketplace.</span>
+</div>
+</div>
+</footer>
+</body></html>

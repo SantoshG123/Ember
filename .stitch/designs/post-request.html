@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post a Request - EMBER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed-dim": "#c6c6c7",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#e2e2e2",
+            "on-secondary-container": "#616363",
+            "graphite": "#1D1D1F",
+            "surface-container-highest": "#e2e2e2",
+            "signal-yellow-pressed": "#E5CA00",
+            "signal-yellow": "#FFE100",
+            "on-primary": "#ffffff",
+            "outline-variant": "#cfc4c5",
+            "inverse-surface": "#303030",
+            "on-surface-variant": "#4c4546",
+            "muted": "#86868B",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#e8e8e8",
+            "surface-container-lowest": "#ffffff",
+            "divider": "#D2D2D7",
+            "primary-fixed-dim": "#c6c6c6",
+            "on-tertiary-container": "#848484",
+            "surface-variant": "#e2e2e2",
+            "surface": "#f9f9f9",
+            "on-primary-fixed": "#1b1b1b",
+            "primary": "#000000",
+            "primary-fixed": "#e2e2e2",
+            "error": "#A61B16",
+            "on-error-container": "#93000a",
+            "surface-container-low": "#f3f3f3",
+            "surface-bright": "#f9f9f9",
+            "background": "#F5F5F7",
+            "surface-muted": "#EEEEF0",
+            "on-primary-fixed-variant": "#474747",
+            "surface-dim": "#dadada",
+            "on-secondary-fixed": "#1a1c1c",
+            "on-secondary": "#ffffff",
+            "tertiary-container": "#1b1b1b",
+            "on-background": "#1b1b1b",
+            "inverse-primary": "#c6c6c6",
+            "on-tertiary-fixed-variant": "#474747",
+            "success": "#168653",
+            "on-surface": "#1b1b1b",
+            "tertiary": "#000000",
+            "on-tertiary-fixed": "#1b1b1b",
+            "on-primary-container": "#848484",
+            "primary-container": "#1b1b1b",
+            "warning": "#9A6700",
+            "outline": "#7e7576",
+            "on-secondary-fixed-variant": "#454747",
+            "on-error": "#ffffff",
+            "surface-tint": "#5e5e5e",
+            "inverse-on-surface": "#f1f1f1",
+            "tertiary-fixed": "#e2e2e2",
+            "secondary": "#5d5f5f",
+            "tertiary-fixed-dim": "#c6c6c6",
+            "surface-container": "#eeeeee",
+            "secondary-container": "#dfe0e0",
+            "ember-red": "#FF3B30"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem",
+            "card": "12px",
+            "control": "6px"
+          },
+          "spacing": {
+            "gutter-desktop": "40px",
+            "base": "8px",
+            "section-desktop": "160px",
+            "margin-desktop": "64px",
+            "section-mobile": "88px"
+          },
+          "fontFamily": {
+            "label": ["Manrope", "sans-serif"],
+            "display-lg": ["Poppins", "sans-serif"],
+            "body-md": ["Manrope", "sans-serif"],
+            "stat": ["Poppins", "sans-serif"],
+            "label-caps": ["Manrope", "sans-serif"],
+            "headline-md": ["Poppins", "sans-serif"],
+            "display-xl": ["Poppins", "sans-serif"],
+            "display-mobile": ["Poppins", "sans-serif"],
+            "body-lg": ["Manrope", "sans-serif"]
+          },
+          "fontSize": {
+            "label": ["12px", {"lineHeight": "140%", "letterSpacing": "0.08em", "fontWeight": "600"}],
+            "display-lg": ["76px", {"lineHeight": "96%", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+            "body-md": ["15px", {"lineHeight": "150%", "fontWeight": "400"}],
+            "stat": ["68px", {"lineHeight": "92%", "letterSpacing": "-0.045em", "fontWeight": "500"}],
+            "label-caps": ["12px", {"lineHeight": "17px", "letterSpacing": "0.08em", "fontWeight": "600"}],
+            "headline-md": ["52px", {"lineHeight": "102%", "letterSpacing": "-0.035em", "fontWeight": "600"}],
+            "display-xl": ["120px", {"lineHeight": "90%", "letterSpacing": "-0.05em", "fontWeight": "600"}],
+            "display-mobile": ["46px", {"lineHeight": "100%", "letterSpacing": "-0.035em", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "155%", "fontWeight": "400"}]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- Top Navigation (EMBER style) -->
+<header class="bg-primary text-on-primary sticky top-0 w-full z-50 px-margin-desktop py-4 flex justify-between items-center shadow-sm">
+<div class="flex items-center space-x-4">
+<span class="font-display-mobile text-2xl font-bold tracking-tight">EMBER</span>
+</div>
+<div class="flex items-center">
+<a class="text-on-primary hover:text-signal-yellow transition-colors duration-200 font-label flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[20px]">close</span>
+<span>Exit</span>
+</a>
+</div>
+</header>
+<!-- Main Content Layout -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-margin-desktop py-16 grid grid-cols-1 md:grid-cols-12 gap-gutter-desktop">
+<!-- Left Column: Navigation & Info (4 cols) -->
+<aside class="md:col-span-4 flex flex-col space-y-12">
+<!-- Step Navigator -->
+<nav aria-label="Progress">
+<ol class="overflow-hidden" role="list">
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a aria-current="step" class="relative flex items-start group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface-bright border-2 border-ember-red rounded-full">
+<span class="h-2.5 w-2.5 bg-ember-red rounded-full"></span>
+</span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-xs font-label-caps text-ember-red tracking-wider uppercase">Step 1</span>
+<span class="text-lg font-headline-md text-on-surface mt-1 text-[20px] leading-tight">Describe your need</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-start group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface-bright border-2 border-outline-variant rounded-full group-hover:border-secondary transition-colors"></span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-xs font-label-caps text-on-surface-variant tracking-wider uppercase">Step 2</span>
+<span class="text-lg font-headline-md text-on-surface-variant mt-1 text-[20px] leading-tight group-hover:text-on-surface transition-colors">Set criteria</span>
+</span>
+</a>
+</li>
+<li class="relative pb-10">
+<div aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-outline-variant"></div>
+<a class="relative flex items-start group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface-bright border-2 border-outline-variant rounded-full group-hover:border-secondary transition-colors"></span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-xs font-label-caps text-on-surface-variant tracking-wider uppercase">Step 3</span>
+<span class="text-lg font-headline-md text-on-surface-variant mt-1 text-[20px] leading-tight group-hover:text-on-surface transition-colors">Review matches</span>
+</span>
+</a>
+</li>
+<li class="relative">
+<a class="relative flex items-start group" href="#">
+<span class="h-9 flex items-center">
+<span class="relative z-10 w-8 h-8 flex items-center justify-center bg-surface-bright border-2 border-outline-variant rounded-full group-hover:border-secondary transition-colors"></span>
+</span>
+<span class="ml-4 min-w-0 flex flex-col">
+<span class="text-xs font-label-caps text-on-surface-variant tracking-wider uppercase">Step 4</span>
+<span class="text-lg font-headline-md text-on-surface-variant mt-1 text-[20px] leading-tight group-hover:text-on-surface transition-colors">Publish</span>
+</span>
+</a>
+</li>
+</ol>
+</nav>
+<!-- Trust Note -->
+<div class="bg-surface p-6 rounded-card border border-outline-variant/50 flex flex-col gap-3">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h4 class="font-label text-sm uppercase tracking-wider">Trust &amp; Privacy</h4>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant leading-relaxed">
+          Only your approximate location is visible to sellers until a bid is accepted. Your full details remain private.
+        </p>
+</div>
+</aside>
+<!-- Right Column: Form Area (8 cols) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-card border border-outline-variant shadow-sm p-8 md:p-12">
+<form action="#" class="space-y-10" method="POST">
+<!-- Category Selection -->
+<div>
+<label class="block font-headline-md text-2xl text-on-surface mb-6">Select a category</label>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm peer-checked:border-primary peer-checked:ring-1 peer-checked:ring-primary transition-all">
+<input checked="" class="peer sr-only" name="category" type="radio" value="food"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center">
+<span class="material-symbols-outlined text-3xl text-primary">restaurant</span>
+<span class="font-label text-sm text-on-surface">Food &amp; Meal Prep</span>
+</div>
+<div class="absolute inset-0 border-2 border-primary rounded-card pointer-events-none hidden peer-checked:block"></div>
+</label>
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm transition-all">
+<input class="peer sr-only" name="category" type="radio" value="home"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center opacity-70 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-3xl text-primary">home_repair_service</span>
+<span class="font-label text-sm text-on-surface">Home Services</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm transition-all">
+<input class="peer sr-only" name="category" type="radio" value="tutoring"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center opacity-70 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-3xl text-primary">school</span>
+<span class="font-label text-sm text-on-surface">Tutoring</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm transition-all">
+<input class="peer sr-only" name="category" type="radio" value="design"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center opacity-70 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-3xl text-primary">design_services</span>
+<span class="font-label text-sm text-on-surface">Design</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm transition-all">
+<input class="peer sr-only" name="category" type="radio" value="tech"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center opacity-70 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-3xl text-primary">computer</span>
+<span class="font-label text-sm text-on-surface">Tech Support</span>
+</div>
+</label>
+<label class="relative flex cursor-pointer rounded-card border border-outline-variant bg-surface-bright p-4 hover:bg-surface-container-low focus:outline-none shadow-sm transition-all">
+<input class="peer sr-only" name="category" type="radio" value="other"/>
+<div class="flex flex-col items-center justify-center w-full gap-2 text-center opacity-70 peer-checked:opacity-100">
+<span class="material-symbols-outlined text-3xl text-primary">more_horiz</span>
+<span class="font-label text-sm text-on-surface">Other</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Request Title (Focus State) -->
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2" for="title">What do you need?</label>
+<input class="block w-full rounded-control border-outline-variant py-3 px-4 text-on-surface shadow-sm focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-lowest sm:text-sm font-body-md bg-surface-bright transition-shadow" id="title" name="title" placeholder="e.g., Weekly homemade Italian dinners for 4" type="text" value="Weekly homemade Italian dinners for 4"/>
+</div>
+<!-- Description -->
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2" for="description">Describe the details</label>
+<div class="mt-1">
+<textarea class="block w-full rounded-control border-outline-variant py-3 px-4 text-on-surface shadow-sm focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm font-body-md bg-surface-bright" id="description" name="description" placeholder="Mention specific preferences, quantities, or special requirements..." rows="4"></textarea>
+</div>
+</div>
+<!-- Media Dropzone -->
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2">Reference images (Optional)</label>
+<div class="mt-2 flex justify-center rounded-card border border-dashed border-outline-variant px-6 py-10 bg-surface-bright hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3">cloud_upload</span>
+<div class="mt-4 flex text-sm leading-6 text-on-surface-variant justify-center">
+<span class="relative cursor-pointer rounded-md bg-transparent font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-fixed-variant">
+<span>Upload a file</span>
+<input class="sr-only" id="file-upload" name="file-upload" type="file"/>
+</span>
+<p class="pl-1">or drag and drop</p>
+</div>
+<p class="text-xs leading-5 text-on-surface-variant mt-1">PNG, JPG, GIF up to 10MB</p>
+</div>
+</div>
+</div>
+<!-- Initial Specs (Inline Fields) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-outline-variant">
+<!-- Error State Example -->
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2" for="location">Approximate Location</label>
+<div class="relative rounded-control shadow-sm">
+<input aria-describedby="location-error" aria-invalid="true" class="block w-full rounded-control border-error text-error placeholder-error/50 focus:border-error focus:ring-error sm:text-sm py-3 px-4 bg-error-container/10" id="location" name="location" placeholder="City or Zip" type="text" value="Invalid Zip"/>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+<span class="material-symbols-outlined text-error text-sm">error</span>
+</div>
+</div>
+<p class="mt-2 text-sm text-error font-body-md" id="location-error">Please enter a valid zip code.</p>
+</div>
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2" for="budget">Initial Budget (Est.)</label>
+<div class="relative rounded-control shadow-sm">
+<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+<span class="text-on-surface-variant sm:text-sm">$</span>
+</div>
+<input class="block w-full rounded-control border-outline-variant py-3 pl-7 pr-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm font-body-md bg-surface-bright" id="budget" name="budget" placeholder="0.00" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label text-sm font-semibold text-on-surface mb-2" for="frequency">Target Frequency</label>
+<select class="block w-full rounded-control border-outline-variant py-3 px-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm font-body-md bg-surface-bright" id="frequency" name="frequency">
+<option>One-time</option>
+<option selected="">Recurring</option>
+</select>
+</div>
+</div>
+</form>
+</div>
+</main>
+<!-- Sticky Actions / Bottom Bar -->
+<div class="sticky bottom-0 w-full bg-surface-container-lowest border-t border-outline-variant py-4 px-margin-desktop z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="max-w-[1440px] mx-auto flex justify-between items-center">
+<button class="font-label text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors px-4 py-2" type="button">
+        Save draft
+      </button>
+<button class="inline-flex items-center justify-center rounded-control bg-ember-red px-8 py-3 text-sm font-label font-semibold text-white shadow-sm hover:bg-error focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember-red transition-colors gap-2" type="button">
+        Continue
+        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full max-w-[1280px] mx-auto px-margin-desktop pt-section-desktop pb-base border-t border-soft-stone grid grid-cols-1 md:grid-cols-2 gap-gutter-desktop mt-12 bg-surface-muted">
+<div>
+<span class="font-display-lg text-3xl font-bold text-primary tracking-tight">EMBER</span>
+<p class="font-body-md text-sm text-on-surface-variant mt-2">Where demand sparks opportunity.</p>
+<p class="font-body-md text-sm text-on-surface-variant mt-8">© 2024 EMBER Marketplace.</p>
+</div>
+<div class="flex justify-start md:justify-end gap-6 items-end">
+<a class="font-label text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="font-label text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
+<a class="font-label text-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help</a>
+</div>
+</footer>
+</body></html>

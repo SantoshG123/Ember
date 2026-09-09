@@ -1,0 +1,24 @@
+{
+  "name": "ember-marketplace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=20.9 <25"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --filter @ember/storefront dev",
+    "backend:dev": "pnpm --filter @ember/backend dev",
+    "backend:build": "pnpm --filter @ember/backend build",
+    "backend:typecheck": "pnpm --filter @ember/backend typecheck",
+    "backend:db:generate": "pnpm --filter @ember/backend db:generate",
+    "backend:db:migrate": "pnpm --filter @ember/backend db:migrate",
+    "build": "pnpm --filter @ember/storefront build",
+    "lint": "pnpm --filter @ember/storefront lint",
+    "test:smoke": "node scripts/storefront-smoke.mjs",
+    "typecheck": "pnpm --filter @ember/storefront typecheck && pnpm --filter @ember/backend typecheck"
+  }
+}
