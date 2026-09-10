@@ -10,7 +10,7 @@ This is an actively developed application, **not a production-ready marketplace*
 
 - **Frontend:** responsive discovery, demand browsing, request creation, buyer and seller workspaces, proposal comparison, messaging, and opportunity planning screens.
 - **Demo mode:** runs without a backend using sample data and in-process adapters. Demo data is not a durable database; authentication and checkout screens simulate their workflows.
-- **Persistent mode — in progress:** Medusa models, protected APIs, frontend adapters, and database-backed UI bindings are implemented. Migration generation/application, seeding, live integration testing, and restart-persistence verification still need to be completed.
+- **Persistent local mode — verified:** Medusa/PostgreSQL requests, proposals, buyer/seller workspaces, messaging/read state, bookmarks, and offer drafts are connected. Local integration tests cover authorization failures, concurrent acceptance, backend outages, seed idempotence, and persistence across backend and database restarts. These use explicit development identities, not real sign-in.
 - **Still to build and verify:** real account onboarding and email, payment lifecycle integration, attachment storage, production operations, and deployment.
 
 ## Stack
@@ -57,14 +57,13 @@ For optional local configuration, copy `.env.template` to `apps/storefront/.env.
 
 ## Persistent development setup
 
-The persistent path is being integrated. The following are development setup steps, not a claim that a complete transaction flow has been verified.
+The local persistence flow is verified; real accounts, payments, and production operations are still separate work. See [persistence QA and repeatable checks](docs/PERSISTENCE-QA.md) for the tested scope and remaining limitations.
 
 1. Provide a development PostgreSQL database. See the [isolated Windows database guide](docs/LOCAL-DATABASE.md) for PostgreSQL 18 on `127.0.0.1:55432`, outside OneDrive. Alternatively, `compose.yaml` supplies PostgreSQL 17 and Redis 7 on loopback ports 5432 and 6379. Copy `.env.compose.template` to the ignored `.env.compose`, set a unique `POSTGRES_PASSWORD`, check port availability, then run `docker compose --env-file .env.compose up -d`. Match that password in the backend database URL; URL-encode reserved characters. Do not expose development services publicly.
 2. Create `apps/backend/.env` from `apps/backend/.env.template`, preserving any existing configuration. Set `DATABASE_URL`, replace JWT/cookie placeholders with independent random secrets, and set CORS origins for your local applications. Only set `REDIS_URL` when Redis is running; otherwise omit it for single-process development.
-3. Generate and review the marketplace migration, then apply it to **your development database**:
+3. Review the committed marketplace migration, then apply the migrations to **your development database**:
 
    ```bash
-   pnpm backend:db:generate
    pnpm backend:db:migrate
    ```
 
@@ -78,7 +77,9 @@ The persistent path is being integrated. The following are development setup ste
 
 6. Set `EMBER_DATA_MODE=medusa` and `MEDUSA_BACKEND_URL=http://127.0.0.1:9000` in `apps/storefront/.env.local`, then restart the storefront. `DISABLE_MEDUSA_ADMIN=true` in the backend environment selects a headless local run.
 
-The fixture seed is local-only and preserves existing records. Seeded opportunity briefs are examples, not measured live demand. The local buyer/seller bridge is restricted to development and loopback access; it is **not real sign-in**. Keep these servers local. Real customer identities must be provisioned and authenticated before shared use.
+Generate a new migration with `pnpm backend:db:generate` only when changing the models; review the generated SQL before applying it. Do not regenerate the initial migration on every setup.
+
+The fixture seed is local-only and preserves existing records. Seeded opportunity briefs are examples, not measured live demand. Both development server commands bind to `127.0.0.1`. The local buyer/seller bridge is restricted to development and loopback access; it is **not real sign-in**. Keep these servers local. Real customer identities must be provisioned and authenticated before shared use.
 
 Persistent-mode failures display an error instead of silently substituting demo fixtures. The backend health endpoint is [localhost:9000/health](http://localhost:9000/health).
 
@@ -100,7 +101,7 @@ pnpm test:smoke
 
 The storefront smoke script targets the **demo** storefront at `http://127.0.0.1:3000`. Set `EMBER_SMOKE_BASE_URL` to use a different local address. It exercises prototype mutations; do not aim it at production or a shared database.
 
-At the repository's initial upload, frontend TypeScript, frontend ESLint, backend TypeScript, and all four transport-policy tests passed. These checks do not replace database integration or browser testing. Earlier UI verification is recorded in [UI-POLISH-QA.md](docs/UI-POLISH-QA.md).
+The latest local persistence verification passed frontend/backend TypeScript, frontend ESLint, both builds (Medusa headless), and five transport-policy tests. Database integration and restart checks are recorded in [PERSISTENCE-QA.md](docs/PERSISTENCE-QA.md). This pass did not repeat interactive browser QA; earlier visual checks are recorded in [UI-POLISH-QA.md](docs/UI-POLISH-QA.md).
 
 ## Repository layout
 

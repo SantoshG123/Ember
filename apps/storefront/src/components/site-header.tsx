@@ -25,7 +25,7 @@ type NavigationKey =
 type SiteHeaderProps = {
   active?: NavigationKey
   messageCount?: number
-  messageHref?: string
+  messageHref?: "/messages" | "/messages?role=buyer" | "/messages?role=seller"
   variant?: "app" | "exit"
 }
 

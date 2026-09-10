@@ -56,6 +56,12 @@ async function configure() {
     catch { throw new Error("Configure the isolated backend .env before running persistence tests.") }
     assert.notEqual(dotenvValue(source, "NODE_ENV"), "production", "The backend must not use production mode.")
     assert.equal(dotenvValue(source, "EMBER_LOCAL_DATA_ACCESS"), "true", "Backend local test identities must be explicitly enabled.")
+    if (phase === "create" || phase === "race") {
+      let database
+      try { database = new URL(dotenvValue(source, "DATABASE_URL")) }
+      catch { throw new Error("Configure the isolated local database before write tests.") }
+      assert.ok(database.hostname === "127.0.0.1" && database.port === "55432" && database.pathname === "/ember", "Write tests require the dedicated local EMBER database on port 55432.")
+    }
     localKey = dotenvValue(source, "EMBER_LOCAL_API_KEY")
     assert.ok(typeof localKey === "string" && localKey.length >= 32, "Backend local test key is missing or too short.")
   }
@@ -120,6 +126,11 @@ async function securityChecks(requestInput) {
     expectStatus(await call("backend", "/marketplace/buyer", { credentials }), 401, `Backend ${credentials} credential rejection`)
   }
   expectStatus(await call("backend", "/marketplace/buyer", { actor: "unknown" }), 401, "Unknown local actor rejection")
+  const unauthorized = await fetch(new URL("/api/buyer", storefront), {
+    headers: { authorization: "Bearer invalid-qa-token", "x-ember-local-actor": "ember-buyer" },
+    signal: AbortSignal.timeout(15_000),
+  })
+  assert.equal(unauthorized.status, 401, "Invalid bearer credentials must not fall back to a local identity.")
   expectStatus(await call("bff", "/api/requests", {
     method: "POST", body: requestInput, origin: "https://untrusted.example",
   }), 403, "Cross-origin write rejection")
@@ -249,12 +260,23 @@ async function race() {
   assert.match(before.body.title, /^EMBER QA concurrency /, "Only the explicitly isolated QA concurrency request may be changed.")
   assert.equal(before.body.status, "open", "Race fixture was already used; create a new isolated fixture.")
   assert.ok(fixture.bidIds.every(value => before.body.bids.some(row => row.id === value && row.status === "active")), "The race fixture must contain two active proposals.")
+  const sellerView = await call("backend", `/marketplace/requests/${requestId}`, { actor: "seller" })
+  expectStatus(sellerView, 200, "Seller privacy view")
+  assert.equal(sellerView.body.buyerId, "")
+  assert.equal(sellerView.body.referenceName, undefined)
+  assert.equal(sellerView.body.bidCount, 2)
+  assert.equal(sellerView.body.bids.length, 1, "Competing seller proposals must remain private.")
+  assert.equal(sellerView.body.bids[0].id, fixture.bidIds[0])
+  assert.equal(sellerView.body.bids[0].pricePerDelivery, 29.99)
+  assert.equal(sellerView.body.bids[0].totalPrice, 59.98, "Money must round-trip to cents.")
   const results = await Promise.all(fixture.bidIds.map(bidId => call("backend", "/marketplace/buyer", { method: "PATCH", body: { bidId, action: "accept" } })))
   assert.deepEqual(results.map(result => result.status).sort(), [200, 409], "Exactly one concurrent proposal acceptance must succeed.")
   manifest.raceRequestId = requestId
   manifest.raceAcceptedBidId = fixture.bidIds[results.findIndex(result => result.status === 200)]
   manifest.raceDeclinedBidId = fixture.bidIds[results.findIndex(result => result.status === 409)]
   await checkpoint(manifest)
+  const retry = await call("backend", "/marketplace/buyer", { method: "PATCH", body: { bidId: manifest.raceAcceptedBidId, action: "accept" } })
+  expectStatus(retry, 200, "Retrying the winning acceptance is idempotent")
   await verify(manifest)
   console.log("RACE passed: concurrent accept attempts produced one match and one conflict; no double acceptance.")
 }
