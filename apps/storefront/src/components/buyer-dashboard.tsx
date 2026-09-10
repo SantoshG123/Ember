@@ -248,15 +248,19 @@ export function BuyerDashboard() {
 
   async function declineSelected() {
     if (!selectedBid) return
-    const result = await decision.mutateAsync({ bidId: selectedBid.id, action: "decline" })
-    setNotice(`${result.seller} was declined. The seller will see a courteous closed status.`)
+    try {
+      const result = await decision.mutateAsync({ bidId: selectedBid.id, action: "decline" })
+      setNotice(`${result.seller} was declined. The seller will see a courteous closed status.`)
+    } catch { /* Keep the proposal visible and show the mutation error. */ }
   }
 
   async function confirmAccept() {
     if (!acceptBid) return
-    const result = await decision.mutateAsync({ bidId: acceptBid.id, action: "accept" })
-    setAcceptBid(null)
-    setNotice(`Matched with ${result.seller}. A private conversation is now open.`)
+    try {
+      const result = await decision.mutateAsync({ bidId: acceptBid.id, action: "accept" })
+      setAcceptBid(null)
+      setNotice(`Matched with ${result.seller}. A private conversation is now open.`)
+    } catch { /* The confirmation stays open so the action can be retried. */ }
   }
 
   if (dashboard.isLoading) return <DashboardLoading />
@@ -549,14 +553,15 @@ export function BuyerDashboard() {
             </DialogDescription>
           </DialogHeader>
           <dl className="mt-8 divide-y divide-divider border-y border-divider">
-            <div className="flex justify-between gap-5 py-4"><dt className="text-subtle">Four-week total</dt><dd className="font-semibold">{money(acceptBid?.totalPrice ?? 0)}</dd></div>
+            <div className="flex justify-between gap-5 py-4"><dt className="text-subtle">Proposal total</dt><dd className="font-semibold">{money(acceptBid?.totalPrice ?? 0)}</dd></div>
             <div className="flex justify-between gap-5 py-4"><dt className="text-subtle">Cadence</dt><dd className="text-right font-semibold">{acceptBid?.cadence}</dd></div>
             <div className="flex justify-between gap-5 py-4"><dt className="text-subtle">Earliest start</dt><dd className="text-right font-semibold">{acceptBid?.earliestStart}</dd></div>
           </dl>
+          {decision.error ? <p className="mt-5 rounded-lg border border-error p-4 text-sm text-error" role="alert">{decision.error.message}</p> : null}
           <div className="mt-8 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <DialogClose asChild><Button variant="outline">Keep comparing</Button></DialogClose>
             <Button disabled={decision.isPending} onClick={confirmAccept} variant="ember">
-              {decision.isPending ? "Accepting…" : "Accept and open chat"}
+              {decision.isPending ? "Accepting…" : "Accept proposal"}
             </Button>
           </div>
         </DialogContent>

@@ -14,7 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react"
 import Link from "next/link"
-import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react"
+import { type FormEvent, type KeyboardEvent, useEffect, useMemo, useState } from "react"
 import { SiteHeader } from "@/components/site-header"
 import { Button } from "@/components/ui/button"
 import { MarketplaceState } from "@/components/marketplace-state"
@@ -182,10 +182,9 @@ export function MessagesWorkspace({ actor = "buyer", initialConversationId }: { 
   const [attachedFile, setAttachedFile] = useState<MessageAttachment | null>(null)
   const [composer, setComposer] = useState("")
   const [mobileDealOpen, setMobileDealOpen] = useState(false)
-  const [mobileThreadOpen, setMobileThreadOpen] = useState(false)
+  const [mobileThreadOpen, setMobileThreadOpen] = useState(Boolean(initialConversationId))
   const [notice, setNotice] = useState("")
   const [query, setQuery] = useState("")
-  const [readConversationIds, setReadConversationIds] = useState<Set<string>>(() => new Set())
   const [selectedId, setSelectedId] = useState(initialConversationId ?? "conversation-maria")
 
   const conversations = useMemo(() => workspace.data?.conversations ?? [], [workspace.data?.conversations])
@@ -193,17 +192,26 @@ export function MessagesWorkspace({ actor = "buyer", initialConversationId }: { 
   const filteredConversations = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     return conversations.filter((conversation) => {
-      const matchesFilter = activeFilter === "all" || (conversation.unreadCount > 0 && !readConversationIds.has(conversation.id))
+      const matchesFilter = activeFilter === "all" || conversation.unreadCount > 0
       const matchesQuery = !normalized || [conversation.participant.name, conversation.requestTitle, conversation.preview]
         .some((value) => value.toLowerCase().includes(normalized))
       return matchesFilter && matchesQuery
     })
-  }, [activeFilter, conversations, query, readConversationIds])
+  }, [activeFilter, conversations, query])
 
   const visibleUnreadCount = conversations.reduce(
-    (total, conversation) => total + (readConversationIds.has(conversation.id) ? 0 : conversation.unreadCount),
+    (total, conversation) => total + conversation.unreadCount,
     0,
   )
+
+  const displayedConversationId = selectedConversation?.id
+  const displayedUnreadCount = selectedConversation?.unreadCount ?? 0
+  const markConversationRead = markRead.mutate
+  useEffect(() => {
+    if (!displayedConversationId || !displayedUnreadCount) return
+    if (!mobileThreadOpen && !window.matchMedia("(min-width: 1024px)").matches) return
+    markConversationRead({ conversationId: displayedConversationId }, { onError: (error) => setNotice(error.message) })
+  }, [displayedConversationId, displayedUnreadCount, mobileThreadOpen, markConversationRead])
 
   if (workspace.isLoading) return <MessagesLoading />
 
@@ -224,16 +232,13 @@ export function MessagesWorkspace({ actor = "buyer", initialConversationId }: { 
   }
 
   function selectConversation(conversation: Conversation) {
-    const unreadCount = readConversationIds.has(conversation.id) ? 0 : conversation.unreadCount
+    const unreadCount = conversation.unreadCount
     setSelectedId(conversation.id)
     setMobileThreadOpen(true)
     setComposer("")
     setAttachedFile(null)
     if (unreadCount) {
-      markRead.mutate({ conversationId: conversation.id }, { onSuccess: () => {
-        setReadConversationIds((current) => new Set(current).add(conversation.id))
-        setNotice(`${unreadCount} unread message${unreadCount === 1 ? "" : "s"} opened.`)
-      }, onError: (error) => setNotice(error.message) })
+      setNotice(`${unreadCount} unread message${unreadCount === 1 ? "" : "s"} opened.`)
     } else {
       setNotice("")
     }
@@ -266,7 +271,7 @@ export function MessagesWorkspace({ actor = "buyer", initialConversationId }: { 
 
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <SiteHeader active="messages" messageCount={visibleUnreadCount} variant="app" />
+      <SiteHeader active="messages" messageCount={visibleUnreadCount} messageHref={`/messages?role=${actor}`} variant="app" />
 
       {notice ? (
         <div className="enterprise-panel-raised fixed left-4 right-4 top-[calc(var(--app-header-height)+1rem)] z-30 px-4 py-3 text-sm sm:left-auto sm:max-w-sm" role="status">
@@ -325,7 +330,7 @@ export function MessagesWorkspace({ actor = "buyer", initialConversationId }: { 
                     <span className="mt-1 block truncate text-xs font-semibold text-foreground/70">{conversation.requestTitle}</span>
                     <span className="mt-1 block truncate text-sm text-subtle">{conversation.preview}</span>
                   </span>
-                  {conversation.unreadCount && !readConversationIds.has(conversation.id) ? (
+                  {conversation.unreadCount ? (
                     <span className="absolute bottom-4 right-5 grid min-w-5 place-items-center rounded-full bg-ember-action px-1.5 py-0.5 text-[10px] font-bold text-white" aria-label={`${conversation.unreadCount} unread`}>
                       {conversation.unreadCount}
                     </span>

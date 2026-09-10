@@ -16,21 +16,25 @@ export const Request = model.define("ember_request", {
   category: model.text(),
   title: model.text().searchable(),
   description: model.text(),
-  budget_min: model.float(),
-  budget_max: model.float(),
+  budget_min: model.bigNumber(),
+  budget_max: model.bigNumber(),
   frequency: model.enum(["one-time", "weekly", "monthly", "flexible"]),
   timing: model.text(),
   zip: model.text(),
   location_area: model.text(),
   status: model.enum(["open", "matched", "fulfilled", "cancelled"]).default("open"),
   reference_name: model.text().nullable(),
-})
+}).checks([
+  { name: "ember_request_budget_check", expression: columns => `${columns.budget_min} > 0 AND ${columns.budget_max} >= ${columns.budget_min} AND ${columns.budget_max} <= 1000000 AND ${columns.budget_min} = trunc(${columns.budget_min}, 2) AND ${columns.budget_max} = trunc(${columns.budget_max}, 2)` },
+]).indexes([
+  { name: "IDX_EMBER_REQUEST_DISCOVERY", on: ["status", "created_at"], where: "deleted_at IS NULL" },
+])
 
 export const Bid = model.define("ember_bid", {
   id: model.id({ prefix: "bid" }).primaryKey(),
   request: model.belongsTo(() => Request),
   seller: model.belongsTo(() => Participant),
-  price_per_delivery: model.float(),
+  price_per_delivery: model.bigNumber(),
   delivery_count: model.number(),
   cadence: model.text(),
   earliest_start: model.text(),
@@ -40,6 +44,10 @@ export const Bid = model.define("ember_bid", {
   accepted_at: model.dateTime().nullable(),
 }).indexes([
   { name: "IDX_EMBER_ONE_ACCEPTED_BID", on: ["request_id"], unique: true, where: "status = 'accepted' AND deleted_at IS NULL" },
+  { name: "IDX_EMBER_ONE_ACTIVE_BID", on: ["request_id", "seller_id"], unique: true, where: "status = 'active' AND deleted_at IS NULL" },
+]).checks([
+  { name: "ember_bid_price_check", expression: columns => `${columns.price_per_delivery} > 0 AND ${columns.price_per_delivery} <= 1000000 AND ${columns.price_per_delivery} = trunc(${columns.price_per_delivery}, 2)` },
+  { name: "ember_bid_count_check", expression: columns => `${columns.delivery_count} >= 1 AND ${columns.delivery_count} <= 1000` },
 ])
 
 export const Opportunity = model.define("ember_opportunity", {
@@ -78,8 +86,11 @@ export const OfferDraft = model.define("ember_offer_draft", {
   id: model.id({ prefix: "offer" }).primaryKey(),
   seller: model.belongsTo(() => Participant),
   opportunity: model.belongsTo(() => Opportunity),
-  price_per_meal: model.float(),
+  price_per_meal: model.bigNumber(),
   weekly_capacity: model.number(),
   delivery_days: model.text(),
   note: model.text(),
-})
+}).checks([
+  { name: "ember_offer_price_check", expression: columns => `${columns.price_per_meal} >= 8 AND ${columns.price_per_meal} <= 1000000 AND ${columns.price_per_meal} = trunc(${columns.price_per_meal}, 2)` },
+  { name: "ember_offer_capacity_check", expression: columns => `${columns.weekly_capacity} >= 20 AND ${columns.weekly_capacity} <= 100000` },
+])

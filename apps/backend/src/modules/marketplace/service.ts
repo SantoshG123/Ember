@@ -13,7 +13,7 @@ const denied = () => new MedusaError(MedusaError.Types.NOT_ALLOWED, "You do not 
 const conflict = (message: string) => new MedusaError(MedusaError.Types.CONFLICT, message)
 const date = (value: Date | string) => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
 const time = (value: Date | string) => new Date(value).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
-const money = (value: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(value)
+const money = (value: unknown) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(Number(value))
 
 export type Mutation =
   | { action: "create-request"; actor: string; data: { category: string; title: string; description: string; budgetMin: number; budgetMax: number; frequency: "one-time" | "weekly" | "monthly" | "flexible"; timing: string; zip: string; referenceName?: string } }
@@ -44,7 +44,7 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
     return {
       id: bid.id, seller: seller.name, initials: seller.initials,
       rating: Number(profile.rating ?? 0), reviews: Number(profile.reviews ?? 0),
-      pricePerDelivery: bid.price_per_delivery, totalPrice: bid.price_per_delivery * bid.delivery_count,
+      pricePerDelivery: Number(bid.price_per_delivery), totalPrice: Math.round(Number(bid.price_per_delivery) * 100) * bid.delivery_count / 100,
       deliveryCount: bid.delivery_count, cadence: bid.cadence, earliestStart: bid.earliest_start,
       distance: Number(details.distance ?? 0), summary: String(details.summary ?? bid.proposal.slice(0, 160)),
       proposal: bid.proposal, fitReason: details.fitReason, recommended: details.recommended ?? false,
@@ -57,7 +57,7 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
     const conversations = await this.listConversations({ request_id: row.id }, { take: 100 }, context)
     return {
       id: row.id, buyerId: viewerId === row.buyer_id ? row.buyer_id : "", category: row.category, title: row.title, description: row.description,
-      budgetMin: row.budget_min, budgetMax: row.budget_max, frequency: row.frequency,
+      budgetMin: Number(row.budget_min), budgetMax: Number(row.budget_max), frequency: row.frequency,
       timing: row.timing, zip: row.zip, locationArea: row.location_area, status: row.status,
       referenceName: viewerId === row.buyer_id ? row.reference_name ?? undefined : undefined, createdAt: row.created_at,
       bidCount: bids.length,
@@ -138,7 +138,7 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
     return {
       currentUser: { id: actor.id, name: actor.name, initials: actor.initials }, unreadMessages: (await this.messagesWorkspace(actorId)).unreadCount,
       bids: rows, requests: requestList.requests, savedOpportunities: opportunities.opportunities.filter(row => row.saved),
-      offerDrafts: await Promise.all(drafts.map(async draft => ({ draftId: draft.id, slug: (await this.retrieveOpportunity(draft.opportunity_id)).slug, pricePerMeal: draft.price_per_meal, weeklyCapacity: draft.weekly_capacity, deliveryDays: draft.delivery_days, note: draft.note, status: "draft" }))),
+      offerDrafts: await Promise.all(drafts.map(async draft => ({ draftId: draft.id, slug: (await this.retrieveOpportunity(draft.opportunity_id)).slug, pricePerMeal: Number(draft.price_per_meal), weeklyCapacity: draft.weekly_capacity, deliveryDays: draft.delivery_days, note: draft.note, status: "draft" }))),
     }
   }
 

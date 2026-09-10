@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 const id = z.string().trim().min(1).max(160)
-const amount = z.number().positive().max(1_000_000)
+const amount = z.number().positive().max(1_000_000).multipleOf(0.01)
 export const createRequestSchema = z.object({
   category: z.string().trim().min(1).max(100),
   title: z.string().trim().min(8).max(80),

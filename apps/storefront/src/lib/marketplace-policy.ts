@@ -31,7 +31,7 @@ export function allowsMarketplaceMutation(request: Request) {
 export function canUseLocalMarketplaceActor(environment: Environment, request: Request, backend: URL) {
   return environment.NODE_ENV !== "production" &&
     environment.EMBER_LOCAL_DATA_ACCESS === "true" &&
-    Boolean(environment.EMBER_LOCAL_API_KEY) &&
+    (environment.EMBER_LOCAL_API_KEY?.length ?? 0) >= 32 &&
     isLoopbackHost(new URL(request.url).hostname) &&
     isLoopbackHost(backend.hostname)
 }

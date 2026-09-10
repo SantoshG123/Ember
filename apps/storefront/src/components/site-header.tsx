@@ -25,6 +25,7 @@ type NavigationKey =
 type SiteHeaderProps = {
   active?: NavigationKey
   messageCount?: number
+  messageHref?: string
   variant?: "app" | "exit"
 }
 
@@ -44,6 +45,7 @@ const navigation = [
 export function SiteHeader({
   active,
   messageCount = 0,
+  messageHref = "/messages",
   variant = "exit",
 }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -118,7 +120,7 @@ export function SiteHeader({
                     ? "bg-white/12 text-white"
                     : "text-white/68 hover:bg-white/[0.07] hover:text-white",
                 )}
-                href="/messages"
+                href={messageHref}
               >
                 <MessageCircle aria-hidden="true" className="size-[18px]" />
                 <span className="hidden 2xl:inline">Messages</span>
