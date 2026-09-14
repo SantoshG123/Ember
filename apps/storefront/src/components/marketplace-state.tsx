@@ -14,6 +14,7 @@ export function MarketplaceState({ title, message, retry, loading = false }: {
       <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight">{title}</h1>
       <p className="mt-5 text-subtle" role={loading ? "status" : undefined}>{message}</p>
       <div className="mt-8 flex flex-wrap gap-3">
+        {!loading ? <Button asChild><Link href="/auth">Sign in or create an account</Link></Button> : null}
         {retry ? <Button onClick={retry}>Try again</Button> : null}
         {!loading ? <Button asChild variant="outline"><Link href="/requests/new">Post a request</Link></Button> : null}
       </div>

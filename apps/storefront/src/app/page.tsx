@@ -42,7 +42,7 @@ export default async function HomePage() {
   let requests: MarketplaceRequestRecord[] = []
   let unavailable = false
   if (persistent) {
-    try { requests = (await fetchMarketplaceData<{ requests: MarketplaceRequestRecord[] }>("requests", { actor: "seller" })).requests }
+    try { requests = (await fetchMarketplaceData<{ requests: MarketplaceRequestRecord[] }>("requests")).requests }
     catch { unavailable = true }
   }
   const areas = new Set(requests.map((request) => request.zip)).size

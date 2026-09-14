@@ -32,10 +32,12 @@ test("mutations allow same-origin browser writes and origin-less local smoke tes
 })
 
 test("local actor bridge needs opt-in, a key, and loopback at both ends; never production", () => {
-  const environment = { NODE_ENV: "development", EMBER_LOCAL_DATA_ACCESS: "true", EMBER_LOCAL_API_KEY: "test-key-placeholder-not-a-real-secret" }
+  const environment = { NODE_ENV: "development", EMBER_AUTH_MODE: "local", EMBER_LOCAL_DATA_ACCESS: "true", EMBER_LOCAL_API_KEY: "test-key-placeholder-not-a-real-secret" }
   const request = new Request("http://localhost:3000/api/buyer")
   const backend = new URL("http://localhost:9000")
   assert.equal(canUseLocalMarketplaceActor(environment, request, backend), true)
+  assert.equal(canUseLocalMarketplaceActor({ ...environment, EMBER_AUTH_MODE: undefined }, request, backend), false)
+  assert.equal(canUseLocalMarketplaceActor({ ...environment, EMBER_AUTH_MODE: "accounts" }, request, backend), false)
   assert.equal(canUseLocalMarketplaceActor({ ...environment, NODE_ENV: "production" }, request, backend), false)
   assert.equal(canUseLocalMarketplaceActor({ ...environment, EMBER_LOCAL_DATA_ACCESS: "false" }, request, backend), false)
   assert.equal(canUseLocalMarketplaceActor({ ...environment, EMBER_LOCAL_API_KEY: "" }, request, backend), false)

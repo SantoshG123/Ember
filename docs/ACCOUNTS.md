@@ -1,0 +1,47 @@
+# EMBER accounts and sessions
+
+Real account registration, sign-in, and sign-out are implemented for the local Medusa-backed application. Email verification, password recovery, and magic links are **not yet connected**. This is not a production authentication launch.
+
+## Local setup
+
+1. Follow the database setup in the README and apply `pnpm backend:db:migrate`. The account migration preserves marketplace data, adds session storage, and replaces the single-customer role index with a unique customer/role pair.
+2. Select `EMBER_DATA_MODE=medusa` in the storefront. Leave `EMBER_AUTH_MODE=accounts` in both apps, or omit it for the same default. Ensure backend JWT/cookie secrets are private random values. Production startup rejects missing or placeholder signing secrets.
+3. Start both loopback development servers and open `/auth`. Register with a display name, email, a 12–128 character password, and buyer, seller, or both roles. Registration does not verify ownership of the email address yet; use this only in the isolated development environment.
+4. Use Sign out in the desktop header or mobile navigation to revoke the session. Signing in and out clears client query data and performs a full navigation to discard the previous account's router/component state.
+
+The previous local fixture bridge is now opt-in: it requires `EMBER_AUTH_MODE=local`, `EMBER_LOCAL_DATA_ACCESS=true`, and matching server-only local keys in both apps, on loopback and outside production. The Windows database helper's existing data-access flag does not by itself activate impersonation. Restart the apps after changing environment settings.
+
+## Security model
+
+- The server-side Next.js bridge uses [Medusa's authentication routes](https://docs.medusajs.com/resources/commerce-modules/auth/authentication-route) and customer-account workflow. Password verification stays with Medusa's email/password provider; the browser never receives its bearer token.
+- A verified Medusa identity is provisioned into an EMBER account. Buyer and seller participants are separate, server-owned records under the same customer. A dual-role account receives both. Sign-in inputs and URL roles cannot grant new permissions or replace existing roles.
+- Account provisioning uses a short PostgreSQL transaction and a per-customer advisory lock. A unique customer/role index protects against duplicate role records. Dual-role customers cannot bid on their own requests.
+- Browser sessions use 256-bit random opaque tokens in HttpOnly, SameSite=Lax cookies, with a 24-hour absolute expiry. Production uses a Secure, host-only `__Host-ember-session` cookie; HTTP development uses `ember-session`.
+- Only a SHA-256 digest of each token is stored in PostgreSQL. Each protected request verifies the session, customer, and selected marketplace role. Sign-out deletes the corresponding server session; expired/revoked cookies cannot authenticate. Invalid credentials never fall back to fixture identities.
+- Account responses are private/no-store. Mutation origin checks protect login/logout as well as marketplace writes. Cookie credentials are forwarded server-side for server-rendered data and never serialized into page props.
+- Medusa email/password routes enforce input size/password bounds, normalize email casing, and have bounded in-memory attempt limits. These limits are single-process development protection, not a replacement for a shared Redis/edge limiter in production.
+
+## Verification performed — September 10, 2026
+
+The HTTP suite created isolated buyer, second-buyer, seller, and dual-role accounts. It verified registration, cookie flags, account retrieval, role isolation, request/proposal ownership, messaging, self-bid rejection, wrong-password rejection, cross-origin login/logout rejection, fresh sessions, logout replay rejection, email normalization, immutable sign-in roles, and HTTP 429 attempt limiting. An authenticated request page also rendered its real data without embedding credentials.
+
+All four session identities and a matched request survived restarting both Medusa and the isolated PostgreSQL database. A service-level test verified token hashing at rest and rejection of expired sessions. QA passwords/cookies stay in test-process memory and are never written to artifacts; QA accounts and clearly labeled marketplace records remain in the local database. The suite revokes its sessions at the end.
+
+```bash
+node --test scripts/account-policy.test.mjs scripts/marketplace-transport.test.mjs
+node scripts/account-integration.test.mjs --confirm-local-medusa
+pnpm --filter @ember/backend exec medusa exec ./src/scripts/verify-account-sessions.ts
+```
+
+Run from the repository root with both local servers running in account mode. The write tests refuse any database other than `127.0.0.1:55432/ember`. To repeat restart verification, add `--restart` to the integration command; when it prints `RESTART READY`, stop the backend, optionally restart the isolated database using its helper, and start the backend within three minutes. Credentials remain only in the waiting test process.
+
+Frontend/backend type checks, frontend lint, and both builds are checked separately. Interactive browser, mobile, cross-tab, and back-navigation QA still need to be run; HTTP/SSR tests do not replace those checks. The available test runtime was Node.js 25.6; supported Node.js 24 CI remains outstanding.
+
+Checkpoint follow-up — September 13, 2026: the production storefront also passed the demo HTTP smoke suite (12 route shells and 6 API scenarios) on a separate loopback port. The suite now refuses persistent mode before making any test writes. Seller workspace content loads after hydration, so its HTTP checks assert route titles rather than pretending to test the interactive dashboard.
+
+## Still required
+
+- Choose/configure an email provider, implement verified-email and single-use password-reset flows, and revoke all sessions when credentials change. The UI/API currently report email actions as unavailable instead of claiming delivery.
+- Finish account lifecycle/profile editing, session-management screens, and any MFA policy. Current roles are selected at signup; self-service role changes are not exposed.
+- Add distributed rate limits, expired-session cleanup, abuse monitoring, secure deployment configuration, and end-to-end browser coverage before opening registration publicly.
+- Payments and fulfillment remain separate work. Account registration and proposal acceptance never charge a card.

@@ -3,13 +3,15 @@ import { MedusaError } from "@medusajs/framework/utils"
 import type { z } from "zod"
 import { MARKETPLACE_MODULE } from "../../modules/marketplace"
 import type MarketplaceModuleService from "../../modules/marketplace/service"
-export type MarketplaceRequest = MedusaRequest & { marketplaceActor?: string }
+export type MarketplaceRequest = MedusaRequest & { marketplaceActor?: string; marketplaceCustomer?: string }
 export async function workspace(req: MedusaRequest, res: MedusaResponse) {
   res.setHeader("Cache-Control", "no-store")
   const service = req.scope.resolve<MarketplaceModuleService>(MARKETPLACE_MODULE)
   const localActor = (req as MarketplaceRequest).marketplaceActor
-  const customerId = (req as AuthenticatedMedusaRequest).auth_context?.actor_id
-  const actor = localActor ?? (customerId ? await service.actorForCustomer(customerId) : undefined)
+  const customerId = (req as MarketplaceRequest).marketplaceCustomer ?? (req as AuthenticatedMedusaRequest).auth_context?.actor_id
+  const requestedRole = req.get("x-ember-role") ?? req.query.role
+  const role = requestedRole === "buyer" || requestedRole === "seller" ? requestedRole : undefined
+  const actor = localActor ?? (customerId ? await service.actorForCustomer(customerId, role) : undefined)
   if (!actor) throw new MedusaError(MedusaError.Types.UNAUTHORIZED, "Sign in to access the marketplace.")
   return { service, actor }
 }

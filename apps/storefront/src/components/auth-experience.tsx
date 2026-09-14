@@ -19,6 +19,7 @@ import { useAuthAction } from "@/lib/auth"
 import { authFormSchema, type AuthFormInput } from "@/lib/auth-schema"
 import type { AuthMode, AuthResult, AuthRole } from "@/lib/auth-types"
 import { cn } from "@/lib/utils"
+import { useMarketplaceMode } from "@/lib/marketplace-data"
 
 const trustSignals = [
   {
@@ -26,11 +27,11 @@ const trustSignals = [
     description: "See what people nearby are actively asking for.",
   },
   {
-    title: "Verified marketplace activity",
+    title: "Account-owned workspaces",
     description: "Build decisions on clear requests and accountable bids.",
   },
   {
-    title: "Protected contact & payment",
+    title: "Private conversations",
     description: "Share details only when you are ready to move forward.",
   },
 ]
@@ -65,7 +66,7 @@ function ErrorText({ message }: { message?: string }) {
 }
 
 function nextDestination(result: AuthResult) {
-  if (result.role === "seller") return "/opportunities/east-austin-team-lunch"
+  if (result.role === "seller") return "/seller"
   if (result.role === "buyer") return "/requests/new"
   return "/buyer"
 }
@@ -102,6 +103,8 @@ function successCopy(result: AuthResult) {
 }
 
 export function AuthExperience() {
+  const config = useMarketplaceMode()
+  const persistent = config.data?.mode !== "demo"
   const [mode, setMode] = useState<AuthMode>("create-account")
   const [view, setView] = useState<"main" | "recover">("main")
   const [showPassword, setShowPassword] = useState(false)
@@ -112,6 +115,7 @@ export function AuthExperience() {
     resolver: zodResolver(authFormSchema),
     mode: "onBlur",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
       role: "buyer",
@@ -127,25 +131,39 @@ export function AuthExperience() {
   }
 
   async function submitCredentials(input: AuthFormInput) {
+    if (mode === "create-account" && input.name.trim().length < 2) {
+      form.setError("name", { message: "Enter your display name." }, { shouldFocus: true })
+      return
+    }
+    if (mode === "create-account" && input.password.length < 12) {
+      form.setError("password", { message: "Use a passphrase with at least 12 characters." }, { shouldFocus: true })
+      return
+    }
+    try {
     const response = await authAction.mutateAsync({
       action: "authenticate",
       mode,
       email: input.email,
       password: input.password,
       role: mode === "create-account" ? input.role : undefined,
+      name: mode === "create-account" ? input.name : undefined,
     })
+    form.resetField("password")
     setResult(response)
+    } catch { /* The mutation error is rendered below the form. */ }
   }
 
   async function requestEmailAction(action: "magic-link" | "recover") {
     const valid = await form.trigger("email", { shouldFocus: true })
     if (!valid) return
 
+    try {
     const response = await authAction.mutateAsync({
       action,
       email: form.getValues("email"),
     })
     setResult(response)
+    } catch { /* The mutation error is rendered below the form. */ }
   }
 
   const copy = result ? successCopy(result) : null
@@ -193,7 +211,7 @@ export function AuthExperience() {
           </div>
 
           <p className="mt-12 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/55 lg:mt-16">
-            Austin pilot · Demo environment
+            Austin pilot · {persistent ? "Account access" : "Demo environment"}
           </p>
         </div>
       </section>
@@ -233,7 +251,7 @@ export function AuthExperience() {
               </div>
               <p className="mt-10 flex items-start gap-2 text-xs leading-relaxed text-subtle">
                 <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-foreground" />
-                This prototype confirms the flow locally. No account or email was created.
+                {result.dataMode === "medusa" ? "Your account is saved and your session is active. Email verification and payments are not enabled yet." : "This prototype confirms the flow locally. No account or email was created."}
               </p>
             </section>
           ) : (
@@ -290,6 +308,11 @@ export function AuthExperience() {
               ) : null}
 
               <form id="auth-panel" onSubmit={form.handleSubmit(submitCredentials)}>
+                {view === "main" && mode === "create-account" ? <div className="mb-7">
+                  <Label htmlFor="auth-name">Display name</Label>
+                  <Input {...form.register("name")} id="auth-name" autoComplete="name" maxLength={80} aria-invalid={Boolean(form.formState.errors.name)} className="mt-2 min-h-14" placeholder="How others will see you" />
+                  <ErrorText message={form.formState.errors.name?.message} />
+                </div> : null}
                 <div>
                   <Label htmlFor="auth-email">Email address</Label>
                   <Input
@@ -308,7 +331,7 @@ export function AuthExperience() {
                   <div className="mt-7">
                     <div className="flex items-end justify-between gap-4">
                       <Label htmlFor="auth-password">Password</Label>
-                      {mode === "sign-in" ? (
+                      {mode === "sign-in" && !persistent ? (
                         <button
                           className="min-h-11 text-sm font-semibold text-subtle underline-offset-4 hover:text-foreground hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                           onClick={() => {
@@ -329,7 +352,8 @@ export function AuthExperience() {
                         autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
                         className="min-h-14 rounded-none border-x-0 border-t-0 bg-muted/70 px-0 pr-14 focus:border-ember focus:ring-0"
                         id="auth-password"
-                        placeholder="8 characters minimum"
+                        maxLength={128}
+                        placeholder={mode === "create-account" ? "12 characters minimum" : "Your password"}
                         type={showPassword ? "text" : "password"}
                       />
                       <button
@@ -402,7 +426,7 @@ export function AuthExperience() {
 
                     <Button
                       className="w-full"
-                      disabled={authAction.isPending}
+                      disabled={authAction.isPending || persistent}
                       onClick={() => requestEmailAction("magic-link")}
                       size="lg"
                       type="button"
@@ -411,6 +435,7 @@ export function AuthExperience() {
                       <LockKeyhole aria-hidden="true" className="size-4" />
                       Email me a secure link
                     </Button>
+                    {persistent ? <p className="mt-3 text-sm leading-relaxed text-subtle">Email links, verification, and password recovery are unavailable until email delivery is configured.</p> : null}
                   </>
                 )}
               </form>
@@ -447,10 +472,10 @@ export function AuthExperience() {
             </DialogTitle>
             <DialogDescription>
               {legalTopic === "privacy"
-                ? "Your exact contact details stay private until you choose to move forward. This prototype does not create or retain an account."
+                ? persistent ? "Your email, display name, and account roles are stored. Passwords are handled by Medusa authentication; browser sessions use HttpOnly cookies. Your display name appears to marketplace counterparties." : "This demo does not create or retain an account."
                 : legalTopic === "terms"
                   ? "Every request and bid should be accurate, lawful, and respectful. Final payment and cancellation terms will be shown before checkout."
-                  : "For this prototype, return to the account form and use any valid demo credentials. Live support will be connected before launch."}
+                  : persistent ? "Sign in with your registered email and password. Email recovery and live support are not connected yet." : "For this prototype, return to the account form and use any valid demo credentials. Live support will be connected before launch."}
             </DialogDescription>
           </DialogHeader>
           <div className="mt-7 flex items-start gap-3 border-t border-divider pt-6 text-sm leading-relaxed text-subtle">

@@ -4,7 +4,8 @@ import { existsSync, readFileSync } from "node:fs"
 // Checks the exact staged blobs. Findings never include credential values.
 // This is a safety net, not a replacement for reviewing the staged diff.
 const git = (...args) => execFileSync("git", args, { maxBuffer: 20 * 1024 * 1024 })
-const files = git("diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z").toString().split("\0").filter(Boolean)
+const worktree = process.argv.includes("--worktree")
+const files = [...new Set((worktree ? git("ls-files", "--cached", "--others", "--exclude-standard", "-z") : git("diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z")).toString().split("\0").filter(Boolean))].filter(file => !worktree || existsSync(file))
 const findings = []
 const rules = [
   ["GitHub credential", /\b(?:github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9]{20,})/],
@@ -35,7 +36,7 @@ for (const file of files) {
   if ((envFile && !template) || /(?:^|\/)(?:node_modules|\.next|\.medusa|\.local|\.cache|\.codex|\.agents)\//.test(file) || /\.(?:pem|key|p12|pfx|dump|backup|sqlite3?|db|pgdump)$/.test(file)) {
     findings.push({ file, reason: "Sensitive or generated file path" })
   }
-  const buffer = git("show", `:${file}`)
+  const buffer = worktree ? readFileSync(file) : git("show", `:${file}`)
   if (buffer.includes(0)) continue
   const content = buffer.toString("utf8")
   for (const [reason, pattern] of rules) {
@@ -47,5 +48,5 @@ if (findings.length) {
   console.error(JSON.stringify({ status: "blocked", findings }, null, 2))
   process.exitCode = 1
 } else {
-  console.log(`PASS: ${files.length} staged files checked; no blocked paths, recognized credential patterns, or matching local secret values found.`)
+  console.log(`PASS: ${files.length} ${worktree ? "worktree" : "staged"} files checked; no blocked paths, recognized credential patterns, or matching local secret values found.`)
 }

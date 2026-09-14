@@ -2,6 +2,13 @@ import { defineConfig, loadEnv } from "@medusajs/framework/utils"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
 
+if (process.env.NODE_ENV === "production") {
+  for (const key of ["JWT_SECRET", "COOKIE_SECRET"] as const) {
+    const value = process.env[key] ?? ""
+    if (value.length < 32 || /replace-with|change-before|generate-at-least/i.test(value)) throw new Error(`${key} must be a private, randomly generated secret before production startup.`)
+  }
+}
+
 const redisUrl = process.env.REDIS_URL
 const modules: Array<{ resolve: string; options?: Record<string, unknown> }> = [
   { resolve: "./src/modules/marketplace" },

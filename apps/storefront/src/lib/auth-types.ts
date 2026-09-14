@@ -11,6 +11,7 @@ export type AuthApiRequest =
       email: string
       password: string
       role?: AuthRole
+      name?: string
     }
   | {
       action: "magic-link" | "recover"
@@ -24,6 +25,5 @@ export type AuthResult = {
   role?: AuthRole
   accountId?: string
   message: string
-  dataMode: "demo"
+  dataMode: "demo" | "medusa"
 }
-

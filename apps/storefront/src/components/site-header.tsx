@@ -13,6 +13,8 @@ import {
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+import { AccountControl } from "@/components/account-control"
+import { useAccount } from "@/lib/auth"
 
 type NavigationKey =
   | "buyer"
@@ -48,6 +50,8 @@ export function SiteHeader({
   messageHref = "/messages",
   variant = "exit",
 }: SiteHeaderProps) {
+  const session = useAccount()
+  const inboxHref = messageHref === "/messages" && session.data?.account?.role === "seller" ? "/messages?role=seller" : messageHref
   const [menuOpen, setMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
@@ -111,6 +115,7 @@ export function SiteHeader({
             </nav>
 
             <div className="ml-auto flex items-center gap-1 sm:gap-3">
+              <div className="hidden xl:block"><AccountControl /></div>
               <Link
                 aria-label={messageCount > 0 ? `${messageCount} unread messages` : "Messages"}
                 aria-current={active === "messages" ? "page" : undefined}
@@ -120,7 +125,7 @@ export function SiteHeader({
                     ? "bg-white/12 text-white"
                     : "text-white/68 hover:bg-white/[0.07] hover:text-white",
                 )}
-                href={messageHref}
+                href={inboxHref}
               >
                 <MessageCircle aria-hidden="true" className="size-[18px]" />
                 <span className="hidden 2xl:inline">Messages</span>
@@ -186,6 +191,7 @@ export function SiteHeader({
               </Link>
             )
           })}
+          <div className="mt-3 border-t border-white/15 px-4 pt-3"><AccountControl /></div>
         </nav>
       ) : null}
     </header>

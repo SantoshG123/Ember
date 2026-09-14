@@ -3,12 +3,23 @@ import { model } from "@medusajs/framework/utils"
 // A single module owns these relations, so PostgreSQL can enforce their foreign keys.
 export const Participant = model.define("ember_participant", {
   id: model.id({ prefix: "emp" }).primaryKey(),
-  customer_id: model.text().unique().nullable(),
+  customer_id: model.text().nullable(),
   role: model.enum(["buyer", "seller"]),
   name: model.text(),
   initials: model.text(),
   profile: model.json().nullable(),
-})
+}).indexes([{ name: "IDX_EMBER_CUSTOMER_ROLE", on: ["customer_id", "role"], unique: true, where: "customer_id IS NOT NULL AND deleted_at IS NULL" }])
+
+// The browser receives a random opaque token; only its SHA-256 digest is stored.
+export const AccountSession = model.define("ember_account_session", {
+  id: model.id({ prefix: "esess" }).primaryKey(),
+  token_hash: model.text().unique(),
+  customer_id: model.text(),
+  expires_at: model.dateTime(),
+}).indexes([
+  { name: "IDX_EMBER_SESSION_CUSTOMER", on: ["customer_id"] },
+  { name: "IDX_EMBER_SESSION_EXPIRY", on: ["expires_at"] },
+])
 
 export const Request = model.define("ember_request", {
   id: model.id({ prefix: "req" }).primaryKey(),

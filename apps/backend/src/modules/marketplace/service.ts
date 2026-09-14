@@ -1,7 +1,8 @@
 import { InjectManager, InjectTransactionManager, MedusaContext, MedusaError, MedusaService } from "@medusajs/framework/utils"
 import type { Context, InferTypeOf } from "@medusajs/framework/types"
 import type { EntityManager } from "@medusajs/framework/mikro-orm/knex"
-import { Bid, Bookmark, Conversation, Message, OfferDraft, Opportunity, Participant, Request } from "./models"
+import { AccountSession, Bid, Bookmark, Conversation, Message, OfferDraft, Opportunity, Participant, Request } from "./models"
+import { createHash, randomBytes } from "node:crypto"
 
 type Person = InferTypeOf<typeof Participant>
 type RequestRow = InferTypeOf<typeof Request>
@@ -25,11 +26,54 @@ export type Mutation =
   | { action: "save-opportunity"; actor: string; data: { slug: string; saved: boolean } }
   | { action: "draft-offer"; actor: string; data: { slug: string; pricePerMeal: number; weeklyCapacity: number; deliveryDays: string; note: string } }
 
-class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid, Opportunity, Conversation, Message, Bookmark, OfferDraft }) {
-  async actorForCustomer(customerId: string) {
-    const [actor] = await this.listParticipants({ customer_id: customerId }, { take: 1 })
+class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid, Opportunity, Conversation, Message, Bookmark, OfferDraft, AccountSession }) {
+  async actorForCustomer(customerId: string, role?: "buyer" | "seller") {
+    const [actor] = await this.listParticipants({ customer_id: customerId, ...(role ? { role } : {}) }, { take: 1, order: { role: "ASC" } })
     if (!actor) throw denied()
     return actor.id
+  }
+
+  @InjectManager()
+  async provisionAccount(customerId: string, name: string, role: "buyer" | "seller" | "both", @MedusaContext() context?: DbContext) {
+    return this.provisionAccount_(customerId, name, role, context)
+  }
+
+  @InjectTransactionManager()
+  protected async provisionAccount_(customerId: string, name: string, role: "buyer" | "seller" | "both", @MedusaContext() context?: DbContext) {
+    // Serialize first-time provisioning without holding a lock during auth/HTTP calls.
+    await context!.transactionManager!.execute("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", [`ember-account:${customerId}`])
+    const existing = await this.listParticipants({ customer_id: customerId }, { take: 2 }, context)
+    if (existing.length) return existing // Signing in never changes stored roles.
+    return this.createParticipants((role === "both" ? ["buyer", "seller"] as const : [role]).map(value => ({
+      customer_id: customerId, role: value, name, initials: name.split(/\s+/).map(word => word[0]).join("").slice(0, 2).toUpperCase(), profile: {},
+    })), context)
+  }
+
+  async accountSummary(customerId: string) {
+    const people = await this.listParticipants({ customer_id: customerId }, { take: 2, order: { role: "ASC" } })
+    if (!people.length) throw denied()
+    return { id: customerId, name: people[0].name, roles: people.map(person => person.role), role: people.length === 2 ? "both" : people[0].role }
+  }
+
+  async createAccountSession(customerId: string) {
+    const account = await this.accountSummary(customerId)
+    const token = randomBytes(32).toString("hex")
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    await this.createAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex"), customer_id: customerId, expires_at: expiresAt })
+    return { token, expiresAt, account }
+  }
+
+  async customerForSession(token: string) {
+    if (!/^[a-f0-9]{64}$/.test(token)) throw new MedusaError(MedusaError.Types.UNAUTHORIZED, "Sign in to continue.")
+    const [session] = await this.listAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex") }, { take: 1 })
+    if (!session || new Date(session.expires_at).getTime() <= Date.now()) throw new MedusaError(MedusaError.Types.UNAUTHORIZED, "Your session has expired. Sign in again.")
+    return session.customer_id
+  }
+
+  async revokeAccountSession(token: string) {
+    if (!/^[a-f0-9]{64}$/.test(token)) return
+    const sessions = await this.listAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex") }, { take: 1 })
+    if (sessions.length) await this.deleteAccountSessions(sessions.map(session => session.id))
   }
 
   async actor(actorId: string, role?: "buyer" | "seller", context?: DbContext) {
@@ -164,6 +208,8 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
       await manager.execute("SELECT id FROM ember_request WHERE id = ? AND deleted_at IS NULL FOR UPDATE", [data.requestId])
       const request = await this.retrieveRequest(data.requestId, {}, context)
       if (request.buyer_id === actor.id) throw denied()
+      const owner = await this.actor(request.buyer_id, undefined, context)
+      if (actor.customer_id && actor.customer_id === owner.customer_id) throw denied()
       if (request.status !== "open") throw conflict("This request is no longer accepting proposals.")
       if ((await this.listBids({ request_id: request.id, seller_id: actor.id, status: "active" }, { take: 1 }, context)).length) throw conflict("You already have an active proposal for this request.")
       const bid = await this.createBids({ request_id: request.id, seller_id: actor.id, price_per_delivery: data.pricePerDelivery, delivery_count: data.deliveryCount, cadence: data.cadence, earliest_start: data.earliestStart, proposal: data.proposal, status: "active" }, context)

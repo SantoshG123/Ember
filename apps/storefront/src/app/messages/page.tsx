@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import { MessagesWorkspace } from "@/components/messages-workspace"
+import { cookies } from "next/headers"
+import { accountBackend, accountCookieName } from "@/lib/account-server"
 
 export const metadata: Metadata = {
   title: "Messages",
@@ -8,5 +10,13 @@ export const metadata: Metadata = {
 
 export default async function MessagesPage({ searchParams }: { searchParams: Promise<{ role?: string; conversation?: string }> }) {
   const query = await searchParams
-  return <MessagesWorkspace actor={query.role === "seller" ? "seller" : "buyer"} initialConversationId={typeof query.conversation === "string" ? query.conversation : undefined} />
+  let actor: "buyer" | "seller" = query.role === "seller" ? "seller" : "buyer"
+  const token = (await cookies()).get(accountCookieName())?.value
+  if (!query.role && token) {
+    try {
+      const current = await accountBackend("/accounts/session", { session: token })
+      if (current.account?.role === "seller") actor = "seller"
+    } catch { /* The workspace renders the authorization/service error. */ }
+  }
+  return <MessagesWorkspace actor={actor} initialConversationId={typeof query.conversation === "string" ? query.conversation : undefined} />
 }

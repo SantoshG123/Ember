@@ -1,5 +1,6 @@
 import "server-only"
 import { headers as requestHeaders } from "next/headers"
+import { accountToken } from "@/lib/account-server"
 
 import {
   allowsMarketplaceMutation,
@@ -15,8 +16,13 @@ export async function fetchMarketplaceData<T>(path: string, options: { actor?: "
   const incoming = await requestHeaders()
   const host = incoming.get("host") ?? "localhost:3000"
   const protocol = isLoopbackHost(host.split(":")[0]) ? "http" : "https"
+  const forwarded = new Headers()
+  for (const key of ["authorization", "cookie"]) {
+    const value = incoming.get(key)
+    if (value !== null) forwarded.set(key, value)
+  }
   const request = new Request(`${protocol}://${host}/api/${path}`, {
-    headers: incoming.get("authorization") ? { authorization: incoming.get("authorization")! } : undefined,
+    headers: forwarded,
   })
   const response = await proxyMarketplace(request, path.split("?")[0], options.actor)
   const result = await response.json()
@@ -41,7 +47,7 @@ export function guardMarketplaceMutation(request: Request) {
     : failure("This action must be submitted from the EMBER application.", 403)
 }
 
-async function readJsonBody(request: Request) {
+export async function readJsonBody(request: Request) {
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
     throw new Error("content-type")
   }
@@ -73,7 +79,7 @@ async function readJsonBody(request: Request) {
 export async function proxyMarketplace(
   request: Request,
   path: string,
-  actor: "buyer" | "seller" = "buyer",
+  actor?: "buyer" | "seller",
 ) {
   if (getMarketplaceDataMode() !== "medusa") {
     return failure("Persistent marketplace data is not configured. Check the EMBER data mode.")
@@ -97,11 +103,16 @@ export async function proxyMarketplace(
 
   const headers = new Headers({ Accept: "application/json" })
   const authorization = request.headers.get("authorization")
+  const session = accountToken(request)
+  const role = actor ?? (path === "buyer" || (path === "requests" && mutating) ? "buyer" : path === "seller" || path === "bids" ? "seller" : undefined)
+  if (role) headers.set("x-ember-role", role)
   if (authorization?.match(/^Bearer [^\s]+$/i)) {
     headers.set("authorization", authorization)
+  } else if (!authorization && session !== undefined) {
+    headers.set("x-ember-session", session || "invalid")
   } else if (!authorization && canUseLocalMarketplaceActor(process.env, request, backend)) {
     headers.set("x-ember-local-key", process.env.EMBER_LOCAL_API_KEY!)
-    headers.set("x-ember-local-actor", `ember-${actor}`)
+    headers.set("x-ember-local-actor", `ember-${role ?? (path === "requests" || path.startsWith("requests/") ? "seller" : "buyer")}`)
   }
 
   let body: string | undefined

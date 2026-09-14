@@ -11,14 +11,22 @@ async function request(path, init) {
   return { response, body }
 }
 
+// This suite intentionally writes demo fixtures. Never run those writes against
+// a persistent account workspace, even if a caller points it at the wrong port.
+const config = await request("/api/marketplace/config")
+assert.equal(config.response.status, 200)
+assert.equal(config.body.mode, "demo", "The prototype smoke suite requires demo mode")
+
 const pages = [
   ["/", "Where demand"],
   ["/demand", "Demand across"],
   ["/requests/R-8924", "Italian"],
   ["/requests/new", "request"],
   ["/buyer", "buyer"],
-  ["/seller", "Good morning"],
-  ["/seller/bids/B-184", "Weekly family dinners"],
+  // Workspace content waits for the client-side mode query. HTTP tests check
+  // the route shell; browser QA must verify the hydrated fixture content.
+  ["/seller", "Seller workspace"],
+  ["/seller/bids/B-184", "Seller proposal"],
   // Radix portals mount after hydration; HTTP checks the route title, while
   // browser QA verifies the actual dialog, keyboard trap, and dismissal.
   ["/seller/test-plan", "Demand test plan"],
@@ -67,6 +75,7 @@ const auth = await request("/api/auth", {
     action: "authenticate",
     mode: "create-account",
     email: "jordan@example.com",
+    name: "Demo Jordan",
     password: "not-persisted-123",
     role: "both",
   }),

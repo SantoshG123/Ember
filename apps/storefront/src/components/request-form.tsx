@@ -112,9 +112,11 @@ export function RequestForm() {
   }
 
   async function onSubmit(input: RequestInput) {
+    try {
     const result = await publish.mutateAsync(input)
-    window.localStorage.removeItem("ember-request-draft")
     setPublishedId(result.id)
+    try { window.localStorage.removeItem("ember-request-draft") } catch { /* Publishing must still succeed when browser storage is disabled. */ }
+    } catch { /* Keep the form intact; the mutation error is rendered below. */ }
   }
 
   if (publishedId) {

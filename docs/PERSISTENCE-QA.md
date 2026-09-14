@@ -1,5 +1,7 @@
 # Local marketplace persistence QA
 
+This records the earlier fixture-identity verification. Real accounts are now available; see [ACCOUNTS.md](ACCOUNTS.md). Repeating this fixture suite requires `EMBER_AUTH_MODE=local` in both apps in addition to the existing explicit local-access flags and matching keys.
+
 Verified September 10, 2026 against the isolated PostgreSQL 18 database at `127.0.0.1:55432/ember`, Medusa at `127.0.0.1:9000`, and the Next.js development storefront at `127.0.0.1:3000`. Local buyer/seller test identities were explicitly enabled. No payment or real service was requested.
 
 ## Verified behavior
@@ -40,7 +42,7 @@ Restart the isolated database using its helper while the backend is stopped, res
 
 ## Limits and remaining work
 
-- Real customer registration, account-to-participant provisioning, sessions, email, and account recovery remain unfinished. Role selection in local development is not authentication.
+- Real customer registration, account provisioning, and revocable sessions were implemented and tested in the subsequent account pass. Email verification and recovery remain unfinished; fixture identity selection is still not authentication.
 - Stripe checkout, webhooks, refunds, and the actual payment/fulfillment lifecycle are not implemented end to end. Accepting a proposal does not charge anyone.
 - Attachments, scalable pagination, multi-process/Redis behavior, production backups, deployment hardening, rate limits, and shared-user browser end-to-end coverage remain future work.
 - Opportunity research records are explicitly seeded examples, not live analytics.

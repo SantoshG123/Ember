@@ -5,8 +5,10 @@ import { useState, type FormEvent } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useCreateMarketplaceBid } from "@/lib/marketplace-data"
+import { useAccount } from "@/lib/auth"
 
 export function RequestBidForm({ requestId, open }: { requestId: string; open: boolean }) {
+  const session = useAccount()
   const mutation = useCreateMarketplaceBid()
   const [submitted, setSubmitted] = useState(false)
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -18,6 +20,7 @@ export function RequestBidForm({ requestId, open }: { requestId: string; open: b
     } catch { /* The mutation error is shown next to the form. */ }
   }
   if (!open) return <p className="rounded-xl border border-divider bg-muted p-6 text-sm text-subtle">This request is no longer accepting bids. Existing proposals are available in your workspace.</p>
+  if (session.data?.account?.role === "buyer") return <p className="rounded-xl border border-divider bg-muted p-6 text-sm text-subtle">Proposals are available to seller accounts. Your buyer account can publish requests and compare responses.</p>
   if (submitted) return <section className="rounded-xl border border-divider bg-muted p-6" role="status"><h2 className="font-display text-2xl font-semibold">Your proposal is saved.</h2><p className="mt-3 text-subtle">The buyer can review it in their workspace. Follow its status from your seller dashboard.</p><Button asChild className="mt-5"><Link href="/seller">Open seller workspace</Link></Button></section>
   return <section className="enterprise-panel p-6 md:p-8">
     <p className="eyebrow text-ember-ink">Seller proposal</p><h2 className="mt-3 font-display text-3xl font-semibold tracking-tight">Make a clear offer.</h2>

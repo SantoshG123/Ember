@@ -22,14 +22,14 @@ export default async function PublicRequestPage({
   const { id } = await params
   if (getMarketplaceMode() !== "demo") {
     let record: MarketplaceRequestRecord
-    try { record = await fetchMarketplaceData<MarketplaceRequestRecord>(`requests/${encodeURIComponent(id)}`, { actor: "seller" }) }
+    try { record = await fetchMarketplaceData<MarketplaceRequestRecord>(`requests/${encodeURIComponent(id)}`) }
     catch { return <MarketplaceState title="Request unavailable" message="This request could not be loaded. Check the address and your connection, then refresh. No example request has been substituted." /> }
     return <main className="min-h-svh bg-background"><SiteHeader variant="app" />
       <section className="mx-auto max-w-[1120px] px-5 py-12 md:px-10 md:py-20" id="content" tabIndex={-1}>
         <Button asChild variant="ghost"><Link href="/demand"><ArrowLeft aria-hidden="true" className="size-4" />Browse requests</Link></Button>
         <div className="mt-10 border-t-4 border-ember pt-8"><p className="eyebrow text-ember-ink">{record.status === "open" ? "Accepting bids" : record.status} · {record.category}</p><h1 className="mt-6 break-words font-display text-[clamp(2.5rem,6vw,5rem)] font-semibold leading-tight tracking-[-0.05em]">{record.title}</h1><p className="mt-5 flex items-center gap-2 text-subtle"><MapPin className="size-4" aria-hidden="true" />{record.locationArea} · ZIP {record.zip}</p></div>
         <div className="my-10 grid gap-8 border-y border-divider py-8 md:grid-cols-[1fr_260px]"><div><h2 className="eyebrow text-subtle">What the buyer needs</h2><p className="mt-5 whitespace-pre-wrap break-words text-lg leading-8">{record.description}</p></div><dl className="space-y-5 text-sm"><div><dt className="text-subtle">Budget per delivery</dt><dd className="mt-1 text-xl font-semibold">${record.budgetMin.toLocaleString()}–${record.budgetMax.toLocaleString()}</dd></div><div><dt className="text-subtle">Frequency</dt><dd className="mt-1 font-semibold">{record.frequency.replaceAll("_", " ")}</dd></div><div><dt className="text-subtle">Timing</dt><dd className="mt-1 font-semibold">{record.timing}</dd></div><div><dt className="text-subtle">Request reference</dt><dd className="mt-1 break-all font-semibold">{record.id}</dd></div></dl></div>
-        <RequestBidForm requestId={record.id} open={record.status === "open"} />
+        {record.buyerId ? <Button asChild><Link href="/buyer">Manage your request</Link></Button> : <RequestBidForm requestId={record.id} open={record.status === "open"} />}
       </section></main>
   }
   const italian = id === "R-8924"

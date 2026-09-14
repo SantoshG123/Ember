@@ -141,7 +141,8 @@ const workspace: MessagesWorkspaceData = {
 }
 
 function messageActor(request: Request) {
-  return new URL(request.url).searchParams.get("role") === "seller" ? "seller" : "buyer"
+  const role = new URL(request.url).searchParams.get("role")
+  return role === "seller" || role === "buyer" ? role : undefined
 }
 
 export async function GET(request: Request) {
