@@ -64,10 +64,49 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
   }
 
   async customerForSession(token: string) {
+    return (await this.sessionForToken(token)).customer_id
+  }
+
+  async sessionForToken(token: string, context?: DbContext) {
     if (!/^[a-f0-9]{64}$/.test(token)) throw new MedusaError(MedusaError.Types.UNAUTHORIZED, "Sign in to continue.")
-    const [session] = await this.listAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex") }, { take: 1 })
+    const [session] = await this.listAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex") }, { take: 1 }, context)
     if (!session || new Date(session.expires_at).getTime() <= Date.now()) throw new MedusaError(MedusaError.Types.UNAUTHORIZED, "Your session has expired. Sign in again.")
-    return session.customer_id
+    return session
+  }
+
+  async activeSessions(token: string, offset = 0) {
+    const current = await this.sessionForToken(token)
+    const limit = 20
+    const [sessions, count] = await this.listAndCountAccountSessions({ customer_id: current.customer_id, expires_at: { $gt: new Date() } }, {
+      take: limit, skip: offset, order: { created_at: "DESC", id: "DESC" },
+      select: ["id", "created_at", "expires_at"],
+    })
+    // Session IDs identify rows only. Never send token digests or credentials.
+    return { sessions: sessions.map(session => ({ id: session.id, createdAt: session.created_at, expiresAt: session.expires_at, current: session.id === current.id })), count, offset, limit }
+  }
+
+  @InjectManager()
+  async endOtherSessions(token: string, sessionId?: string, @MedusaContext() context?: DbContext) {
+    return this.endOtherSessions_(token, sessionId, context)
+  }
+
+  @InjectTransactionManager()
+  protected async endOtherSessions_(token: string, sessionId?: string, @MedusaContext() context?: DbContext) {
+    let current = await this.sessionForToken(token, context)
+    const manager = context!.transactionManager!
+    // Serialize overlapping bulk revocations for this customer, then recheck
+    // authorization after waiting. No network calls run under the lock.
+    await manager.execute("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", [`ember-sessions:${current.customer_id}`])
+    current = await this.sessionForToken(token, context)
+    if (sessionId === current.id) throw new MedusaError(MedusaError.Types.INVALID_DATA, "Use Sign out to end your current session.")
+    // A single customer-scoped delete avoids loading an unbounded list. Session
+    // rows are internal auth records with no commerce events or related models.
+    const parameters = [current.customer_id, current.id, ...(sessionId ? [sessionId] : [])]
+    const [result] = await manager.execute<Array<{ revoked: number }>>(`WITH removed AS (
+      DELETE FROM ember_account_session WHERE customer_id = ? AND id <> ? AND deleted_at IS NULL AND expires_at > NOW()${sessionId ? " AND id = ?" : ""} RETURNING 1
+    ) SELECT count(*)::integer AS revoked FROM removed`, parameters)
+    if (sessionId && !result.revoked) throw notFound()
+    return { revoked: result.revoked }
   }
 
   async revokeAccountSession(token: string) {

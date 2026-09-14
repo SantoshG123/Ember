@@ -11,7 +11,7 @@ This is an actively developed application, **not a production-ready marketplace*
 - **Frontend:** responsive discovery, demand browsing, request creation, buyer and seller workspaces, proposal comparison, messaging, and opportunity planning screens.
 - **Demo mode:** runs without a backend using sample data and in-process adapters. Demo data is not a durable database; authentication and checkout screens simulate their workflows.
 - **Persistent local mode — verified:** Medusa/PostgreSQL requests, proposals, buyer/seller workspaces, messaging/read state, bookmarks, and offer drafts are connected. Local integration tests cover authorization failures, concurrent acceptance, backend outages, seed idempotence, and persistence across backend and database restarts. Earlier fixture tests are complemented by the real-account tests below.
-- **Accounts — local implementation verified:** real Medusa registration/sign-in, buyer/seller/both account roles, and revocable database sessions are connected. See [account setup and QA](docs/ACCOUNTS.md). Email verification and password recovery still need a configured provider.
+- **Accounts — local implementation verified:** real Medusa registration/sign-in, buyer/seller/both account roles, and revocable database sessions are connected. The `/account` page lists active browser sessions and lets you end individual or all other sessions. See [account setup and QA](docs/ACCOUNTS.md) for tested scope and remaining browser checks. Email verification and password recovery still need a configured provider.
 - **Still to build and verify:** email flows, richer account profiles, payment lifecycle integration, attachment storage, production operations, and deployment.
 
 ## Stack

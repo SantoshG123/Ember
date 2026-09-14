@@ -57,6 +57,7 @@ export default defineMiddlewares({ routes: [
   { matcher: "/auth/customer/emailpass*", method: ["POST"], bodyParser: { sizeLimit: "8kb" }, middlewares: [authRateLimit] },
   { matcher: "/accounts", method: ["POST"], bodyParser: { sizeLimit: "8kb" }, middlewares: [authenticate("customer", ["bearer"], { allowUnregistered: true })] },
   { matcher: "/accounts/session", method: ["POST"], middlewares: [authenticate("customer", ["bearer"])] },
+  { matcher: "/accounts/sessions", bodyParser: { sizeLimit: "4kb" }, middlewares: [] },
   { matcher: "/marketplace/*", bodyParser: { sizeLimit: "32kb" }, middlewares: [marketplaceAuth] },
   { matcher: "/store/marketplace/*", middlewares: [(_req: MedusaRequest, res: MedusaResponse) => { res.status(410).json({ message: "This legacy endpoint is retired. Use authenticated /marketplace endpoints." }) }] },
 ] })

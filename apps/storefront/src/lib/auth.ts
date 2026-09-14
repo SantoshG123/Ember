@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { AuthRole } from "@/lib/auth-types"
 import { marketplaceFetch } from "@/lib/marketplace-data"
 import type { AuthApiRequest, AuthResult } from "@/lib/auth-types"
+import type { AccountSessions, RevokeSessionInput } from "@/lib/account-session-schema"
 
 async function runAuthAction(input: AuthApiRequest): Promise<AuthResult> {
   const response = await fetch("/api/auth", {
@@ -35,6 +36,30 @@ export function useAuthAction() {
 export type Account = { id: string; name: string; email: string; role: AuthRole; roles: Array<"buyer" | "seller"> }
 export function useAccount() {
   return useQuery({ queryKey: ["account"], queryFn: () => marketplaceFetch<{ account: Account | null; dataMode: string }>("/api/auth"), retry: false, staleTime: 0, refetchOnWindowFocus: true })
+}
+
+export function useAccountSessions(accountId: string | undefined, offset: number) {
+  return useQuery({
+    queryKey: ["account-sessions", accountId, offset],
+    queryFn: () => marketplaceFetch<AccountSessions>(`/api/auth/sessions?offset=${offset}`),
+    enabled: Boolean(accountId), retry: false, staleTime: 0,
+    refetchOnWindowFocus: true, refetchInterval: 30_000,
+  })
+}
+
+export function useRevokeSession() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (input: RevokeSessionInput) => marketplaceFetch<{ revoked: number }>("/api/auth/sessions", {
+      method: "DELETE", headers: { "content-type": "application/json" }, body: JSON.stringify(input),
+    }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["account-sessions"] }),
+        queryClient.invalidateQueries({ queryKey: ["account"] }),
+      ])
+    },
+  })
 }
 
 export function useSignOut() {

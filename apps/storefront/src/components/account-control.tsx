@@ -10,7 +10,7 @@ export function AccountControl() {
   const account = session.data?.account
   return <div className="flex flex-wrap items-center gap-2 text-sm">
     {account ? <>
-      <span className="max-w-28 truncate text-white/70" title={account.name}>{account.name}</span>
+      <Link className="inline-flex min-h-11 items-center rounded-lg px-3 font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" href="/account" aria-label="Account and security" title={account.name}>Account</Link>
       <button className="min-h-11 rounded-lg border border-white/20 px-3 font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60" disabled={signOut.isPending} onClick={() => signOut.mutate()} type="button">
         {signOut.isPending ? "Signing out…" : "Sign out"}
       </button>

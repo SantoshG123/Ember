@@ -33,6 +33,7 @@ const pages = [
   ["/opportunities/east-austin-team-lunch", "lunch"],
   ["/messages", "Messages"],
   ["/auth", "EMBER"],
+  ["/account", "Account &amp; security"],
   ["/checkout", "Protected payment"],
 ]
 

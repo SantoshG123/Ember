@@ -44,6 +44,63 @@ async function signup(role) {
   console.log(`PASS: ${role} registration, session cookie, and stored roles.`)
   return account
 }
+
+async function sessionManagement(buyer, otherBuyer) {
+  const path = "/api/auth/sessions"
+  const list = cookie => call(path, { cookie })
+  const revoke = (cookie, body) => call(path, { cookie, method: "DELETE", body })
+  const extraCookies = []
+  try {
+    status(await list(undefined), 401, "Anonymous session list denied")
+    status(await list("ember-session=invalid"), 401, "Invalid session list denied")
+    status(await revoke(undefined, { allOthers: true }), 401, "Anonymous revocation denied")
+    const initial = await list(buyer.cookie)
+    status(initial, 200, "Own session list")
+    assert.equal(initial.body.count, 1)
+    assert.equal(initial.body.sessions[0].current, true)
+    const currentId = initial.body.sessions[0].id
+    for (let index = 0; index < 3; index++) {
+      const login = await call("/api/auth", { method: "POST", body: { action: "authenticate", mode: "sign-in", email: buyer.email, password: buyer.password } })
+      status(login, 200, "Additional session login")
+      extraCookies.push(login.headers.getSetCookie().find(value => value.startsWith("ember-session=")).split(";")[0])
+    }
+    const many = await list(buyer.cookie)
+    status(many, 200, "List additional sessions")
+    assert.equal(many.body.count, 4)
+    assert.equal(many.body.sessions.filter(row => row.current).length, 1)
+    for (const row of many.body.sessions) assert.deepEqual(Object.keys(row).sort(), ["createdAt", "current", "expiresAt", "id"].sort(), "Session metadata must omit credentials and internal fields.")
+    const foreign = await list(otherBuyer.cookie)
+    assert.equal(foreign.body.count, 1)
+    const foreignId = foreign.body.sessions[0].id
+    status(await revoke(buyer.cookie, { sessionId: foreignId }), 404, "Another account's session cannot be revoked")
+    status(await revoke(buyer.cookie, { sessionId: currentId }), 400, "Current session is protected from bulk controls")
+    status(await revoke(buyer.cookie, {}), 400, "Empty body must not trigger bulk sign-out")
+    status(await revoke(buyer.cookie, { allOthers: false }), 400, "Bulk sign-out needs explicit intent")
+    status(await revoke(buyer.cookie, { allOthers: true, customerId: otherBuyer.id }), 400, "Customer identity cannot be supplied by the client")
+    status(await call(path, { cookie: buyer.cookie, method: "DELETE", headers: { origin: "https://untrusted.example" }, body: { allOthers: true } }), 403, "Cross-origin session revocation denied")
+    status(await call(path + "?offset=-1", { cookie: buyer.cookie }), 400, "Invalid pagination denied")
+    status(await call(path + "?offset=0&offset=20", { cookie: buyer.cookie }), 400, "Ambiguous pagination denied")
+    const extra = await list(extraCookies[0])
+    const extraId = extra.body.sessions.find(row => row.current).id
+    const ended = await revoke(buyer.cookie, { sessionId: extraId })
+    status(ended, 200, "End selected session")
+    assert.equal(ended.body.revoked, 1)
+    status(await list(extraCookies[0]), 401, "Ended session cannot inspect sessions")
+    status(await call("/api/buyer", { cookie: extraCookies[0] }), 401, "Ended session cannot access workspace")
+    status(await revoke(extraCookies[0], { allOthers: true }), 401, "Revoked session cannot revoke others")
+    const all = await revoke(buyer.cookie, { allOthers: true })
+    status(all, 200, "End all other sessions")
+    assert.equal(all.body.revoked, 2)
+    for (const cookie of extraCookies) status(await call("/api/buyer", { cookie }), 401, "Bulk-revoked cookie cannot be replayed")
+    status(await call("/api/buyer", { cookie: buyer.cookie }), 200, "Current session survives bulk revocation")
+    status(await call("/api/buyer", { cookie: otherBuyer.cookie }), 200, "Other account is unaffected")
+    assert.equal((await list(buyer.cookie)).body.count, 1)
+    assert.equal((await revoke(buyer.cookie, { allOthers: true })).body.revoked, 0)
+    console.log("PASS: private session listing, strict inputs, cross-account isolation, individual/bulk revocation, replay rejection, and current-session preservation.")
+  } finally {
+    for (const cookie of extraCookies) { try { await call("/api/auth", { method: "DELETE", cookie }) } catch { /* Local QA sessions also expire automatically. */ } }
+  }
+}
 const requestInput = () => ({ category: "QA fixtures", title: `EMBER account QA ${run.slice(0, 8)}`, description: "An isolated account-ownership verification request. No actual service or payment is being requested by this test.", budgetMin: 30, budgetMax: 80, frequency: "one-time", timing: "Local QA only", zip: "78704" })
 
 async function test() {
@@ -64,6 +121,7 @@ async function test() {
   const otherBuyer = await signup("buyer")
   const seller = await signup("seller")
   const both = await signup("both")
+  await sessionManagement(buyer, otherBuyer)
   status(await call("/api/marketplace/seller", { cookie: buyer.cookie }), 400, "Buyer cannot become seller via URL")
   status(await call("/api/buyer", { cookie: seller.cookie }), 400, "Seller cannot become buyer via URL")
   status(await call("/api/buyer", { cookie: both.cookie }), 200, "Dual-role buyer access")
