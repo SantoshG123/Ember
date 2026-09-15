@@ -13,7 +13,7 @@ The previous local fixture bridge is now opt-in: it requires `EMBER_AUTH_MODE=lo
 
 ## Account page and session controls
 
-Open `/account` or choose **Account** in the desktop header or mobile navigation. Account details and roles are read-only. Active sessions show their creation/expiry times and a **Current** badge; these are sign-in sessions, not a device inventory. No device names, locations, IP addresses, tokens, or token hashes are returned in this list.
+Open `/account` or choose **Account** in the desktop header or mobile navigation. Email and roles are read-only; **Edit public profile** changes your marketplace display name and optional seller details. Active sessions show their creation/expiry times and a **Current** badge; these are sign-in sessions, not a device inventory. No device names, locations, IP addresses, tokens, or token hashes are returned in this list.
 
 - Sessions are paginated in groups of 20. The list refreshes on focus and every 30 seconds while the page is visible.
 - **End session** targets one other session; **End other sessions** ends all other active EMBER browser sessions after confirmation. The current session stays signed in. Use **Sign out** to end the current session.
@@ -24,6 +24,18 @@ Open `/account` or choose **Account** in the desktop header or mobile navigation
 The confirmation dialog provides cancel/error/pending states and returns focus to the session heading. Demo mode explains that real accounts are required instead of simulating session deletion.
 
 ## Security model
+
+### Public profiles
+
+- All accounts can edit a 2–80 character display name. Seller and dual-role accounts can also edit a 600-character introduction, 120-character service area, and up to 8 unique capabilities (40 characters each).
+- Seller introductions appear in the buyer workspace's full-proposal dialog and are explicitly labeled self-described, not verified. This does not enable geographic matching, identity verification, or business approval.
+- Both API layers allowlist editable fields with strict Zod schemas. Customers cannot change email, roles, IDs, ratings, reviews, or verification flags. A short customer-scoped transaction updates both participant names/initials together and merges only permitted seller fields. No schema migration is needed.
+- Public display names are separate from Medusa's commerce customer name. Signing in preserves the edited marketplace profile; the commerce/customer record is not rewritten.
+- Each save requires a customer-bound content revision. Stale or competing edits return HTTP 409, including an old-account draft after a cookie/account switch. Revisions are not authentication credentials. Reloading explicitly replaces the draft; background refetches do not overwrite it.
+- The form includes labeled inputs, inline errors, pending/success feedback, dirty-dialog confirmation, and a browser reload/close warning. Saved changes invalidate account and marketplace query data in the current tab. Cross-tab cache clearing and complete browser/back-navigation coverage remain separate QA work.
+- Profile routes require real opaque sessions, return private/no-store responses, reject cross-origin writes, and have an 8 KB body bound. Seller metadata outside the editable allowlist stays server-controlled.
+
+### Authentication
 
 - The server-side Next.js bridge uses [Medusa's authentication routes](https://docs.medusajs.com/resources/commerce-modules/auth/authentication-route) and customer-account workflow. Password verification stays with Medusa's email/password provider; the browser never receives its bearer token.
 - A verified Medusa identity is provisioned into an EMBER account. Buyer and seller participants are separate, server-owned records under the same customer. A dual-role account receives both. Sign-in inputs and URL roles cannot grant new permissions or replace existing roles.
@@ -44,6 +56,7 @@ pnpm test:unit
 node scripts/account-integration.test.mjs --confirm-local-medusa
 pnpm --filter @ember/backend exec medusa exec ./src/scripts/verify-account-sessions.ts
 pnpm --filter @ember/backend exec medusa exec ./src/scripts/verify-session-controls.ts
+pnpm --filter @ember/backend exec medusa exec ./src/scripts/verify-account-profile.ts
 ```
 
 Run from the repository root with both local servers running in account mode. The write tests refuse any database other than `127.0.0.1:55432/ember`. To repeat restart verification, add `--restart` to the integration command; when it prints `RESTART READY`, stop the backend, optionally restart the isolated database using its helper, and start the backend within three minutes. Credentials remain only in the waiting test process.
@@ -56,9 +69,15 @@ Session-controls checkpoint — September 14, 2026: the extended HTTP suite pass
 
 The signed-out `/account` screen and mobile menu were browser-checked at 375×812 and 812×375 with no horizontal overflow. Authenticated account controls, dialog keyboard/focus behavior, cross-tab behavior, and the signed-in responsive layout still need an interactive browser pass; their API behavior was tested separately. No QA passwords or session tokens were printed or committed. Both application builds, type checks, and frontend lint passed for this checkpoint.
 
-## Still required
+## Profile checkpoint — September 15, 2026
+
+Eleven unit tests passed, including equivalent schema acceptance/rejection at both API boundaries. The expanded account HTTP suite passed buyer/seller/dual-role edits, persistence, immutable identity fields, cross-origin rejection, stale/concurrent saves, role synchronization, updated proposal/conversation names, sign-in preservation, and revoked-cookie rejection. Service tests additionally verified atomic dual-role updates, preserved ratings/reviews/verification/internal metadata, identical profiles with different customer-bound revisions, Unicode-safe initials, and expired/revoked sessions. Synthetic service fixtures are removed in `finally`; HTTP QA accounts/marketplace fixtures remain local with sessions revoked.
+
+Both application builds, frontend/backend type checks, and frontend lint passed. A separate production demo server passed 13 route checks and 6 API smoke scenarios; profile reads/writes correctly return unavailable in demo mode. Interactive testing of the new editor (keyboard/focus, discard/conflict recovery, small-phone/landscape layouts, reduced motion, large text, and authenticated cross-tab/back navigation) has **not** been completed. The available Node runtime lacks Playwright; HTTP and source checks are not substitutes for browser testing. Supported Node.js 24 CI remains outstanding.
+
+## Remaining account and launch work
 
 - Choose/configure an email provider, implement verified-email and single-use password-reset flows, and revoke all sessions when credentials change. The UI/API currently report email actions as unavailable instead of claiming delivery.
-- Finish account lifecycle/profile editing and any MFA policy; complete interactive QA of the new session-management screen. Current roles are selected at signup; self-service role changes are not exposed.
+- Finish account lifecycle (email changes, account deletion, MFA policy), seller verification/onboarding, and interactive profile/session QA. Current roles are selected at signup; self-service role changes are not exposed. Basic public profile editing is implemented; profile photos and attachment storage are not.
 - Add distributed rate limits, expired-session cleanup, abuse monitoring, secure deployment configuration, and end-to-end browser coverage before opening registration publicly.
 - Payments and fulfillment remain separate work. Account registration and proposal acceptance never charge a card.

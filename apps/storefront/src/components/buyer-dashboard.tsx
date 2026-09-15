@@ -536,6 +536,13 @@ export function BuyerDashboard() {
             <div><p className="text-subtle">Cadence</p><p className="mt-1 font-semibold">{proposalBid?.cadence}</p></div>
             <div><p className="text-subtle">Earliest start</p><p className="mt-1 font-semibold">{proposalBid?.earliestStart}</p></div>
           </div>
+          {proposalBid?.sellerProfile && (proposalBid.sellerProfile.summary || proposalBid.sellerProfile.serviceArea || proposalBid.sellerProfile.capabilities.length > 0) ? <section className="mt-6 rounded-xl border border-divider bg-muted/50 p-5" aria-label="Seller introduction">
+            <h3 className="font-semibold">About this seller</h3>
+            <p className="mt-1 text-xs leading-relaxed text-subtle">Self-described profile · not verified by EMBER</p>
+            {proposalBid.sellerProfile.serviceArea ? <p className="mt-4 break-words text-sm"><span className="font-semibold">Service area: </span>{proposalBid.sellerProfile.serviceArea}</p> : null}
+            {proposalBid.sellerProfile.summary ? <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-relaxed">{proposalBid.sellerProfile.summary}</p> : null}
+            {proposalBid.sellerProfile.capabilities.length ? <ul className="mt-4 flex flex-wrap gap-2" aria-label="Seller capabilities">{proposalBid.sellerProfile.capabilities.map(capability => <li key={capability} className="max-w-full break-words rounded-md border border-divider bg-white px-2.5 py-1 text-xs font-medium">{capability}</li>)}</ul> : null}
+          </section> : null}
           <div className="mt-8 flex flex-wrap justify-end gap-2">
             <DialogClose asChild><Button variant="outline">Close</Button></DialogClose>
             {proposalBid ? <Button onClick={() => { setSelectedBidId(proposalBid.id); setProposalBid(null); setAcceptBid(proposalBid) }} variant="ember">Choose this bid</Button> : null}

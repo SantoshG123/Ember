@@ -19,7 +19,7 @@
     "build": "pnpm --filter @ember/storefront build",
     "lint": "pnpm --filter @ember/storefront lint",
     "test:smoke": "node scripts/storefront-smoke.mjs",
-    "test:unit": "node --test scripts/account-policy.test.mjs scripts/account-sessions.test.mjs scripts/marketplace-transport.test.mjs",
+    "test:unit": "node --test scripts/account-policy.test.mjs scripts/account-sessions.test.mjs scripts/account-profile.test.mjs scripts/marketplace-transport.test.mjs",
     "typecheck": "pnpm --filter @ember/storefront typecheck && pnpm --filter @ember/backend typecheck"
   }
 }

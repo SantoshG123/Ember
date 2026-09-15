@@ -103,6 +103,61 @@ async function sessionManagement(buyer, otherBuyer) {
 }
 const requestInput = () => ({ category: "QA fixtures", title: `EMBER account QA ${run.slice(0, 8)}`, description: "An isolated account-ownership verification request. No actual service or payment is being requested by this test.", budgetMin: 30, budgetMax: 80, frequency: "one-time", timing: "Local QA only", zip: "78704" })
 
+async function profileManagement(buyer, otherBuyer, seller, both) {
+  const path = "/api/auth/profile"
+  const get = cookie => call(path, { cookie })
+  const update = (cookie, body) => call(path, { cookie, method: "PATCH", body })
+  status(await get(undefined), 401, "Anonymous profile denied")
+  status(await get("ember-session=invalid"), 401, "Invalid session profile denied")
+  status(await update(undefined, {}), 401, "Anonymous profile update denied")
+  const untouched = (await get(otherBuyer.cookie)).body
+  const details = { summary: "QA seller introduction", serviceArea: "Austin", capabilities: ["Meal preparation", "Delivery"] }
+  for (const account of [buyer, seller, both]) {
+    const initial = await get(account.cookie)
+    status(initial, 200, "Read own public profile")
+    assert.deepEqual(Object.keys(initial.body).sort(), ["name", "seller", "version"])
+    assert.equal(initial.body.name, account.name)
+    assert.equal(initial.body.seller === null, account.role === "buyer")
+    const input = { name: `Updated QA ${account.role}`, version: initial.body.version, ...(account.role !== "buyer" ? { seller: details } : {}) }
+    status(await call(path, { cookie: account.cookie, method: "PATCH", headers: { origin: "https://untrusted.example" }, body: input }), 403, "Cross-origin profile edit denied")
+    for (const extra of [{ customerId: otherBuyer.id }, { email: otherBuyer.email }, { role: "both" }, { profile: {} }]) {
+      status(await update(account.cookie, { ...input, ...extra }), 400, "Protected profile identity field denied")
+    }
+    status(await call(path + "?customerId=" + otherBuyer.id, { cookie: account.cookie }), 400, "Targeted profile lookup denied")
+    status(await update(account.cookie, { ...input, name: "x".repeat(81) }), 400, "Oversize name denied")
+    status(await update(account.cookie, { ...input, seller: { ...details, verified: true } }), 400, "Self-verification denied")
+    if (account.role === "buyer") status(await update(account.cookie, { ...input, seller: details }), 400, "Buyer cannot create seller profile")
+    const saved = await update(account.cookie, input)
+    status(saved, 200, "Save public profile")
+    assert.equal(saved.body.name, input.name)
+    assert.notEqual(saved.body.version, initial.body.version)
+    assert.deepEqual((await get(account.cookie)).body, saved.body, "Profile persists across requests.")
+    if (account.role !== "buyer") assert.deepEqual(saved.body.seller, details)
+    status(await update(account.cookie, { ...input, name: "Stale draft" }), 409, "Stale profile edit denied")
+    const refreshed = await call("/api/auth", { cookie: account.cookie })
+    assert.equal(refreshed.body.account.name, input.name)
+    assert.equal(refreshed.body.account.email, account.email)
+    assert.equal(refreshed.body.account.role, account.role)
+    account.name = input.name
+    const direct = await fetch(backend + "/accounts/profile", {
+      method: "PATCH", headers: { "content-type": "application/json", "x-ember-session": account.cookie.split("=")[1] },
+      body: JSON.stringify({ ...input, version: saved.body.version, customerId: otherBuyer.id }), signal: AbortSignal.timeout(10_000),
+    })
+    assert.equal(direct.status, 400, "Backend independently rejects injected ownership.")
+  }
+  assert.deepEqual((await get(otherBuyer.cookie)).body, untouched, "Other account's profile stays unchanged.")
+  const latest = (await get(both.cookie)).body
+  const race = await Promise.all(["Concurrent QA One", "Concurrent QA Two"].map(name => update(both.cookie, { name, version: latest.version })))
+  assert.deepEqual(race.map(result => result.status).sort(), [200, 409])
+  both.name = race.find(result => result.status === 200).body.name
+  for (const role of ["buyer", "seller"]) {
+    const workspace = await call("/api/messages?role=" + role, { cookie: both.cookie })
+    status(workspace, 200, "Dual-role profile projection")
+    assert.equal(workspace.body.currentUser.name, both.name)
+  }
+  console.log("PASS: profile persistence, buyer/seller/both editing, protected fields, same-origin checks, account isolation, and concurrent-save conflicts.")
+}
+
 async function test() {
   assert.ok(process.argv.includes("--confirm-local-medusa"), "Local write tests require explicit confirmation.")
   const env = await readFile("apps/backend/.env", "utf8")
@@ -122,6 +177,7 @@ async function test() {
   const seller = await signup("seller")
   const both = await signup("both")
   await sessionManagement(buyer, otherBuyer)
+  await profileManagement(buyer, otherBuyer, seller, both)
   status(await call("/api/marketplace/seller", { cookie: buyer.cookie }), 400, "Buyer cannot become seller via URL")
   status(await call("/api/buyer", { cookie: seller.cookie }), 400, "Seller cannot become buyer via URL")
   status(await call("/api/buyer", { cookie: both.cookie }), 200, "Dual-role buyer access")
@@ -138,12 +194,15 @@ async function test() {
   const bidInput = { requestId: request.body.id, pricePerDelivery: 49.95, deliveryCount: 1, cadence: "QA only", earliestStart: "Local test", proposal: "Isolated QA proposal to verify authenticated account ownership." }
   const bid = await call("/api/marketplace/bids", { cookie: seller.cookie, method: "POST", body: bidInput })
   status(bid, 201, "Authenticated seller submits proposal")
+  assert.equal(bid.body.bid.seller, seller.name)
+  assert.equal(bid.body.bid.sellerProfile.summary, "QA seller introduction")
   const conversationId = bid.body.bid.conversationId
   status(await call("/api/buyer", { cookie: otherBuyer.cookie, method: "PATCH", body: { bidId: bid.body.bid.id, action: "accept" } }), 400, "Another buyer cannot accept")
   status(await call("/api/messages", { cookie: otherBuyer.cookie, method: "POST", body: { conversationId, body: "Unauthorized QA message" } }), 400, "Another buyer cannot message")
   status(await call("/api/buyer", { cookie: buyer.cookie, method: "PATCH", body: { bidId: bid.body.bid.id, action: "accept" } }), 200, "Owning buyer can accept")
   status(await call("/api/messages?role=seller", { cookie: seller.cookie, method: "POST", body: { conversationId, body: "Authenticated seller QA reply" } }), 201, "Seller sends with their account")
   const inbox = await call("/api/messages", { cookie: buyer.cookie })
+  assert.equal(inbox.body.conversations.find(row => row.id === conversationId).participant.name, seller.name)
   assert.ok(inbox.body.conversations.some(row => row.id === conversationId && row.messages.some(message => message.body === "Authenticated seller QA reply")))
   const selfRequest = await call("/api/requests", { cookie: both.cookie, method: "POST", body: requestInput() })
   status(selfRequest, 201, "Dual-role request")
@@ -172,10 +231,13 @@ async function test() {
   const oldCookie = buyer.cookie
   status(await call("/api/auth", { method: "DELETE", cookie: oldCookie }), 200, "Logout")
   status(await call("/api/buyer", { cookie: oldCookie }), 401, "Revoked cookie cannot be replayed")
+  status(await call("/api/auth/profile", { cookie: oldCookie }), 401, "Revoked cookie cannot read profile")
+  status(await call("/api/auth/profile", { cookie: oldCookie, method: "PATCH", body: { name: "Revoked edit", version: "a".repeat(64) } }), 401, "Revoked cookie cannot edit profile")
   const login = await call("/api/auth", { method: "POST", body: { action: "authenticate", mode: "sign-in", email: buyer.email.toUpperCase(), password: buyer.password, role: "seller" } })
   status(login, 200, "Sign back in")
   assert.equal(login.body.role, "buyer", "Sign-in input cannot change stored roles.")
   buyer.cookie = login.headers.getSetCookie().find(value => value.startsWith("ember-session=")).split(";")[0]
+  assert.equal((await call("/api/auth", { cookie: buyer.cookie })).body.account.name, buyer.name, "Signing in preserves the edited public name.")
   assert.notEqual(buyer.cookie, oldCookie, "A new login must issue a fresh session.")
   status(await call("/api/buyer", { cookie: buyer.cookie }), 200, "New session works")
   const rateEmail = `rate-qa-${run}@example.invalid`

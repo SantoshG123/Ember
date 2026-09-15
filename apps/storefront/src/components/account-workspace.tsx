@@ -5,6 +5,7 @@ import { useRef, useState } from "react"
 import { ArrowLeft, ArrowRight, Check, Clock3, KeyRound, LogOut, ShieldCheck } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { MarketplaceState } from "@/components/marketplace-state"
+import { AccountProfileEditor } from "@/components/account-profile-editor"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useAccount, useAccountSessions, useRevokeSession, useSignOut } from "@/lib/auth"
@@ -65,7 +66,8 @@ export function AccountWorkspace() {
             <div><dt className="text-subtle">Email address</dt><dd className="mt-1 break-all font-semibold">{account.email}</dd></div>
             <div><dt className="text-subtle">Workspace access</dt><dd className="mt-2 flex flex-wrap gap-2">{account.roles.map(role => <span key={role} className="rounded-md border border-divider bg-muted px-2.5 py-1 font-semibold capitalize">{role}</span>)}</dd></div>
           </dl>
-          <p className="mt-6 border-t border-divider pt-5 text-sm leading-relaxed text-subtle">Email ownership is not verified yet. Profile changes and password recovery are not available in this local release.</p>
+          <AccountProfileEditor key={account.id} accountId={account.id} />
+          <p className="mt-6 border-t border-divider pt-5 text-sm leading-relaxed text-subtle">Email ownership is not verified yet. Email changes and password recovery are not available in this local release.</p>
         </section>
         <section className="rounded-xl bg-graphite p-6 text-white" aria-labelledby="session-info-heading">
           <ShieldCheck aria-hidden="true" className="size-5 text-white/80" />

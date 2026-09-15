@@ -4,6 +4,7 @@ export type BidStatus = "active" | "accepted" | "declined"
 export type BuyerBid = {
   id: string
   seller: string
+  sellerProfile?: { summary: string; serviceArea: string; capabilities: string[] }
   initials: string
   rating: number
   reviews: number

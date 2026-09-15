@@ -11,8 +11,8 @@ This is an actively developed application, **not a production-ready marketplace*
 - **Frontend:** responsive discovery, demand browsing, request creation, buyer and seller workspaces, proposal comparison, messaging, and opportunity planning screens.
 - **Demo mode:** runs without a backend using sample data and in-process adapters. Demo data is not a durable database; authentication and checkout screens simulate their workflows.
 - **Persistent local mode — verified:** Medusa/PostgreSQL requests, proposals, buyer/seller workspaces, messaging/read state, bookmarks, and offer drafts are connected. Local integration tests cover authorization failures, concurrent acceptance, backend outages, seed idempotence, and persistence across backend and database restarts. Earlier fixture tests are complemented by the real-account tests below.
-- **Accounts — local implementation verified:** real Medusa registration/sign-in, buyer/seller/both account roles, and revocable database sessions are connected. The `/account` page lists active browser sessions and lets you end individual or all other sessions. See [account setup and QA](docs/ACCOUNTS.md) for tested scope and remaining browser checks. Email verification and password recovery still need a configured provider.
-- **Still to build and verify:** email flows, richer account profiles, payment lifecycle integration, attachment storage, production operations, and deployment.
+- **Accounts — local implementation verified:** real Medusa registration/sign-in, buyer/seller/both roles, and revocable database sessions are connected. The `/account` page supports public profile editing and individual/bulk session sign-out. Seller introductions appear with full proposals. See [account setup and QA](docs/ACCOUNTS.md) for tested scope and remaining browser checks. Email verification and password recovery still need a configured provider.
+- **Still to build and verify:** email flows, seller verification/onboarding, payment lifecycle integration, attachment storage, authenticated browser QA, production operations, and deployment.
 
 ## Stack
 
@@ -54,7 +54,9 @@ For optional local configuration, copy `.env.template` to `apps/storefront/.env.
 | `/seller/bids/[id]` | Seller proposal details |
 | `/messages` | Buyer conversations; `?role=seller` selects the local seller view |
 | `/opportunities/east-austin-team-lunch` | Example opportunity brief and planning tools |
-| `/auth`, `/checkout` | Authentication and checkout prototypes |
+| `/auth` | Real registration/sign-in in Medusa mode; simulated in demo mode |
+| `/account` | Public profile editing and active-session management |
+| `/checkout` | Checkout prototype; does not charge a card |
 
 ## Persistent development setup
 
@@ -90,7 +92,7 @@ Persistent-mode failures display an error instead of silently substituting demo 
 pnpm typecheck
 pnpm lint
 pnpm build
-node --test scripts/marketplace-transport.test.mjs
+pnpm test:unit
 ```
 
 Additional checks:
@@ -102,7 +104,7 @@ pnpm test:smoke
 
 The storefront smoke script targets the **demo** storefront at `http://127.0.0.1:3000`. Set `EMBER_SMOKE_BASE_URL` to use a different local address. It exercises prototype mutations; do not aim it at production or a shared database.
 
-The latest local persistence verification passed frontend/backend TypeScript, frontend ESLint, both builds (Medusa headless), and five transport-policy tests. Database integration and restart checks are recorded in [PERSISTENCE-QA.md](docs/PERSISTENCE-QA.md). This pass did not repeat interactive browser QA; earlier visual checks are recorded in [UI-POLISH-QA.md](docs/UI-POLISH-QA.md).
+The profile checkpoint passed frontend/backend TypeScript, frontend ESLint, both builds (Medusa headless), 11 unit tests, and account/profile HTTP and database integration tests. See [account QA](docs/ACCOUNTS.md) for exact scope and remaining interactive checks. Earlier database restart checks are recorded in [PERSISTENCE-QA.md](docs/PERSISTENCE-QA.md); visual checks are recorded in [UI-POLISH-QA.md](docs/UI-POLISH-QA.md).
 
 ## Repository layout
 

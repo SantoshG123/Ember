@@ -3,6 +3,7 @@ import type { Context, InferTypeOf } from "@medusajs/framework/types"
 import type { EntityManager } from "@medusajs/framework/mikro-orm/knex"
 import { AccountSession, Bid, Bookmark, Conversation, Message, OfferDraft, Opportunity, Participant, Request } from "./models"
 import { createHash, randomBytes } from "node:crypto"
+import type { AccountProfile, AccountProfileInput, SellerProfile } from "./profile-schema"
 
 type Person = InferTypeOf<typeof Participant>
 type RequestRow = InferTypeOf<typeof Request>
@@ -15,6 +16,24 @@ const conflict = (message: string) => new MedusaError(MedusaError.Types.CONFLICT
 const date = (value: Date | string) => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" })
 const time = (value: Date | string) => new Date(value).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
 const money = (value: unknown) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(Number(value))
+
+function publicSellerProfile(person: Person): SellerProfile {
+  const profile = person.profile ?? {}
+  return {
+    summary: typeof profile.summary === "string" ? profile.summary : "",
+    serviceArea: typeof profile.serviceArea === "string" ? profile.serviceArea : "",
+    capabilities: Array.isArray(profile.capabilities) ? profile.capabilities.filter((value): value is string => typeof value === "string") : [],
+  }
+}
+
+function profileDto(people: Person[]): AccountProfile {
+  if (!people.length) throw denied()
+  const seller = people.find(person => person.role === "seller")
+  const fields = { name: (people.find(person => person.role === "buyer") ?? people[0]).name, seller: seller ? publicSellerProfile(seller) : null }
+  // A customer-bound content revision, not a credential. A draft from a tab
+  // signed into a different account must conflict even when names are identical.
+  return { ...fields, version: createHash("sha256").update(JSON.stringify([people[0].customer_id, fields])).digest("hex") }
+}
 
 export type Mutation =
   | { action: "create-request"; actor: string; data: { category: string; title: string; description: string; budgetMin: number; budgetMax: number; frequency: "one-time" | "weekly" | "monthly" | "flexible"; timing: string; zip: string; referenceName?: string } }
@@ -61,6 +80,34 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
     await this.createAccountSessions({ token_hash: createHash("sha256").update(token).digest("hex"), customer_id: customerId, expires_at: expiresAt })
     return { token, expiresAt, account }
+  }
+
+  async accountProfile(customerId: string) {
+    return profileDto(await this.listParticipants({ customer_id: customerId }, { take: 2 }))
+  }
+
+  @InjectManager()
+  async updateAccountProfile(token: string, input: AccountProfileInput, @MedusaContext() context?: DbContext) {
+    return this.updateAccountProfile_(token, input, context)
+  }
+
+  @InjectTransactionManager()
+  protected async updateAccountProfile_(token: string, input: AccountProfileInput, @MedusaContext() context?: DbContext) {
+    const session = await this.sessionForToken(token, context)
+    await context!.transactionManager!.execute("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", [`ember-account:${session.customer_id}`])
+    // A queued save must still have a valid session after acquiring the lock.
+    await this.sessionForToken(token, context)
+    const people = await this.listParticipants({ customer_id: session.customer_id }, { take: 2 }, context)
+    const current = profileDto(people)
+    if (input.seller && !current.seller) throw denied()
+    if (input.version !== current.version) throw conflict("Your profile changed in another session. Reload before saving.")
+    const initials = input.name.split(/\s+/).map(word => Array.from(word)[0]).slice(0, 2).join("").toUpperCase()
+    const updated = await this.updateParticipants(people.map(person => ({
+      id: person.id, name: input.name, initials,
+      // Merge only allowlisted fields; verification, reviews and other metadata stay server-controlled.
+      ...(person.role === "seller" && input.seller ? { profile: { ...person.profile, summary: input.seller.summary, serviceArea: input.seller.serviceArea, capabilities: input.seller.capabilities } } : {}),
+    })), context)
+    return profileDto(updated)
   }
 
   async customerForSession(token: string) {
@@ -126,6 +173,7 @@ class MarketplaceModuleService extends MedusaService({ Participant, Request, Bid
     const profile = seller.profile ?? {}
     return {
       id: bid.id, seller: seller.name, initials: seller.initials,
+      sellerProfile: publicSellerProfile(seller),
       rating: Number(profile.rating ?? 0), reviews: Number(profile.reviews ?? 0),
       pricePerDelivery: Number(bid.price_per_delivery), totalPrice: Math.round(Number(bid.price_per_delivery) * 100) * bid.delivery_count / 100,
       deliveryCount: bid.delivery_count, cadence: bid.cadence, earliestStart: bid.earliest_start,
